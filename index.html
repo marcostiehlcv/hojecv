@@ -1,0 +1,481 @@
+<!doctype html>
+<html lang="pt">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Hoje CV · Neste dia na história de Cabo Verde</title>
+<meta name="description" content="Os acontecimentos, nascimentos e falecimentos que marcaram a história de Cabo Verde, dia a dia. Cada registo com fonte. Também em inglês.">
+<meta name="author" content="Marco Stiehl">
+<meta name="theme-color" content="#003893">
+<meta property="og:title" content="Hoje CV">
+<meta property="og:description" content="Neste dia na história de Cabo Verde · On this day in Cabo Verde's history">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="pt_PT">
+<meta property="og:locale:alternate" content="en_GB">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23003893'/%3E%3Crect y='34' width='64' height='14' fill='%23fff'/%3E%3Crect y='39' width='64' height='4' fill='%23cf2027'/%3E%3Ccircle cx='24' cy='41' r='13' fill='none' stroke='%23f7d116' stroke-width='3' stroke-dasharray='3 5'/%3E%3C/svg%3E">
+<style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
+<script src="config.js"></script>
+<script src="dados/eventos.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,800&family=Literata:opsz,wght@7..72,400;7..72,600&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Layout: one narrow column like a phone app; flag-blue masthead carrying the official flag (10 stars for the ten islands), white reading surface below */
+:root{
+  --ocean:#003893; --ocean-deep:#002566; --sun:#f2c230; --rubro:#c8262f;
+  --bg:#f5f7fb; --surface:#ffffff; --fg:#0f1a2e; --muted:#5a6680; --line:#dde3ee; --chip:#e9eef8;
+  --img-op:.38;
+  --display:"Bricolage Grotesque",system-ui,sans-serif;
+  --body:"Literata",Georgia,serif;
+  --mono:"JetBrains Mono",ui-monospace,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#08111f; --surface:#0f1b30; --fg:#e8eefa; --muted:#93a1bd; --line:#1f2d47; --chip:#17253f; --ocean:#123f94; --ocean-deep:#0a2a63; --img-op:.3; color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#08111f; --surface:#0f1b30; --fg:#e8eefa; --muted:#93a1bd; --line:#1f2d47; --chip:#17253f; --ocean:#123f94; --ocean-deep:#0a2a63; --img-op:.3; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.55}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--ocean-deep)}
+.wrap{max-width:640px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+header.mast{background:linear-gradient(170deg,var(--ocean) 0%,var(--ocean-deep) 100%);color:#fff;position:relative;overflow:hidden}
+header.mast .wrap{padding-block:18px 26px;position:relative}
+.brand{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.logo{font-family:var(--display);font-weight:800;font-size:22px;letter-spacing:-.02em;display:flex;align-items:center;gap:8px}
+.logo b{background:var(--sun);color:var(--ocean-deep);padding:0 7px;border-radius:6px}
+nav.tabs{display:flex;gap:4px;background:rgba(255,255,255,.12);padding:3px;border-radius:999px}
+nav.tabs a{color:#fff;text-decoration:none;font-family:var(--display);font-weight:500;font-size:14px;padding:6px 12px;border-radius:999px}
+nav.tabs a[aria-current="page"]{background:#fff;color:var(--ocean-deep)}
+.datehero{margin-top:24px;display:grid;grid-template-columns:1fr auto;align-items:end;gap:16px}
+.flagwrap{margin:0 0 6px;width:clamp(120px,36vw,220px);aspect-ratio:17/10;max-width:100%;border-radius:4px;overflow:hidden;box-shadow:0 0 0 1px rgba(255,255,255,.28),0 12px 28px -10px rgba(0,0,0,.55)}
+.flag-cv{display:block;width:100%;height:100%}
+.datehero h1{margin:0;font-family:var(--display);font-weight:800;line-height:.9;letter-spacing:-.03em;text-wrap:balance}
+.datehero .day{font-size:clamp(64px,20vw,108px);display:block}
+.datehero .month{font-size:clamp(22px,6vw,30px);font-weight:500;letter-spacing:-.01em;display:block;margin-top:4px}
+.navbtn{width:40px;height:40px;flex:none;border-radius:50%;border:1px solid rgba(255,255,255,.35);background:transparent;color:#fff;font-size:20px;cursor:pointer}
+.navbtn:hover{background:rgba(255,255,255,.12)}
+.navbtn:focus-visible,button:focus-visible,a:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid var(--sun);outline-offset:2px}
+.dateline{margin-top:16px;display:flex;flex-direction:column;gap:10px;align-items:flex-start;font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:rgba(255,255,255,.8)}
+.dateline input{font:inherit;color:#fff;background:rgba(255,255,255,.12);border:0;border-radius:8px;padding:6px 8px;color-scheme:dark}
+.ctrls{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.dateline .todaybtn{font:inherit;color:var(--ocean-deep);background:var(--sun);border:0;border-radius:8px;padding:6px 10px;cursor:pointer}
+.dateline input{min-height:36px}
+main .wrap{padding-block:22px 48px;display:flex;flex-direction:column;gap:22px}
+.label{font-family:var(--mono);font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.feature{position:relative;overflow:hidden;isolation:isolate;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:20px;display:flex;flex-direction:column;gap:10px;box-shadow:0 10px 30px -18px rgba(7,42,102,.45)}
+.feature .wash{position:absolute;inset:0 0 0 38%;margin:0;z-index:-1;pointer-events:none;-webkit-mask-image:linear-gradient(to left,#000 0%,rgba(0,0,0,.55) 45%,transparent 100%);mask-image:linear-gradient(to left,#000 0%,rgba(0,0,0,.55) 45%,transparent 100%)}
+.feature .wash img{width:100%;height:100%;object-fit:cover;opacity:var(--img-op);filter:saturate(.55)}
+.cred{align-self:flex-end;font-family:var(--mono);font-size:10px;letter-spacing:.04em;color:var(--muted);text-decoration:none;opacity:.7}
+.cred:hover{text-decoration:underline;opacity:1}
+.item.has-img{grid-template-columns:62px 1fr 64px}
+.thumb{margin:4px 0 0;width:64px;height:64px;border-radius:12px;overflow:hidden;background:var(--chip)}
+.thumb img{width:100%;height:100%;object-fit:cover;opacity:var(--img-op);filter:saturate(.6);transition:opacity .2s}
+.item:hover .thumb img{opacity:calc(var(--img-op) + .25)}
+.feature .yr{font-family:var(--display);font-weight:800;font-size:44px;line-height:1;color:var(--rubro);letter-spacing:-.03em}
+.feature h2{margin:0;font-family:var(--display);font-weight:800;font-size:24px;line-height:1.15;letter-spacing:-.015em;text-wrap:balance}
+.feature p{margin:0;color:var(--fg)}
+.meta{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.tag{font-family:var(--mono);font-size:11px;letter-spacing:.05em;text-transform:uppercase;padding:3px 8px;border-radius:999px;background:var(--chip);color:var(--muted)}
+.tag.cat{color:#fff}
+.chips{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}
+.chips button{flex:none;font-family:var(--display);font-weight:500;font-size:14px;border:1px solid var(--line);background:var(--surface);color:var(--fg);padding:7px 14px;border-radius:999px;cursor:pointer}
+.chips button[aria-pressed="true"]{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.list{display:flex;flex-direction:column}
+.item{display:grid;grid-template-columns:62px 1fr;gap:14px;padding-block:14px;border-top:1px solid var(--line)}
+.item:first-child{border-top:0}
+.item .y{font-family:var(--display);font-weight:800;font-size:20px;font-variant-numeric:tabular-nums;color:var(--ocean);line-height:1.2}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .item .y{color:var(--sun)}}
+:root[data-theme="dark"] .item .y{color:var(--sun)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .src{color:#8fb4ff}}
+:root[data-theme="dark"] .src{color:#8fb4ff}
+.item h3{margin:0 0 4px;font-family:var(--display);font-weight:500;font-size:17px;line-height:1.3}
+.item p{margin:0 0 8px;color:var(--muted);font-size:15px}
+.item .d{font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:.05em;text-transform:uppercase;margin-bottom:2px}
+.empty{background:var(--surface);border:1px dashed var(--line);border-radius:14px;padding:18px;color:var(--muted)}
+.empty strong{color:var(--fg);font-family:var(--display);font-weight:500}
+.near{display:flex;flex-direction:column;gap:8px;margin-top:12px}
+.near button{text-align:left;font:inherit;background:var(--chip);color:var(--fg);border:0;border-radius:10px;padding:10px 12px;cursor:pointer}
+.near button span{font-family:var(--mono);font-size:11.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);display:block}
+.seg{display:flex;flex-wrap:wrap;gap:6px}
+.seg button{font-family:var(--mono);font-size:12px;letter-spacing:.05em;text-transform:uppercase;border:1px solid var(--line);background:transparent;color:var(--fg);padding:6px 10px;border-radius:8px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--ocean);border-color:var(--ocean);color:#fff}
+.century{display:flex;flex-direction:column;gap:2px}
+.century h2{margin:8px 0 0;font-family:var(--display);font-weight:800;font-size:28px;letter-spacing:-.02em;display:flex;align-items:baseline;gap:10px}
+.century h2 small{font-family:var(--mono);font-weight:500;font-size:12px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
+.note{font-size:13.5px;color:var(--muted);border-top:1px solid var(--line);padding-top:14px}
+.src{font-family:var(--mono);font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--ocean);text-decoration:none;margin-left:auto;padding:3px 0}
+.src:hover{text-decoration:underline}
+.flag{font-family:var(--mono);font-size:11px;letter-spacing:.04em;text-transform:uppercase;background:none;border:0;color:var(--muted);cursor:pointer;padding:3px 0;display:inline-flex;align-items:center;gap:4px;opacity:.8}
+.flag:hover{color:var(--rubro);opacity:1}
+.flag[data-done]{color:var(--muted);cursor:default;opacity:.6}
+.sheet-bg{position:fixed;inset:0;z-index:20;background:rgba(5,15,35,.55);display:flex;align-items:flex-end;justify-content:center;padding:env(safe-area-inset-top,0px) env(safe-area-inset-right,0px) 0 env(safe-area-inset-left,0px)}
+.sheet{background:var(--surface);color:var(--fg);width:100%;max-width:520px;max-height:88vh;overflow:auto;border-radius:20px 20px 0 0;padding:20px max(16px,env(safe-area-inset-right,0px)) calc(20px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));display:flex;flex-direction:column;gap:14px;box-shadow:0 -10px 40px rgba(0,0,0,.25)}
+@media (min-width:640px){.sheet-bg{align-items:center}.sheet{border-radius:20px}}
+.sheet h2{margin:0;font-family:var(--display);font-weight:800;font-size:21px;letter-spacing:-.01em}
+.sheet .ev{font-size:14px;color:var(--muted);margin:-6px 0 0}
+.opts{display:flex;flex-direction:column;gap:6px}
+.opt{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border:1px solid var(--line);border-radius:12px;cursor:pointer;font-size:15px;line-height:1.35}
+.opt:has(input:checked){border-color:var(--ocean);background:var(--chip)}
+.opt input{margin-top:2px;accent-color:var(--ocean);width:18px;height:18px;flex:none}
+.sheet .acts{display:flex;gap:8px;justify-content:flex-end}
+.sheet .acts button{font-family:var(--display);font-weight:500;font-size:15px;border-radius:999px;padding:10px 18px;cursor:pointer;border:1px solid var(--line);background:transparent;color:var(--fg)}
+.sheet .acts .send{background:var(--rubro);border-color:var(--rubro);color:#fff}
+.sheet .acts .send:disabled{opacity:.45;cursor:not-allowed}
+.sheet .msg{font-size:14px;color:var(--muted);margin:0}
+.share{font-family:var(--mono);font-size:11px;letter-spacing:.04em;text-transform:uppercase;background:none;border:0;color:var(--ocean);cursor:pointer;padding:3px 0;display:inline-flex;align-items:center;gap:4px}
+.share:hover{text-decoration:underline}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .share{color:#8fb4ff}}
+:root[data-theme="dark"] .share{color:#8fb4ff}
+.acts-row{display:flex;gap:14px;align-items:center;flex-wrap:wrap;margin-top:2px}
+.seg2{display:inline-flex;background:var(--chip);border-radius:999px;padding:3px;gap:2px;align-self:flex-start}
+.seg2 button{font-family:var(--display);font-weight:500;font-size:14px;border:0;background:transparent;color:var(--fg);padding:6px 14px;border-radius:999px;cursor:pointer}
+.seg2 button[aria-pressed="true"]{background:var(--surface);box-shadow:0 1px 3px rgba(0,0,0,.15)}
+.cardprev{display:flex;justify-content:center;background:var(--chip);border-radius:14px;padding:12px}
+.cardprev canvas{display:block;max-width:100%;height:auto;max-height:52vh;border-radius:8px;box-shadow:0 8px 24px -10px rgba(0,0,0,.45);cursor:zoom-in}
+.sharebtns{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.sharebtns a,.sharebtns button{font-family:var(--display);font-weight:500;font-size:14px;text-align:center;text-decoration:none;border-radius:12px;padding:11px 10px;border:1px solid var(--line);background:transparent;color:var(--fg);cursor:pointer}
+.sharebtns .primary{background:var(--ocean);border-color:var(--ocean);color:#fff}
+.full{position:fixed;inset:0;z-index:30;background:#000;display:flex;align-items:center;justify-content:center;padding:env(safe-area-inset-top,0px) env(safe-area-inset-right,0px) env(safe-area-inset-bottom,0px) env(safe-area-inset-left,0px)}
+.full canvas{max-width:100%;max-height:100%;width:auto;height:auto}
+.full .hint{position:absolute;bottom:calc(14px + env(safe-area-inset-bottom,0px));left:0;right:0;text-align:center;color:rgba(255,255,255,.7);font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;pointer-events:none}
+.lang{display:inline-flex;gap:2px;background:rgba(255,255,255,.12);padding:3px;border-radius:999px}
+.lang button{font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;border:0;background:transparent;color:#fff;padding:5px 9px;border-radius:999px;cursor:pointer}
+.lang button[aria-pressed="true"]{background:#fff;color:var(--ocean-deep)}
+.brand-r{display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+.aboutlink{font:inherit;background:none;border:0;padding:0;color:var(--muted);text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+.aboutlink:hover{color:var(--fg)}
+.about p{margin:0;line-height:1.6;font-size:15.5px}
+.foot{font-size:12.5px;color:var(--muted);display:flex;flex-wrap:wrap;gap:6px 14px;justify-content:space-between;border-top:1px solid var(--line);padding-top:12px;margin-top:-8px}
+.c-acontecimento{background:var(--ocean)}.c-politica{background:var(--rubro)}.c-nascimento{background:#1f8a5b}.c-falecimento{background:#4a5468}.c-cultura{background:#a3570f}.c-desporto{background:#6b3fb0}
+@media (prefers-reduced-motion:no-preference){.feature,.item{animation:rise .35s ease both}@keyframes rise{from{transform:translateY(6px);opacity:.4}to{transform:none;opacity:1}}}
+</style>
+</head>
+<body>
+
+<header class="mast">
+  <div class="wrap">
+    <div class="brand">
+      <div class="logo">Hoje <b>CV</b></div>
+      <div class="brand-r">
+        <nav class="tabs" id="tabs" aria-label="Secções">
+          <a href="#hoje" id="tab-hoje">Hoje</a>
+          <a href="#explorar" id="tab-explorar">Explorar</a>
+        </nav>
+        <div class="lang" id="lang" role="group" aria-label="Idioma / Language"><button type="button" data-l="pt" aria-pressed="true" lang="pt">PT</button><button type="button" data-l="en" aria-pressed="false" lang="en">EN</button></div>
+      </div>
+    </div>
+    <div class="datehero" id="hero">
+      <h1><span class="day" id="hDay">30</span><span class="month" id="hMonth">de outubro</span></h1>
+      <figure class="flagwrap"><svg class="flag-cv" viewBox="0 0 1020 600" role="img" aria-label="Bandeira de Cabo Verde"><rect width="1020" height="600" fill="#003893"/><rect y="300" width="1020" height="150" fill="#fff"/><rect y="350" width="1020" height="50" fill="#cf2027"/><g fill="#f7d116" transform="translate(382.5 375)"><polygon points="0.00,-35.00 7.86,-10.82 33.29,-10.82 12.71,4.13 20.57,28.32 0.00,13.37 -20.57,28.32 -12.71,4.13 -33.29,-10.82 -7.86,-10.82" transform="rotate(0) translate(0 -150)"/><polygon points="0.00,-35.00 7.86,-10.82 33.29,-10.82 12.71,4.13 20.57,28.32 0.00,13.37 -20.57,28.32 -12.71,4.13 -33.29,-10.82 -7.86,-10.82" transform="rotate(36) translate(0 -150)"/><polygon points="0.00,-35.00 7.86,-10.82 33.29,-10.82 12.71,4.13 20.57,28.32 0.00,13.37 -20.57,28.32 -12.71,4.13 -33.29,-10.82 -7.86,-10.82" transform="rotate(72) translate(0 -150)"/><polygon points="0.00,-35.00 7.86,-10.82 33.29,-10.82 12.71,4.13 20.57,28.32 0.00,13.37 -20.57,28.32 -12.71,4.13 -33.29,-10.82 -7.86,-10.82" transform="rotate(108) translate(0 -150)"/><polygon points="0.00,-35.00 7.86,-10.82 33.29,-10.82 12.71,4.13 20.57,28.32 0.00,13.37 -20.57,28.32 -12.71,4.13 -33.29,-10.82 -7.86,-10.82" transform="rotate(144) translate(0 -150)"/><polygon points="0.00,-35.00 7.86,-10.82 33.29,-10.82 12.71,4.13 20.57,28.32 0.00,13.37 -20.57,28.32 -12.71,4.13 -33.29,-10.82 -7.86,-10.82" transform="rotate(180) translate(0 -150)"/><polygon points="0.00,-35.00 7.86,-10.82 33.29,-10.82 12.71,4.13 20.57,28.32 0.00,13.37 -20.57,28.32 -12.71,4.13 -33.29,-10.82 -7.86,-10.82" transform="rotate(216) translate(0 -150)"/><polygon points="0.00,-35.00 7.86,-10.82 33.29,-10.82 12.71,4.13 20.57,28.32 0.00,13.37 -20.57,28.32 -12.71,4.13 -33.29,-10.82 -7.86,-10.82" transform="rotate(252) translate(0 -150)"/><polygon points="0.00,-35.00 7.86,-10.82 33.29,-10.82 12.71,4.13 20.57,28.32 0.00,13.37 -20.57,28.32 -12.71,4.13 -33.29,-10.82 -7.86,-10.82" transform="rotate(288) translate(0 -150)"/><polygon points="0.00,-35.00 7.86,-10.82 33.29,-10.82 12.71,4.13 20.57,28.32 0.00,13.37 -20.57,28.32 -12.71,4.13 -33.29,-10.82 -7.86,-10.82" transform="rotate(324) translate(0 -150)"/></g></svg></figure>
+    </div>
+    <div class="dateline" id="dateline">
+      <span id="hWeek" class="week">Neste dia na história de Cabo Verde</span>
+      <div class="ctrls">
+        <button class="navbtn" id="prev" aria-label="Dia anterior">‹</button>
+        <input type="date" id="pick" aria-label="Escolher data">
+        <button id="today" class="todaybtn">Hoje</button>
+        <button class="navbtn" id="next" aria-label="Dia seguinte">›</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="wrap" id="view-hoje">
+    <section id="featureBox"></section>
+    <section style="display:flex;flex-direction:column;gap:12px">
+      <div class="label" id="lblCats">Categorias</div>
+      <div class="chips" id="chips" role="group" aria-label="Filtrar por categoria"></div>
+      <div class="list" id="dayList"></div>
+    </section>
+    <p class="note" id="note"></p>
+    <div class="foot"><span id="foot"></span><button type="button" class="aboutlink" id="aboutBtn">Sobre o Hoje CV</button></div>
+  </div>
+
+  <div class="wrap" id="view-explorar" hidden>
+    <section style="display:flex;flex-direction:column;gap:12px">
+      <div class="label" id="lblEra">Época</div>
+      <div class="seg" id="eras" role="group" aria-label="Filtrar por época"></div>
+      <div class="label" style="margin-top:6px" id="lblCat">Categoria</div>
+      <div class="chips" id="chips2" role="group" aria-label="Filtrar por categoria"></div>
+    </section>
+    <div id="timeline" style="display:flex;flex-direction:column;gap:18px"></div>
+  </div>
+</main>
+
+<div class="sheet-bg" id="rep" hidden>
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="repTitle">
+    <h2 id="repTitle">Assinalar erro</h2>
+    <p class="ev" id="repEv"></p>
+    <div class="label" id="repQ">O que está errado? Escolha uma ou mais opções</div>
+    <div class="opts" id="repOpts"></div>
+    <p class="msg" id="repMsg" hidden></p>
+    <div class="acts"><button id="repCancel" type="button">Cancelar</button><button class="send" id="repSend" type="button" disabled>Enviar</button></div>
+  </div>
+</div>
+
+<div class="sheet-bg" id="shr" hidden>
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="shrTitle">
+    <h2 id="shrTitle">Partilhar</h2>
+    <div class="seg2" role="group" aria-label="Formato do cartão"><button type="button" data-f="sq" aria-pressed="true" id="fmtSq">Quadrado</button><button type="button" data-f="st" aria-pressed="false">Story</button></div>
+    <div class="cardprev"><canvas id="shrCv" title="Ver em ecrã inteiro"></canvas></div>
+    <div class="sharebtns" id="shrBtns">
+      <button type="button" class="primary" id="shrSave">Guardar imagem</button>
+      <button type="button" id="shrNative" hidden>Partilhar…</button>
+      <button type="button" id="shrFull">Ecrã inteiro (para print)</button>
+      <a id="shrWa" target="_blank" rel="noopener">WhatsApp</a>
+      <a id="shrX" target="_blank" rel="noopener">X / Twitter</a>
+      <button type="button" id="shrCopy">Copiar texto</button>
+    </div>
+    <p class="msg" id="shrMsg" hidden></p>
+    <div class="acts"><button id="shrClose" type="button">Fechar</button></div>
+  </div>
+</div>
+<div class="sheet-bg" id="abt" hidden><div class="sheet about" role="dialog" aria-modal="true" aria-labelledby="abtTitle"><h2 id="abtTitle"></h2><div id="abtBody" style="display:flex;flex-direction:column;gap:12px"></div><div class="acts"><button id="abtClose" type="button"></button></div></div></div>
+<div class="full" id="full" hidden><div class="hint" id="fullHint">Toque para fechar</div></div>
+
+<script>
+let RAW = Array.isArray(window.HOJECV_DADOS) ? window.HOJECV_DADOS : [];
+const toEv=a=>a.map(([d,m,y,t,x,c,ilha,top,f,img,cr,te,xe])=>({d,m,y,t,x,c,ilha,top,f,img,cr,te,xe}));
+let EVENTS = toEv(RAW);
+const I18N={
+pt:{hoje:"Hoje",explorar:"Explorar",today:"Hoje",prev:"Dia anterior",next:"Dia seguinte",pick:"Escolher data",tabs:"Secções",
+ highlight:"Destaque do dia",catsLbl:"Categorias",era:"Época",cat:"Categoria",onday:"neste dia em Cabo Verde",
+ note:n=>`${n} registos verificados, cada um com fonte. Datas do século XV são tradicionais. Imagens do Wikimedia Commons, com licença livre.`,
+ foot:"Hoje CV · Um projeto de Marco Stiehl",aboutBtn:"Sobre o Hoje CV",aboutTitle:"Sobre o Hoje CV",
+ about:["O Hoje CV mostra, dia a dia, os acontecimentos, nascimentos e falecimentos que marcaram a história de Cabo Verde, desde a chegada dos navegadores em 1460 até aos nossos dias.",
+ "A motivação é informar. Queremos ajudar os cabo-verdianos, nas ilhas e na diáspora, a conhecer melhor a sua própria história, e dar a quem quer descobrir Cabo Verde uma forma simples de ficar mais bem informado sobre o país.",
+ "Critérios para um registo entrar no Hoje CV: ter relevância para a história de Cabo Verde ou para a sua diáspora; ter data exata (dia, mês e ano); estar confirmado numa fonte que se possa consultar, como enciclopédias, instituições oficiais, arquivos ou imprensa de referência. Datas sem confirmação ficam de fora, e as datas tradicionais são assinaladas como tal.",
+ "Cada registo tem uma fonte que pode consultar. Se encontrar um erro, use «Assinalar erro»: todos os reportes são revistos antes de qualquer alteração.",
+ "Um projeto de Marco Stiehl."],
+ repTitle:"Assinalar erro",repQ:"O que está errado? Escolha uma ou mais opções",cancel:"Cancelar",send:"Enviar",sending:"A enviar…",sentBtn:"Enviado",
+ thanks:"Obrigado. O erro foi registado e vai ser revisto.",failSend:"O envio falhou. Tente de novo dentro de momentos.",failLimit:"Este acontecimento já recebeu muitos reportes. Tente mais tarde.",
+ failCfg:"O envio ainda não está configurado.",failClaude:"Não foi possível enviar daqui. Inicie sessão no claude.ai e tente de novo.",
+ flag:"⚑ Assinalar erro",flagAria:"Assinalar erro neste acontecimento",flagDone:"✓ Erro assinalado",
+ share:"↗ Partilhar",shareAria:"Partilhar este acontecimento",shrTitle:"Partilhar",fmtAria:"Formato do cartão",sq:"Quadrado",st:"Story",
+ save:"Guardar imagem",native:"Partilhar…",full:"Ecrã inteiro (para print)",copy:"Copiar texto",close:"Fechar",hint:"Toque para fechar",cvTitle:"Ver em ecrã inteiro",
+ saved:"Imagem guardada.",saveFail:"Não foi possível guardar aqui. Use o ecrã inteiro e faça print.",nativeFail:"A partilha não está disponível neste dispositivo.",copied:"Texto copiado.",
+ src:"Fonte ↗",credit:"Imagem: Wikimedia Commons",
+ ago:n=>n<=0?"este ano":n===1?"há 1 ano":`há ${n} anos`,
+ emptyDay:(d,m)=>`Ainda não há registos para ${d} de ${m}.`,emptyMore:"É aqui que a comunidade pode sugerir acontecimentos. Datas próximas:",
+ noneCat:"Nenhum registo nesta categoria para este dia.",noneCombo:"Nada nesta combinação de época e categoria.",
+ century:r=>`Século ${r}`,count:n=>`${n} registo${n>1?"s":""}`,
+ heroMonth:m=>"de "+m,shortDate:(d,m)=>`${d} ${m}`,longDate:(d,m,y)=>`${d} ${m} ${y}`,
+ cardLbl:(d,m)=>`${d} DE ${m.toUpperCase()}  ·  NESTE DIA EM CABO VERDE`,cardFoot:"A HISTÓRIA DE CABO VERDE, DIA A DIA",
+ shareText:(e,m)=>`Neste dia em Cabo Verde (${e.d} de ${m} de ${e.y}): ${T(e)}. ${X(e)} ${SITE} #HojeCV #CaboVerde`,
+ flagAlt:"Bandeira de Cabo Verde",
+ months:["janeiro","fevereiro","março","abril","maio","junho","julho","agosto","setembro","outubro","novembro","dezembro"],
+ week:["domingo","segunda","terça","quarta","quinta","sexta","sábado"],
+ cats:{todas:"Todas",acontecimento:"Acontecimentos",politica:"Política",nascimento:"Nascimentos",falecimento:"Falecimentos",cultura:"Cultura",desporto:"Desporto"},
+ cat1:{acontecimento:"Acontecimento",politica:"Política",nascimento:"Nascimento",falecimento:"Falecimento",cultura:"Cultura",desporto:"Desporto"},
+ eras:{todas:"Tudo",xv:"Séc. XV–XVIII",xix:"Séc. XIX",colonial:"Séc. XX colonial",indep:"Independência",democ:"Democracia"},
+ mot:{data:"A data (dia ou mês) está errada",ano:"O ano está errado",titulo:"O título ou o nome está errado",descricao:"A descrição tem informação incorreta",categoria:"A categoria está errada",local:"A ilha ou o local está errado",fonte:"A fonte não abre ou não confirma o facto",imagem:"A imagem não corresponde ou é inadequada",duplicado:"O acontecimento está repetido",ofensivo:"Conteúdo ofensivo ou inadequado"},
+ place:{}},
+en:{hoje:"Today",explorar:"Explore",today:"Today",prev:"Previous day",next:"Next day",pick:"Choose a date",tabs:"Sections",
+ highlight:"Highlight of the day",catsLbl:"Categories",era:"Period",cat:"Category",onday:"on this day in Cabo Verde",
+ note:n=>`${n} verified records, each with a source. 15th-century dates are traditional. Images from Wikimedia Commons, freely licensed.`,
+ foot:"Hoje CV · A project by Marco Stiehl",aboutBtn:"About Hoje CV",aboutTitle:"About Hoje CV",
+ about:["Hoje CV (“Today CV”) shows, day by day, the events, births and deaths that shaped the history of Cabo Verde, from the arrival of the navigators in 1460 to the present day.",
+ "Its purpose is to inform. We want to help Cape Verdeans, on the islands and in the diaspora, learn more about their own history, and to give anyone who wants to discover Cabo Verde a simple way to become better informed about the country.",
+ "Criteria for a record to enter Hoje CV: it must be relevant to the history of Cabo Verde or its diaspora; have an exact date (day, month and year); and be confirmed by a source you can check, such as encyclopaedias, official institutions, archives or reputable press. Unconfirmed dates are left out, and traditional dates are marked as such.",
+ "Every record has a source you can check. If you find a mistake, use “Report error”: all reports are reviewed before anything is changed.",
+ "A project by Marco Stiehl."],
+ repTitle:"Report an error",repQ:"What is wrong? Choose one or more options",cancel:"Cancel",send:"Send",sending:"Sending…",sentBtn:"Sent",
+ thanks:"Thank you. The error has been recorded and will be reviewed.",failSend:"Sending failed. Please try again in a moment.",failLimit:"This event has already received many reports. Please try later.",
+ failCfg:"Reporting is not set up yet.",failClaude:"Could not send from here. Sign in to claude.ai and try again.",
+ flag:"⚑ Report error",flagAria:"Report an error in this event",flagDone:"✓ Error reported",
+ share:"↗ Share",shareAria:"Share this event",shrTitle:"Share",fmtAria:"Card format",sq:"Square",st:"Story",
+ save:"Save image",native:"Share…",full:"Full screen (for a screenshot)",copy:"Copy text",close:"Close",hint:"Tap to close",cvTitle:"View full screen",
+ saved:"Image saved.",saveFail:"Could not save here. Use full screen and take a screenshot.",nativeFail:"Sharing is not available on this device.",copied:"Text copied.",
+ src:"Source ↗",credit:"Image: Wikimedia Commons",
+ ago:n=>n<=0?"this year":n===1?"1 year ago":`${n} years ago`,
+ emptyDay:(d,m)=>`No records yet for ${m} ${d}.`,emptyMore:"This is where the community can suggest events. Nearby dates:",
+ noneCat:"No records in this category for this day.",noneCombo:"Nothing for this period and category.",
+ century:r=>`${r} century`,count:n=>`${n} record${n>1?"s":""}`,
+ heroMonth:m=>m,shortDate:(d,m)=>`${m} ${d}`,longDate:(d,m,y)=>`${m} ${d}, ${y}`,
+ cardLbl:(d,m)=>`${m.toUpperCase()} ${d}  ·  ON THIS DAY IN CABO VERDE`,cardFoot:"CABO VERDE'S HISTORY, DAY BY DAY",
+ shareText:(e,m)=>`On this day in Cabo Verde (${m} ${e.d}, ${e.y}): ${T(e)}. ${X(e)} ${SITE} #HojeCV #CaboVerde`,
+ flagAlt:"Flag of Cabo Verde",
+ months:["January","February","March","April","May","June","July","August","September","October","November","December"],
+ week:["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],
+ cats:{todas:"All",acontecimento:"Events",politica:"Politics",nascimento:"Births",falecimento:"Deaths",cultura:"Culture",desporto:"Sport"},
+ cat1:{acontecimento:"Event",politica:"Politics",nascimento:"Birth",falecimento:"Death",cultura:"Culture",desporto:"Sport"},
+ eras:{todas:"All",xv:"15th–18th c.",xix:"19th c.",colonial:"20th c. colonial",indep:"Independence",democ:"Democracy"},
+ mot:{data:"The date (day or month) is wrong",ano:"The year is wrong",titulo:"The title or name is wrong",descricao:"The description is incorrect",categoria:"The category is wrong",local:"The island or place is wrong",fonte:"The source doesn't open or doesn't confirm it",imagem:"The image doesn't match or is inappropriate",duplicado:"This event is a duplicate",ofensivo:"Offensive or inappropriate content"},
+ place:{"Nacional":"National","Guiné-Bissau":"Guinea-Bissau","Guiné-Conacri":"Guinea (Conakry)","Nova Iorque":"New York","Estados Unidos":"United States","África do Sul":"South Africa","Costa do Marfim":"Ivory Coast","Genebra":"Geneva"}}
+};
+const SITE="hojecv.app";
+let LANG="pt";try{const l=localStorage.getItem("hojecv_lang");if(l==="en"||l==="pt")LANG=l}catch(_){}
+const L=()=>I18N[LANG];
+const T=e=>LANG==="en"&&e.te?e.te:e.t;
+const X=e=>LANG==="en"&&e.xe?e.xe:e.x;
+const PL=p=>L().place[p]||p;
+const ROMAN_EN={"XV":"15th","XVI":"16th","XVII":"17th","XVIII":"18th","XIX":"19th","XX":"20th","XXI":"21st"};
+const CATS={todas:"Todas",acontecimento:"Acontecimentos",politica:"Política",nascimento:"Nascimentos",falecimento:"Falecimentos",cultura:"Cultura",desporto:"Desporto"};
+const ERAS=[["todas","Tudo",0,9999],["xv","Séc. XV–XVIII",1400,1799],["xix","Séc. XIX",1800,1899],["colonial","Séc. XX colonial",1900,1974],["indep","Independência",1975,1990],["democ","Democracia",1991,9999]];
+const MO=i=>L().months[i];
+
+const $=id=>document.getElementById(id);
+let cur=new Date(); cur.setHours(12,0,0,0);
+let cat="todas", cat2="todas", era="todas";
+try{const s=localStorage.getItem("hojecv"); if(s){const o=JSON.parse(s); cat=o.cat||cat; era=o.era||era;}}catch(e){}
+const save=()=>{try{localStorage.setItem("hojecv",JSON.stringify({cat,era}))}catch(e){}};
+
+
+
+const esc=s=>s.replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));
+const tagCat=c=>`<span class="tag cat c-${c}">${L().cat1[c]||c}</span>`;
+const ago=y=>L().ago(new Date().getFullYear()-y);
+const imgTag=(e,cls)=>e.img?`<figure class="${cls}" aria-hidden="true"><img src="${e.img}" alt="" loading="lazy" onerror="var a=this.closest('article');if(a){a.classList.remove('has-img');var c=a.querySelector('.cred');if(c)c.remove();}this.parentNode.remove()"></figure>`:"";
+const credit=e=>e.img&&e.cr?`<a class="cred" href="${e.cr}" target="_blank" rel="noopener">${L().credit}</a>`:"";
+const srcLink=e=>e.f?`<a class="src" href="${e.f}" target="_blank" rel="noopener">${L().src}</a>`:"";
+const itemHTML=(e,showDate)=>`<article class="item${e.img?" has-img":""}"><div class="y">${e.y}</div><div style="min-width:0">${showDate?`<div class="d">${L().shortDate(e.d,MO(e.m-1))}</div>`:""}<h3>${esc(T(e))}</h3><p>${esc(X(e))}</p><div class="meta">${tagCat(e.c)}<span class="tag">${PL(e.ilha)}</span>${srcLink(e)}</div><div class="acts-row">${shareBtn(e)}${flagBtn(e)}</div></div>${imgTag(e,"thumb")}</article>`;
+
+const MOTIVOS=[["data","A data (dia ou mês) está errada"],["ano","O ano está errado"],["titulo","O título ou o nome está errado"],["descricao","A descrição tem informação incorreta"],["categoria","A categoria está errada"],["local","A ilha ou o local está errado"],["fonte","A fonte não abre ou não confirma o facto"],["imagem","A imagem não corresponde ou é inadequada"],["duplicado","O acontecimento está repetido"],["ofensivo","Conteúdo ofensivo ou inadequado"]];
+const hashT=s=>{let x=5381;for(const c of s)x=((x<<5)+x+c.charCodeAt(0))>>>0;return x.toString(36)};
+const keyOf=e=>`${e.y}-${String(e.m).padStart(2,"0")}-${String(e.d).padStart(2,"0")}-${hashT(e.t)}`;
+const BYKEY={};const indexar=()=>{for(const k in BYKEY)delete BYKEY[k];EVENTS.forEach(e=>BYKEY[keyOf(e)]=e)};indexar();
+const sent=new Set((()=>{try{return JSON.parse(localStorage.getItem("hojecv_rep")||"[]")}catch(_){return[]}})());
+const saveSent=()=>{try{localStorage.setItem("hojecv_rep",JSON.stringify([...sent]))}catch(_){}};
+const flagBtn=e=>{const k=keyOf(e);return sent.has(k)?`<button class="flag" data-done type="button" disabled>${L().flagDone}</button>`:`<button class="flag" data-k="${k}" type="button" aria-label="${L().flagAria}">${L().flag}</button>`};
+let repKey=null;
+function openRep(k){repKey=k;const e=BYKEY[k];$("repEv").textContent=`${L().longDate(e.d,MO(e.m-1),e.y)} · ${T(e)}`;
+ $("repOpts").innerHTML=MOTIVOS.map(([v])=>`<label class="opt"><input type="checkbox" value="${v}" id="mot-${v}"><span>${L().mot[v]}</span></label>`).join("");
+ $("repMsg").hidden=true;$("repSend").disabled=true;$("repSend").textContent=L().send;$("rep").hidden=false;$("repOpts").querySelector("input").focus();}
+function closeRep(){$("rep").hidden=true;repKey=null;}
+$("repOpts").addEventListener("change",()=>{$("repSend").disabled=!$("repOpts").querySelector("input:checked")});
+$("repCancel").onclick=closeRep;
+$("rep").addEventListener("click",ev=>{if(ev.target.id==="rep")closeRep()});
+addEventListener("keydown",ev=>{if(ev.key==="Escape"&&!$("rep").hidden)closeRep()});
+$("repSend").onclick=async()=>{
+ const mot=[...$("repOpts").querySelectorAll("input:checked")].map(i=>i.value).filter(v=>MOTIVOS.some(m=>m[0]===v));
+ if(!mot.length||!repKey)return;const k=repKey;$("repSend").disabled=true;$("repSend").textContent=L().sending;
+ const fail=t=>{$("repMsg").textContent=t;$("repMsg").hidden=false;$("repSend").disabled=false;$("repSend").textContent=L().send};
+ try{const api=(window.HOJECV_CONFIG||{}).API;
+  if(!api){fail(L().failCfg);return}
+  const r=await fetch(api,{method:"POST",body:JSON.stringify({chave:k,motivos:mot})});const j=await r.json().catch(()=>({}));
+  if(!j.ok){fail(j.erro==="limite"?L().failLimit:L().failSend);return}
+  sent.add(k);saveSent();
+  $("repMsg").textContent=L().thanks;$("repMsg").hidden=false;$("repSend").textContent=L().sentBtn;
+  setTimeout(()=>{closeRep();route()},1200);
+ }catch(err){fail(L().failSend)}
+};
+document.addEventListener("click",ev=>{const b=ev.target.closest(".flag[data-k]");if(b)openRep(b.dataset.k)});
+
+const shareBtn=e=>`<button class="share" data-s="${keyOf(e)}" type="button" aria-label="${L().shareAria}">${L().share}</button>`;
+let shrKey=null,shrFmt="sq";
+function wrap(ctx,text,maxW){const words=text.split(/\s+/);const lines=[];let line="";for(const w of words){const t=line?line+" "+w:w;if(ctx.measureText(t).width>maxW&&line){lines.push(line);line=w}else line=t}if(line)lines.push(line);return lines}
+function drawFlag(ctx,x,y,w){const h=w*600/1020,s=w/1020;ctx.save();ctx.translate(x,y);ctx.scale(s,s);ctx.fillStyle="#003893";ctx.fillRect(0,0,1020,600);ctx.fillStyle="#fff";ctx.fillRect(0,300,1020,150);ctx.fillStyle="#cf2027";ctx.fillRect(0,350,1020,50);ctx.translate(382.5,375);ctx.fillStyle="#f7d116";const ro=35,ri=ro*Math.sin(Math.PI/10)/Math.sin(3*Math.PI/10);for(let i=0;i<10;i++){ctx.save();ctx.rotate(i*Math.PI/5);ctx.translate(0,-150);ctx.beginPath();for(let k=0;k<10;k++){const r=k%2?ri:ro,a=-Math.PI/2+k*Math.PI/5;ctx.lineTo(r*Math.cos(a),r*Math.sin(a))}ctx.closePath();ctx.fill();ctx.restore()}ctx.restore();ctx.strokeStyle="rgba(255,255,255,.35)";ctx.lineWidth=2;ctx.strokeRect(x,y,w,h)}
+function fitLines(ctx,text,font,size,minSize,maxW,maxLines){let s=size;for(;s>=minSize;s-=4){ctx.font=font.replace("$",s);const l=wrap(ctx,text,maxW);if(l.length<=maxLines)return{s,l}}ctx.font=font.replace("$",minSize);let l=wrap(ctx,text,maxW);if(l.length>maxLines){l=l.slice(0,maxLines);l[maxLines-1]=l[maxLines-1].replace(/\s*\S*$/,"")+"…"}return{s:minSize,l}}
+async function drawCard(cv,e,fmt){
+ try{await Promise.all(['800 80px "Bricolage Grotesque"','500 40px "Bricolage Grotesque"','400 36px "Literata"','500 28px "JetBrains Mono"'].map(f=>document.fonts.load(f)))}catch(_){}
+ const W=1080,H=fmt==="st"?1920:1080;cv.width=W;cv.height=H;const ctx=cv.getContext("2d");
+ const g=ctx.createLinearGradient(0,0,0,H);g.addColorStop(0,"#003893");g.addColorStop(1,"#002566");ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+ const P=88,st=fmt==="st";let y=st?150:84;
+ // brand
+ ctx.textBaseline="alphabetic";ctx.font='800 56px "Bricolage Grotesque", system-ui, sans-serif';ctx.fillStyle="#fff";ctx.fillText("Hoje",P,y+48);const hw=ctx.measureText("Hoje ").width;
+ ctx.fillStyle="#f7d116";const cvw=ctx.measureText("CV").width+28;ctx.beginPath();ctx.roundRect(P+hw,y-2,cvw,64,12);ctx.fill();ctx.fillStyle="#002566";ctx.fillText("CV",P+hw+14,y+48);
+ const fw=st?260:200;drawFlag(ctx,W-P-fw,y-8,fw);
+ y+=st?470:190;
+ // date label
+ ctx.font='500 30px "JetBrains Mono", ui-monospace, monospace';ctx.fillStyle="rgba(255,255,255,.78)";
+ const lbl=L().cardLbl(e.d,MO(e.m-1));ctx.fillText(lbl,P,y);
+ y+=st?225:172;ctx.font=`800 ${st?210:170}px "Bricolage Grotesque", system-ui, sans-serif`;ctx.fillStyle="#f7d116";ctx.fillText(String(e.y),P-6,y);
+ y+=st?50:16;
+ const maxW=W-2*P;const tt=fitLines(ctx,T(e),'800 $px "Bricolage Grotesque", system-ui, sans-serif',st?92:76,48,maxW,st?4:3);
+ ctx.fillStyle="#fff";ctx.font=`800 ${tt.s}px "Bricolage Grotesque", system-ui, sans-serif`;for(const l of tt.l){y+=tt.s*1.08;ctx.fillText(l,P,y)}
+ y+=st?80:44;const dd=fitLines(ctx,X(e),'400 $px "Literata", Georgia, serif',st?44:36,28,maxW,st?7:4);
+ ctx.fillStyle="rgba(255,255,255,.86)";ctx.font=`400 ${dd.s}px "Literata", Georgia, serif`;for(const l of dd.l){ctx.fillText(l,P,y+dd.s);y+=dd.s*1.45}
+ // tags
+ y+=st?60:34;ctx.font='500 26px "JetBrains Mono", ui-monospace, monospace';let x=P;
+ for(const t of [L().cat1[e.c]||e.c,PL(e.ilha)]){const tw=ctx.measureText(t.toUpperCase()).width+40;ctx.fillStyle="rgba(255,255,255,.12)";ctx.beginPath();ctx.roundRect(x,y,tw,52,26);ctx.fill();ctx.fillStyle="#fff";ctx.fillText(t.toUpperCase(),x+20,y+35);x+=tw+14}
+ // footer stripes (flag band)
+ const fb=H-(st?230:150);ctx.fillStyle="#fff";ctx.fillRect(0,fb,W,36);ctx.fillStyle="#cf2027";ctx.fillRect(0,fb+12,W,12);
+ ctx.font='500 23px "JetBrains Mono", ui-monospace, monospace';ctx.fillStyle="rgba(255,255,255,.62)";ctx.fillText(L().cardFoot,P,fb+(st?120:88));ctx.font='500 28px "JetBrains Mono", ui-monospace, monospace';ctx.fillStyle="rgba(255,255,255,.95)";ctx.textAlign="right";ctx.fillText(SITE,W-P,fb+(st?120:88));ctx.textAlign="left";
+}
+const shareText=e=>L().shareText(e,MO(e.m-1));
+async function renderShare(){const e=BYKEY[shrKey];await drawCard($("shrCv"),e,shrFmt);
+ document.querySelectorAll('#shr .seg2 button').forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.f===shrFmt)))}
+async function openShare(k){shrKey=k;shrFmt="sq";const e=BYKEY[k];const t=shareText(e);
+ $("shrWa").href="https://wa.me/?text="+encodeURIComponent(t);$("shrX").href="https://twitter.com/intent/tweet?text="+encodeURIComponent(t);
+ $("shrMsg").hidden=true;$("shr").hidden=false;await renderShare();
+ let canNative=false;try{canNative=!!(navigator.canShare&&navigator.canShare({files:[new File([new Blob(["x"])],"t.png",{type:"image/png"})]}))}catch(_){}
+ $("shrNative").hidden=!canNative;$("shrSave").focus()}
+const closeShare=()=>{$("shr").hidden=true;shrKey=null};
+const shrMsg=t=>{$("shrMsg").textContent=t;$("shrMsg").hidden=false};
+const cardBlob=()=>new Promise(r=>$("shrCv").toBlob(r,"image/png"));
+const fileName=()=>{const e=BYKEY[shrKey];return `hojecv-${e.y}-${String(e.m).padStart(2,"0")}-${String(e.d).padStart(2,"0")}${shrFmt==="st"?"-story":""}.png`};
+document.querySelector('#shr .seg2').addEventListener("click",ev=>{const b=ev.target.closest("button");if(b&&b.dataset.f!==shrFmt){shrFmt=b.dataset.f;renderShare()}});
+$("shrClose").onclick=closeShare;$("shr").addEventListener("click",ev=>{if(ev.target.id==="shr")closeShare()});
+addEventListener("keydown",ev=>{if(ev.key==="Escape"){if(!$("full").hidden){$("full").hidden=true}else if(!$("shr").hidden)closeShare()}});
+$("shrSave").onclick=async()=>{const blob=await cardBlob();const name=fileName();
+ try{const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();a.remove();shrMsg(L().saved)}catch(_){shrMsg(L().saveFail)}};
+$("shrNative").onclick=async()=>{try{const blob=await cardBlob();const e=BYKEY[shrKey];await navigator.share({files:[new File([blob],fileName(),{type:"image/png"})],text:shareText(e)})}catch(err){if(err&&err.name!=="AbortError")shrMsg(L().nativeFail)}};
+$("shrCopy").onclick=async()=>{const t=shareText(BYKEY[shrKey]);try{await navigator.clipboard.writeText(t);shrMsg(L().copied)}catch(_){shrMsg(t)}};
+const openFull=async()=>{const c=document.createElement("canvas");await drawCard(c,BYKEY[shrKey],shrFmt);const f=$("full");f.querySelector("canvas")?.remove();f.prepend(c);f.hidden=false};
+$("shrFull").onclick=openFull;$("shrCv").onclick=openFull;$("full").onclick=()=>{$("full").hidden=true};
+document.addEventListener("click",ev=>{const b=ev.target.closest(".share[data-s]");if(b)openShare(b.dataset.s)});
+
+function chips(el,val,set){el.innerHTML=Object.entries(L().cats).map(([k,v])=>`<button data-k="${k}" aria-pressed="${k===val}">${v}</button>`).join("");
+ el.onclick=ev=>{const b=ev.target.closest("button");if(b){set(b.dataset.k);}};}
+
+function renderDay(){
+ const m=cur.getMonth()+1,d=cur.getDate();
+ $("hDay").textContent=d; $("hMonth").textContent=L().heroMonth(MO(m-1));
+ $("hWeek").textContent=L().week[cur.getDay()]+" · "+L().onday;
+ $("pick").value=`${cur.getFullYear()}-${String(m).padStart(2,"0")}-${String(d).padStart(2,"0")}`;
+ const day=EVENTS.filter(e=>e.m===m&&e.d===d).sort((a,b)=>a.y-b.y);
+ const fb=$("featureBox");
+ if(!day.length){
+  const key=(mm,dd)=>new Date(2024,mm-1,dd).getTime();const k0=key(m,d),YR=366*864e5;
+  const near=[...EVENTS].map(e=>{let diff=key(e.m,e.d)-k0;if(diff>YR/2)diff-=YR;if(diff<-YR/2)diff+=YR;return{e,diff}}).sort((a,b)=>Math.abs(a.diff)-Math.abs(b.diff)).slice(0,3);
+  fb.innerHTML=`<div class="empty"><strong>${L().emptyDay(d,MO(m-1))}</strong><br>${L().emptyMore}<div class="near">${near.map(({e})=>`<button data-m="${e.m}" data-d="${e.d}"><span>${L().shortDate(e.d,MO(e.m-1))} · ${e.y}</span>${esc(T(e))}</button>`).join("")}</div></div>`;
+  fb.querySelectorAll(".near button").forEach(b=>b.onclick=()=>{cur.setMonth(+b.dataset.m-1,+b.dataset.d);renderDay()});
+ } else {
+  const f=day.find(e=>e.top)||day[0];
+  fb.innerHTML=`<div class="label" style="margin-bottom:8px">${L().highlight}</div><article class="feature${f.img?" has-img":""}">${imgTag(f,"wash")}<div class="yr">${f.y}</div><h2>${esc(T(f))}</h2><p>${esc(X(f))}</p><div class="meta">${tagCat(f.c)}<span class="tag">${PL(f.ilha)}</span><span class="tag">${ago(f.y)}</span>${srcLink(f)}</div><div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap"><div class="acts-row">${shareBtn(f)}${flagBtn(f)}</div>${credit(f)}</div></article>`;
+ }
+ chips($("chips"),cat,k=>{cat=k;save();renderDay()});
+ const list=day.filter(e=>cat==="todas"||e.c===cat);
+ $("dayList").innerHTML=list.length?list.map(e=>itemHTML(e,false)).join(""):`<p class="empty">${L().noneCat}</p>`;
+}
+
+function renderExplore(){
+ $("eras").innerHTML=ERAS.map(([k])=>`<button data-k="${k}" aria-pressed="${k===era}">${L().eras[k]}</button>`).join("");
+ $("eras").onclick=ev=>{const b=ev.target.closest("button");if(b){era=b.dataset.k;save();renderExplore()}};
+ chips($("chips2"),cat2,k=>{cat2=k;renderExplore()});
+ const [,,a,z]=ERAS.find(x=>x[0]===era);
+ const items=EVENTS.filter(e=>e.y>=a&&e.y<=z&&(cat2==="todas"||e.c===cat2)).sort((p,q)=>p.y-q.y||p.m-q.m||p.d-q.d);
+ const roman=n=>["XV","XVI","XVII","XVIII","XIX","XX","XXI"][n-15];
+ const groups={};items.forEach(e=>{const c=Math.floor((e.y-1)/100)+1;(groups[c]=groups[c]||[]).push(e)});
+ $("timeline").innerHTML=Object.keys(groups).length?Object.entries(groups).map(([c,arr])=>`<section class="century"><h2>${LANG==="en"?L().century(ROMAN_EN[roman(+c)]):L().century(roman(+c))}<small>${L().count(arr.length)}</small></h2><div class="list">${arr.map(e=>itemHTML(e,true)).join("")}</div></section>`).join(""):`<p class="empty">${L().noneCombo}</p>`;
+}
+
+function applyLang(){const t=L();document.documentElement.lang=LANG==="en"?"en":"pt";
+ const set=(id,v)=>{const el=$(id);if(el)el.textContent=v};
+ set("tab-hoje",t.hoje);set("tab-explorar",t.explorar);set("today",t.today);set("lblCats",t.catsLbl);set("lblEra",t.era);set("lblCat",t.cat);
+ set("repTitle",t.repTitle);set("repQ",t.repQ);set("repCancel",t.cancel);set("repSend",t.send);set("shrTitle",t.shrTitle);set("fmtSq",t.sq);
+ set("shrSave",t.save);set("shrNative",t.native);set("shrFull",t.full);set("shrCopy",t.copy);set("shrClose",t.close);set("fullHint",t.hint);set("foot",t.foot);set("aboutBtn",t.aboutBtn);set("abtTitle",t.aboutTitle);set("abtClose",t.close);{const b=$("abtBody");if(b){b.innerHTML="";t.about.forEach(x=>{const p=document.createElement("p");p.textContent=x;b.appendChild(p)})}}
+ if($("note"))$("note").textContent=t.note(EVENTS.length);
+ $("prev").setAttribute("aria-label",t.prev);$("next").setAttribute("aria-label",t.next);$("pick").setAttribute("aria-label",t.pick);$("tabs").setAttribute("aria-label",t.tabs);
+ $("shrCv").title=t.cvTitle;document.querySelector('#shr .seg2').setAttribute("aria-label",t.fmtAria);
+ const fl=document.querySelector(".flag-cv");if(fl)fl.setAttribute("aria-label",t.flagAlt);
+ document.querySelectorAll("#lang button").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.l===LANG)));}
+$("lang").addEventListener("click",ev=>{const b=ev.target.closest("button[data-l]");if(!b||b.dataset.l===LANG)return;LANG=b.dataset.l;try{localStorage.setItem("hojecv_lang",LANG)}catch(_){}applyLang();route();
+ if(!$("shr").hidden&&shrKey){const e=BYKEY[shrKey];$("shrWa").href="https://wa.me/?text="+encodeURIComponent(shareText(e));$("shrX").href="https://twitter.com/intent/tweet?text="+encodeURIComponent(shareText(e));renderShare()}});
+$("aboutBtn").onclick=()=>{$("abt").hidden=false;$("abtClose").focus()};$("abtClose").onclick=()=>{$("abt").hidden=true};$("abt").addEventListener("click",ev=>{if(ev.target.id==="abt")$("abt").hidden=true});addEventListener("keydown",ev=>{if(ev.key==="Escape")$("abt").hidden=true});
+function route(){const v=location.hash==="#explorar"?"explorar":"hoje";
+ $("view-hoje").hidden=v!=="hoje";$("view-explorar").hidden=v!=="explorar";
+ $("hero").hidden=v!=="hoje";$("dateline").hidden=v!=="hoje";
+ $("tab-hoje").setAttribute("aria-current",v==="hoje"?"page":"false");$("tab-explorar").setAttribute("aria-current",v==="explorar"?"page":"false");
+ v==="hoje"?renderDay():renderExplore();}
+$("prev").onclick=()=>{cur.setDate(cur.getDate()-1);renderDay()};
+$("next").onclick=()=>{cur.setDate(cur.getDate()+1);renderDay()};
+$("today").onclick=()=>{cur=new Date();cur.setHours(12,0,0,0);renderDay()};
+$("pick").onchange=e=>{const [y,m,d]=e.target.value.split("-").map(Number);if(y){cur=new Date(y,m-1,d,12);renderDay()}};
+addEventListener("hashchange",route);applyLang();route();
+(async()=>{const api=(window.HOJECV_CONFIG||{}).API;if(!api)return;
+ try{const ctl=new AbortController();const t=setTimeout(()=>ctl.abort(),12000);
+  const r=await fetch(api+"?acao=eventos",{signal:ctl.signal});clearTimeout(t);const j=await r.json();
+  if(Array.isArray(j.eventos)&&j.eventos.length){RAW=j.eventos;EVENTS=toEv(RAW);indexar();applyLang();if($("rep").hidden&&$("shr").hidden)route()}
+ }catch(_){/* fica a cópia de reserva */}})();
+</script>
+</body>
+</html>
