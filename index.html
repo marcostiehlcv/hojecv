@@ -15,7 +15,7 @@
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23003893'/%3E%3Crect y='34' width='64' height='14' fill='%23fff'/%3E%3Crect y='39' width='64' height='4' fill='%23cf2027'/%3E%3Ccircle cx='24' cy='41' r='13' fill='none' stroke='%23f7d116' stroke-width='3' stroke-dasharray='3 5'/%3E%3C/svg%3E">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
 <script src="config.js"></script>
-<script src="dados/eventos.js"></script>
+<script src="eventos.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,800&family=Literata:opsz,wght@7..72,400;7..72,600&family=JetBrains+Mono:wght@500&display=swap">
 <style>
@@ -220,8 +220,6 @@ main .wrap{padding-block:22px 48px;display:flex;flex-direction:column;gap:22px}
       <button type="button" class="primary" id="shrSave">Guardar imagem</button>
       <button type="button" id="shrNative" hidden>Partilhar…</button>
       <button type="button" id="shrFull">Ecrã inteiro (para print)</button>
-      <a id="shrWa" target="_blank" rel="noopener">WhatsApp</a>
-      <a id="shrX" target="_blank" rel="noopener">X / Twitter</a>
       <button type="button" id="shrCopy">Copiar texto</button>
     </div>
     <p class="msg" id="shrMsg" hidden></p>
@@ -362,17 +360,27 @@ document.addEventListener("click",ev=>{const b=ev.target.closest(".flag[data-k]"
 const shareBtn=e=>`<button class="share" data-s="${keyOf(e)}" type="button" aria-label="${L().shareAria}">${L().share}</button>`;
 let shrKey=null,shrFmt="sq";
 function wrap(ctx,text,maxW){const words=text.split(/\s+/);const lines=[];let line="";for(const w of words){const t=line?line+" "+w:w;if(ctx.measureText(t).width>maxW&&line){lines.push(line);line=w}else line=t}if(line)lines.push(line);return lines}
-function drawFlag(ctx,x,y,w){const h=w*600/1020,s=w/1020;ctx.save();ctx.translate(x,y);ctx.scale(s,s);ctx.fillStyle="#003893";ctx.fillRect(0,0,1020,600);ctx.fillStyle="#fff";ctx.fillRect(0,300,1020,150);ctx.fillStyle="#cf2027";ctx.fillRect(0,350,1020,50);ctx.translate(382.5,375);ctx.fillStyle="#f7d116";const ro=35,ri=ro*Math.sin(Math.PI/10)/Math.sin(3*Math.PI/10);for(let i=0;i<10;i++){ctx.save();ctx.rotate(i*Math.PI/5);ctx.translate(0,-150);ctx.beginPath();for(let k=0;k<10;k++){const r=k%2?ri:ro,a=-Math.PI/2+k*Math.PI/5;ctx.lineTo(r*Math.cos(a),r*Math.sin(a))}ctx.closePath();ctx.fill();ctx.restore()}ctx.restore();ctx.strokeStyle="rgba(255,255,255,.35)";ctx.lineWidth=2;ctx.strokeRect(x,y,w,h)}
+function drawFlag(ctx,x,y,w){const h=w*600/1020,s=w/1020,r=Math.max(5,w*.02);
+ ctx.save();ctx.shadowColor="rgba(0,0,0,.5)";ctx.shadowBlur=w*.14;ctx.shadowOffsetY=w*.06;ctx.fillStyle="#003893";ctx.beginPath();ctx.roundRect(x,y,w,h,r);ctx.fill();ctx.restore();
+ ctx.save();ctx.beginPath();ctx.roundRect(x,y,w,h,r);ctx.clip();ctx.translate(x,y);ctx.scale(s,s);
+ ctx.fillStyle="#003893";ctx.fillRect(0,0,1020,600);ctx.fillStyle="#fff";ctx.fillRect(0,300,1020,150);ctx.fillStyle="#cf2027";ctx.fillRect(0,350,1020,50);
+ ctx.translate(382.5,375);ctx.fillStyle="#f7d116";const ro=35,ri=ro*Math.sin(Math.PI/10)/Math.sin(3*Math.PI/10);
+ for(let i=0;i<10;i++){ctx.save();ctx.rotate(i*Math.PI/5);ctx.translate(0,-150);ctx.beginPath();for(let k=0;k<10;k++){const q=k%2?ri:ro,a=-Math.PI/2+k*Math.PI/5;ctx.lineTo(q*Math.cos(a),q*Math.sin(a))}ctx.closePath();ctx.fill();ctx.restore()}
+ ctx.restore();
+ ctx.save();ctx.strokeStyle="rgba(255,255,255,.28)";ctx.lineWidth=2;ctx.beginPath();ctx.roundRect(x,y,w,h,r);ctx.stroke();ctx.restore()}
+const loadImg=u=>new Promise(res=>{const i=new Image();i.crossOrigin="anonymous";const t=setTimeout(()=>res(null),5000);i.onload=()=>{clearTimeout(t);res(i)};i.onerror=()=>{clearTimeout(t);res(null)};i.src=u});
 function fitLines(ctx,text,font,size,minSize,maxW,maxLines){let s=size;for(;s>=minSize;s-=4){ctx.font=font.replace("$",s);const l=wrap(ctx,text,maxW);if(l.length<=maxLines)return{s,l}}ctx.font=font.replace("$",minSize);let l=wrap(ctx,text,maxW);if(l.length>maxLines){l=l.slice(0,maxLines);l[maxLines-1]=l[maxLines-1].replace(/\s*\S*$/,"")+"…"}return{s:minSize,l}}
 async function drawCard(cv,e,fmt){
  try{await Promise.all(['800 80px "Bricolage Grotesque"','500 40px "Bricolage Grotesque"','400 36px "Literata"','500 28px "JetBrains Mono"'].map(f=>document.fonts.load(f)))}catch(_){}
  const W=1080,H=fmt==="st"?1920:1080;cv.width=W;cv.height=H;const ctx=cv.getContext("2d");
  const g=ctx.createLinearGradient(0,0,0,H);g.addColorStop(0,"#003893");g.addColorStop(1,"#002566");ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+ let hasImg=false;
+ if(e.img){const im=await loadImg(e.img);if(im&&im.naturalWidth){const x0=Math.round(W*.38),w=W-x0,hh=H;const oc=document.createElement("canvas");oc.width=w;oc.height=hh;const o=oc.getContext("2d");const sc=Math.max(w/im.naturalWidth,hh/im.naturalHeight),iw=im.naturalWidth*sc,ih=im.naturalHeight*sc;try{o.filter="saturate(.55)"}catch(_){}o.drawImage(im,(w-iw)/2,(hh-ih)/2,iw,ih);try{o.filter="none"}catch(_){}o.globalCompositeOperation="destination-in";const mg=o.createLinearGradient(0,0,w,0);mg.addColorStop(0,"rgba(0,0,0,0)");mg.addColorStop(.55,"rgba(0,0,0,.55)");mg.addColorStop(1,"#000");o.fillStyle=mg;o.fillRect(0,0,w,hh);ctx.globalAlpha=.34;ctx.drawImage(oc,x0,0);ctx.globalAlpha=1;hasImg=true}}
  const P=88,st=fmt==="st";let y=st?150:84;
  // brand
  ctx.textBaseline="alphabetic";ctx.font='800 56px "Bricolage Grotesque", system-ui, sans-serif';ctx.fillStyle="#fff";ctx.fillText("Hoje",P,y+48);const hw=ctx.measureText("Hoje ").width;
  ctx.fillStyle="#f7d116";const cvw=ctx.measureText("CV").width+28;ctx.beginPath();ctx.roundRect(P+hw,y-2,cvw,64,12);ctx.fill();ctx.fillStyle="#002566";ctx.fillText("CV",P+hw+14,y+48);
- const fw=st?260:200;drawFlag(ctx,W-P-fw,y-8,fw);
+ const fw=st?320:260;drawFlag(ctx,W-P-fw,y-8,fw);
  y+=st?470:190;
  // date label
  ctx.font='500 30px "JetBrains Mono", ui-monospace, monospace';ctx.fillStyle="rgba(255,255,255,.78)";
@@ -385,16 +393,16 @@ async function drawCard(cv,e,fmt){
  ctx.fillStyle="rgba(255,255,255,.86)";ctx.font=`400 ${dd.s}px "Literata", Georgia, serif`;for(const l of dd.l){ctx.fillText(l,P,y+dd.s);y+=dd.s*1.45}
  // tags
  y+=st?60:34;ctx.font='500 26px "JetBrains Mono", ui-monospace, monospace';let x=P;
- for(const t of [L().cat1[e.c]||e.c,PL(e.ilha)]){const tw=ctx.measureText(t.toUpperCase()).width+40;ctx.fillStyle="rgba(255,255,255,.12)";ctx.beginPath();ctx.roundRect(x,y,tw,52,26);ctx.fill();ctx.fillStyle="#fff";ctx.fillText(t.toUpperCase(),x+20,y+35);x+=tw+14}
+ for(const t of [L().cat1[e.c]||e.c,PL(e.ilha),ago(e.y)]){const tw=ctx.measureText(t.toUpperCase()).width+40;ctx.fillStyle="rgba(255,255,255,.12)";ctx.beginPath();ctx.roundRect(x,y,tw,52,26);ctx.fill();ctx.fillStyle="#fff";ctx.fillText(t.toUpperCase(),x+20,y+35);x+=tw+14}
  // footer stripes (flag band)
  const fb=H-(st?230:150);ctx.fillStyle="#fff";ctx.fillRect(0,fb,W,36);ctx.fillStyle="#cf2027";ctx.fillRect(0,fb+12,W,12);
  ctx.font='500 23px "JetBrains Mono", ui-monospace, monospace';ctx.fillStyle="rgba(255,255,255,.62)";ctx.fillText(L().cardFoot,P,fb+(st?120:88));ctx.font='500 28px "JetBrains Mono", ui-monospace, monospace';ctx.fillStyle="rgba(255,255,255,.95)";ctx.textAlign="right";ctx.fillText(SITE,W-P,fb+(st?120:88));ctx.textAlign="left";
+ if(hasImg&&L().credit){ctx.font='500 20px "JetBrains Mono", ui-monospace, monospace';ctx.fillStyle="rgba(255,255,255,.55)";ctx.textAlign="right";ctx.fillText(L().credit.replace(/^[^A-Za-zÀ-ú]+/,""),W-P,fb-22);ctx.textAlign="left"}
 }
 const shareText=e=>L().shareText(e,MO(e.m-1));
 async function renderShare(){const e=BYKEY[shrKey];await drawCard($("shrCv"),e,shrFmt);
  document.querySelectorAll('#shr .seg2 button').forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.f===shrFmt)))}
 async function openShare(k){shrKey=k;shrFmt="sq";const e=BYKEY[k];const t=shareText(e);
- $("shrWa").href="https://wa.me/?text="+encodeURIComponent(t);$("shrX").href="https://twitter.com/intent/tweet?text="+encodeURIComponent(t);
  $("shrMsg").hidden=true;$("shr").hidden=false;await renderShare();
  let canNative=false;try{canNative=!!(navigator.canShare&&navigator.canShare({files:[new File([new Blob(["x"])],"t.png",{type:"image/png"})]}))}catch(_){}
  $("shrNative").hidden=!canNative;$("shrSave").focus()}
@@ -459,7 +467,7 @@ function applyLang(){const t=L();document.documentElement.lang=LANG==="en"?"en":
  const fl=document.querySelector(".flag-cv");if(fl)fl.setAttribute("aria-label",t.flagAlt);
  document.querySelectorAll("#lang button").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.l===LANG)));}
 $("lang").addEventListener("click",ev=>{const b=ev.target.closest("button[data-l]");if(!b||b.dataset.l===LANG)return;LANG=b.dataset.l;try{localStorage.setItem("hojecv_lang",LANG)}catch(_){}applyLang();route();
- if(!$("shr").hidden&&shrKey){const e=BYKEY[shrKey];$("shrWa").href="https://wa.me/?text="+encodeURIComponent(shareText(e));$("shrX").href="https://twitter.com/intent/tweet?text="+encodeURIComponent(shareText(e));renderShare()}});
+ if(!$("shr").hidden&&shrKey){const e=BYKEY[shrKey];renderShare()}});
 $("aboutBtn").onclick=()=>{$("abt").hidden=false;$("abtClose").focus()};$("abtClose").onclick=()=>{$("abt").hidden=true};$("abt").addEventListener("click",ev=>{if(ev.target.id==="abt")$("abt").hidden=true});addEventListener("keydown",ev=>{if(ev.key==="Escape")$("abt").hidden=true});
 function route(){const v=location.hash==="#explorar"?"explorar":"hoje";
  $("view-hoje").hidden=v!=="hoje";$("view-explorar").hidden=v!=="explorar";
