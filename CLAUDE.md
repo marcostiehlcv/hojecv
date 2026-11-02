@@ -12,13 +12,14 @@ Projeto: **Hoje CV** ("Neste dia na história de Cabo Verde"), de Marco Stiehl. 
 | Ficheiro | Função |
 |---|---|
 | `index.html` | O site inteiro (HTML + CSS + JS). Editar diretamente |
-| `eventos.js` | Os dados do site, gerados a partir da Sheet: `window.HOJECV_DADOS = [[...]]` |
+| `eventos.js` | Os dados do site, gerados a partir da Sheet: `window.HOJECV_ATUALIZADO = "AAAA-MM-DD"` e `window.HOJECV_DADOS = [[...]]` |
 | `config.js` | `window.HOJECV_CONFIG = { API: "<url /exec do Apps Script>" }` (usado só para os reportes) |
 | `scripts/gerar-eventos.js` | Gera o `eventos.js` a partir do Apps Script, com validação (`--ver` só valida) |
 | `Code.gs` | Script da Google Sheet (colar em Extensões → Apps Script). O site só o usa para os reportes |
 
 **A Sheet serve para editar; o `eventos.js` serve o site.** O site é estático: lê apenas o `eventos.js` (carrega `dados/eventos.js` e depois `eventos.js`; o da raiz tem prioridade) e não pede dados ao Apps Script. Uma alteração na Sheet só chega ao site depois de regenerar o `eventos.js` e fazer commit.
 Abrir `/?fonte` mostra uma etiqueta com a origem e o número de registos.
+A nota no fim da vista Hoje mostra «Dados atualizados a …» (`I18N.*.updated`), a partir de `HOJECV_ATUALIZADO`. O gerador só muda essa data quando algum registo mudou (hora de Cabo Verde).
 
 ## Dados
 Fonte de verdade: Google Sheet **"Hoje CV — Base de dados"** (id `1P8pzpkJ-V5zoudy7IWXynx_hyIG2YMhckNINPA6UpdI`).
