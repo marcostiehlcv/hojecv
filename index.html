@@ -26,6 +26,7 @@
   /* etiquetas de tipo e tema (texto branco) */
   --t-nascimento:#1f8a5b; --t-falecimento:#4a5468; --t-musica:#a3570f; --t-literatura:#6d4c41; --t-artes:#ad3a6e;
   --t-desporto:#6b3fb0; --t-religiao:#5f6b1f; --t-sociedade:#0b7285; --t-catastrofe:#3d3d3d; --t-celebracao:#8a6d00;
+  --conf-alta:#1f8a5b; --conf-media:#e0a400; --conf-baixa:#9aa3b5;
   --bg:#f5f7fb; --surface:#ffffff; --fg:#0f1a2e; --muted:#5a6680; --line:#dde3ee; --chip:#e9eef8;
   --img-op:.38;
   --display:"Bricolage Grotesque",system-ui,sans-serif;
@@ -109,6 +110,14 @@ main .wrap{padding-block:22px 48px;display:flex;flex-direction:column;gap:22px}
 .century h2 small{font-family:var(--mono);font-weight:500;font-size:12px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
 .note{font-size:13.5px;color:var(--muted);border-top:1px solid var(--line);padding-top:14px}
 .src{font-family:var(--mono);font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--ocean);text-decoration:none;margin-left:auto;padding:3px 0}
+/* nível de confiança (alta / média / baixa), calculado a partir da fonte */
+.conf{font-family:var(--mono);font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);margin-left:auto;padding:3px 0;display:inline-flex;align-items:center;gap:5px;white-space:nowrap}
+.conf::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--conf-baixa)}
+.conf.alta::before{background:var(--conf-alta)}.conf.media::before{background:var(--conf-media)}
+.confi{width:16px;height:16px;margin-left:5px;padding:0;border:1px solid var(--line);border-radius:50%;background:none;color:var(--muted);font:600 10px/14px var(--mono);cursor:pointer;flex:none}
+.confi:hover{color:var(--fg);border-color:var(--muted)}
+.confi+.src{margin-left:10px}
+.about p.hl{background:var(--chip);border-radius:8px;padding:8px 10px;margin:0 -10px}
 .src:hover{text-decoration:underline}
 .flag{font-family:var(--mono);font-size:11px;letter-spacing:.04em;text-transform:uppercase;background:none;border:0;color:var(--muted);cursor:pointer;padding:3px 0;display:inline-flex;align-items:center;gap:4px;opacity:.8}
 .flag:hover{color:var(--rubro);opacity:1}
@@ -288,6 +297,9 @@ let EVENTS = toEv(RAW);
 const I18N={
 pt:{hoje:"Hoje",explorar:"Explorar",today:"Hoje",prev:"Dia anterior",next:"Dia seguinte",pick:"Escolher data",tabs:"Secções",
  highlight:"Destaque do dia",catsLbl:"Categorias",era:"Época",cat:"Categoria",onday:"neste dia em Cabo Verde",
+ conf:{alta:"Confiança alta",media:"Confiança média",baixa:"Confiança baixa"},confInfo:"O que significa o nível de confiança?",
+ confTip:"Nível de confiança da fonte. Alta: fonte oficial, imprensa de referência ou enciclopédia. Média: Wikipédia ou outra fonte. Baixa: data tradicional. Toque no i para saber mais.",
+ aboutConf:"Cada registo mostra um nível de confiança, calculado a partir da fonte principal. Alta: instituições oficiais, imprensa de referência ou enciclopédias. Média: Wikipédia ou outras fontes. Baixa: datas tradicionais, sem registo documental exato. Um nível médio não quer dizer que o facto esteja errado, apenas que a fonte é menos direta. Se encontrar um erro, use «Assinalar erro».",
  updated:(d,m,y,h)=>`Última atualização: ${d} de ${m} de ${y}, às ${h} (hora de Cabo Verde)`,
  foot:"Hoje CV · Um projeto de Marco Stiehl",aboutBtn:"Sobre o Hoje CV",aboutTitle:"Sobre o Hoje CV",
  about:["O Hoje CV mostra, dia a dia, os acontecimentos, nascimentos e falecimentos que marcaram a história de Cabo Verde, desde a chegada dos navegadores em 1460 até aos nossos dias.",
@@ -320,6 +332,9 @@ pt:{hoje:"Hoje",explorar:"Explorar",today:"Hoje",prev:"Dia anterior",next:"Dia s
  place:{}},
 en:{hoje:"Today",explorar:"Explore",today:"Today",prev:"Previous day",next:"Next day",pick:"Choose a date",tabs:"Sections",
  highlight:"Highlight of the day",catsLbl:"Categories",era:"Period",cat:"Category",onday:"on this day in Cabo Verde",
+ conf:{alta:"High confidence",media:"Medium confidence",baixa:"Low confidence"},confInfo:"What does the confidence level mean?",
+ confTip:"Source confidence level. High: official source, reputable press or encyclopaedia. Medium: Wikipedia or another source. Low: traditional date. Tap the i to learn more.",
+ aboutConf:"Each record shows a confidence level, based on its main source. High: official institutions, reputable press or encyclopaedias. Medium: Wikipedia or other sources. Low: traditional dates with no exact documentary record. A medium level does not mean the fact is wrong, only that the source is less direct. If you find a mistake, use “Report error”.",
  updated:(d,m,y,h)=>`Last updated: ${d} ${m} ${y}, ${h} (Cabo Verde time)`,
  foot:"Hoje CV · A project by Marco Stiehl",aboutBtn:"About Hoje CV",aboutTitle:"About Hoje CV",
  about:["Hoje CV (“Today CV”) shows, day by day, the events, births and deaths that shaped the history of Cabo Verde, from the arrival of the navigators in 1460 to the present day.",
@@ -380,8 +395,12 @@ const wdTag=e=>{if(e.y<1582||(e.y===1582&&(e.m<10||(e.m===10&&e.d<15))))return""
 const ago=y=>L().ago(new Date().getFullYear()-y);
 const imgTag=(e,cls)=>e.img?`<figure class="${cls}" aria-hidden="true"><img src="${e.img}" alt="" loading="lazy" onerror="var a=this.closest('article');if(a){a.classList.remove('has-img');var c=a.querySelector('.cred');if(c)c.remove();}this.parentNode.remove()"></figure>`:"";
 const credit=e=>e.img&&e.cr?`<a class="cred" href="${e.cr}" target="_blank" rel="noopener">${L().credit}</a>`:"";
+// Nível de confiança: baixa = data tradicional; alta = fonte oficial, imprensa de referência ou enciclopédia; média = Wikipédia ou outra fonte.
+const CONF_ALTA=["cv","unesco.org","un.org","who.int","wto.org","rtp.pt","dn.pt","rr.pt","observador.pt","publico.pt","sapo.pt","sabado.pt","infopedia.pt","britannica.com","grammy.com","olympedia.org","fifa.com","cafonline.com","fiba.basketball","catholic-hierarchy.org","gcatholic.org","forbesafricalusofona.com","forbespt.com","embaixadadecaboverde.pt","ahram.org.eg","uca.edu"];
+const confOf=e=>{if(/data tradicional|traditional date/i.test(e.x+" "+(e.xe||"")))return"baixa";let h="";try{h=new URL(e.f).hostname.replace(/^www\./,"")}catch(_){return"baixa"}return CONF_ALTA.some(d=>h===d||h.endsWith("."+d))?"alta":"media"};
+const confTag=e=>{const c=confOf(e);return`<span class="conf ${c}" title="${L().confTip}">${L().conf[c]}</span><button type="button" class="confi" aria-label="${L().confInfo}" title="${L().confTip}">i</button>`};
 const srcLink=e=>e.f?`<a class="src" href="${e.f}" target="_blank" rel="noopener">${L().src}</a>`:"";
-const itemHTML=(e,showDate)=>`<article class="item${e.img?" has-img":""}"><div class="y">${e.y}${wdTag(e)}</div><div style="min-width:0">${showDate?`<div class="d">${L().shortDate(e.d,MO(e.m-1))}</div>`:""}<h3>${esc(T(e))}</h3><p>${esc(X(e))}</p><div class="meta">${tagCat(e)}<span class="tag">${PL(e.ilha)}</span>${srcLink(e)}</div><div class="acts-row">${shareBtn(e)}${flagBtn(e)}</div></div>${imgTag(e,"thumb")}</article>`;
+const itemHTML=(e,showDate)=>`<article class="item${e.img?" has-img":""}"><div class="y">${e.y}${wdTag(e)}</div><div style="min-width:0">${showDate?`<div class="d">${L().shortDate(e.d,MO(e.m-1))}</div>`:""}<h3>${esc(T(e))}</h3><p>${esc(X(e))}</p><div class="meta">${tagCat(e)}<span class="tag">${PL(e.ilha)}</span>${confTag(e)}${srcLink(e)}</div><div class="acts-row">${shareBtn(e)}${flagBtn(e)}</div></div>${imgTag(e,"thumb")}</article>`;
 
 const MOTIVOS=[["data","A data (dia ou mês) está errada"],["ano","O ano está errado"],["titulo","O título ou o nome está errado"],["descricao","A descrição tem informação incorreta"],["categoria","A categoria está errada"],["local","A ilha ou o local está errado"],["fonte","A fonte não abre ou não confirma o facto"],["imagem","A imagem não corresponde ou é inadequada"],["duplicado","O acontecimento está repetido"],["ofensivo","Conteúdo ofensivo ou inadequado"]];
 const hashT=s=>{let x=5381;for(const c of s)x=((x<<5)+x+c.charCodeAt(0))>>>0;return x.toString(36)};
@@ -496,7 +515,7 @@ function renderDay(){
   fb.querySelectorAll(".near button").forEach(b=>b.onclick=()=>{cur.setMonth(+b.dataset.m-1,+b.dataset.d);renderDay()});
  } else {
   const f=day.find(e=>e.top)||day[0];
-  fb.innerHTML=`<div class="label" style="margin-bottom:8px">${L().highlight}</div><article class="feature${f.img?" has-img":""}">${imgTag(f,"wash")}<div class="yr">${f.y}${wdTag(f)}</div><h2>${esc(T(f))}</h2><p>${esc(X(f))}</p><div class="meta">${tagCat(f)}<span class="tag">${PL(f.ilha)}</span><span class="tag">${ago(f.y)}</span>${srcLink(f)}</div><div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap"><div class="acts-row">${shareBtn(f)}${flagBtn(f)}</div>${credit(f)}</div></article>`;
+  fb.innerHTML=`<div class="label" style="margin-bottom:8px">${L().highlight}</div><article class="feature${f.img?" has-img":""}">${imgTag(f,"wash")}<div class="yr">${f.y}${wdTag(f)}</div><h2>${esc(T(f))}</h2><p>${esc(X(f))}</p><div class="meta">${tagCat(f)}<span class="tag">${PL(f.ilha)}</span><span class="tag">${ago(f.y)}</span>${confTag(f)}${srcLink(f)}</div><div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap"><div class="acts-row">${shareBtn(f)}${flagBtn(f)}</div>${credit(f)}</div></article>`;
  }
  chips($("chips"),cat,k=>{cat=k;save();renderDay()},day);
  const list=day.filter(e=>hit(e,cat));
@@ -518,7 +537,7 @@ function applyLang(){const t=L();document.documentElement.lang=LANG==="en"?"en":
  const set=(id,v)=>{const el=$(id);if(el)el.textContent=v};
  set("tab-hoje",t.hoje);set("tab-explorar",t.explorar);set("today",t.today);set("lblCats",t.catsLbl);set("lblEra",t.era);set("lblCat",t.cat);
  set("repTitle",t.repTitle);set("repQ",t.repQ);set("repCancel",t.cancel);set("repSend",t.send);set("shrTitle",t.shrTitle);set("fmtSq",t.sq);
- set("shrSave",t.save);set("shrNative",t.native);set("shrFull",t.full);set("shrCopy",t.copy);set("shrClose",t.close);set("fullHint",t.hint);set("foot",t.foot);set("aboutBtn",t.aboutBtn);set("abtTitle",t.aboutTitle);set("abtClose",t.close);{const b=$("abtBody");if(b){b.innerHTML="";t.about.forEach(x=>{const p=document.createElement("p");p.textContent=x;b.appendChild(p)})}}
+ set("shrSave",t.save);set("shrNative",t.native);set("shrFull",t.full);set("shrCopy",t.copy);set("shrClose",t.close);set("fullHint",t.hint);set("foot",t.foot);set("aboutBtn",t.aboutBtn);set("abtTitle",t.aboutTitle);set("abtClose",t.close);{const b=$("abtBody");if(b){b.innerHTML="";t.about.forEach((x,i)=>{const p=document.createElement("p");p.textContent=x;b.appendChild(p);if(i===2){const q=document.createElement("p");q.id="abtConf";q.textContent=t.aboutConf;b.appendChild(q)}})}}
  if($("note")){const u=/^(\d{4})-(\d{2})-(\d{2}) (\d{2}:\d{2})$/.exec(window.HOJECV_ATUALIZADO||"");$("note").textContent=u?t.updated(+u[3],MO(+u[2]-1),u[1],u[4]):"";$("note").hidden=!u}
  $("prev").setAttribute("aria-label",t.prev);$("next").setAttribute("aria-label",t.next);$("pick").setAttribute("aria-label",t.pick);$("tabs").setAttribute("aria-label",t.tabs);
  $("shrCv").title=t.cvTitle;document.querySelector('#shr .seg2').setAttribute("aria-label",t.fmtAria);
@@ -526,7 +545,8 @@ function applyLang(){const t=L();document.documentElement.lang=LANG==="en"?"en":
  document.querySelectorAll("#lang button").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.l===LANG)));}
 $("lang").addEventListener("click",ev=>{const b=ev.target.closest("button[data-l]");if(!b||b.dataset.l===LANG)return;LANG=b.dataset.l;try{localStorage.setItem("hojecv_lang",LANG)}catch(_){}applyLang();route();
  if(!$("shr").hidden&&shrKey){const e=BYKEY[shrKey];renderShare()}});
-$("aboutBtn").onclick=()=>{$("abt").hidden=false;$("abtClose").focus()};$("abtClose").onclick=()=>{$("abt").hidden=true};$("abt").addEventListener("click",ev=>{if(ev.target.id==="abt")$("abt").hidden=true});addEventListener("keydown",ev=>{if(ev.key==="Escape")$("abt").hidden=true});
+$("aboutBtn").onclick=()=>{const p=$("abtConf");if(p)p.classList.remove("hl");$("abt").hidden=false;$("abtClose").focus()};
+document.addEventListener("click",ev=>{if(!ev.target.closest(".confi"))return;$("abt").hidden=false;const p=$("abtConf");if(p){p.classList.add("hl");p.scrollIntoView({block:"center"})}$("abtClose").focus({preventScroll:true})});$("abtClose").onclick=()=>{$("abt").hidden=true;const p=$("abtConf");if(p)p.classList.remove("hl")};$("abt").addEventListener("click",ev=>{if(ev.target.id==="abt")$("abt").hidden=true});addEventListener("keydown",ev=>{if(ev.key==="Escape")$("abt").hidden=true});
 function route(){const v=location.hash==="#explorar"?"explorar":"hoje";
  $("view-hoje").hidden=v!=="hoje";$("view-explorar").hidden=v!=="explorar";
  $("hero").hidden=v!=="hoje";$("dateline").hidden=v!=="hoje";
