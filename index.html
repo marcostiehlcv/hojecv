@@ -116,7 +116,7 @@ main .wrap{padding-block:22px 48px;display:flex;flex-direction:column;gap:22px}
 .conf.alta::before{background:var(--conf-alta)}.conf.media::before{background:var(--conf-media)}
 .confi{width:16px;height:16px;margin-left:5px;padding:0;border:1px solid var(--line);border-radius:50%;background:none;color:var(--muted);font:600 10px/14px var(--mono);cursor:pointer;flex:none}
 .confi:hover{color:var(--fg);border-color:var(--muted)}
-.confw{display:inline-flex;align-items:center;margin-left:auto;white-space:nowrap}.confw .conf{margin-left:0}.confw+.src{margin-left:10px}
+.srcw{display:inline-flex;align-items:center;margin-left:auto;white-space:nowrap}.srcw .src{margin-left:0}.confw{display:inline-flex;align-items:center;white-space:nowrap}.confw .conf{margin-left:0}.confw+.src{margin-left:10px}
 .src:hover{text-decoration:underline}
 .flag{font-family:var(--mono);font-size:11px;letter-spacing:.04em;text-transform:uppercase;background:none;border:0;color:var(--muted);cursor:pointer;padding:3px 0;display:inline-flex;align-items:center;gap:4px;opacity:.8}
 .flag:hover{color:var(--rubro);opacity:1}
@@ -135,10 +135,12 @@ main .wrap{padding-block:22px 48px;display:flex;flex-direction:column;gap:22px}
 .sheet .acts .send{background:var(--rubro);border-color:var(--rubro);color:#fff}
 .sheet .acts .send:disabled{opacity:.45;cursor:not-allowed}
 .sheet .msg{font-size:14px;color:var(--muted);margin:0}
-.share{font-family:var(--mono);font-size:11px;letter-spacing:.04em;text-transform:uppercase;background:none;border:0;color:var(--ocean);cursor:pointer;padding:3px 0;display:inline-flex;align-items:center;gap:4px}
-.share:hover{text-decoration:underline}
+.share{font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;background:var(--chip);border:1px solid currentColor;border-radius:999px;color:var(--ocean);cursor:pointer;padding:5px 12px;display:inline-flex;align-items:center;gap:4px}
+.share:hover{background:var(--ocean);border-color:var(--ocean);color:#fff}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .share{color:#8fb4ff}}
 :root[data-theme="dark"] .share{color:#8fb4ff}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .share:hover{color:#fff;border-color:#8fb4ff}}
+:root[data-theme="dark"] .share:hover{color:#fff;border-color:#8fb4ff}
 .acts-row{display:flex;gap:14px;align-items:center;flex-wrap:wrap;margin-top:2px}
 .seg2{display:inline-flex;background:var(--chip);border-radius:999px;padding:3px;gap:2px;align-self:flex-start}
 .seg2 button{font-family:var(--display);font-weight:500;font-size:14px;border:0;background:transparent;color:var(--fg);padding:6px 14px;border-radius:999px;cursor:pointer}
@@ -407,7 +409,7 @@ const CONF_ALTA=["cv","unesco.org","un.org","who.int","wto.org","rtp.pt","dn.pt"
 const confOf=e=>{if(/data tradicional|traditional date/i.test(e.x+" "+(e.xe||"")))return"baixa";let h="";try{h=new URL(e.f).hostname.replace(/^www\./,"")}catch(_){return"baixa"}return CONF_ALTA.some(d=>h===d||h.endsWith("."+d))?"alta":"media"};
 const confTag=e=>{const c=confOf(e);return`<span class="confw"><span class="conf ${c}" title="${L().confTip}">${L().conf[c]}</span><button type="button" class="confi" aria-label="${L().confInfo}" title="${L().confTip}">i</button></span>`};
 const srcLink=e=>e.f?`<a class="src" href="${e.f}" target="_blank" rel="noopener">${L().src}</a>`:"";
-const itemHTML=(e,showDate)=>`<article class="item"><div class="y">${e.y}${wdTag(e)}</div><div style="min-width:0">${showDate?`<div class="d">${L().shortDate(e.d,MO(e.m-1))}</div>`:""}<h3>${esc(T(e))}</h3><p>${esc(X(e))}</p><div class="meta">${tagCat(e)}<span class="tag">${PL(e.ilha)}</span>${confTag(e)}${srcLink(e)}</div><div class="acts-row">${shareBtn(e)}${flagBtn(e)}</div></div></article>`;
+const itemHTML=(e,showDate)=>`<article class="item"><div class="y">${e.y}${wdTag(e)}</div><div style="min-width:0">${showDate?`<div class="d">${L().shortDate(e.d,MO(e.m-1))}</div>`:""}<h3>${esc(T(e))}</h3><p>${esc(X(e))}</p><div class="meta">${tagCat(e)}<span class="tag">${PL(e.ilha)}</span></div><div class="acts-row">${shareBtn(e)}${flagBtn(e)}<span class="srcw">${confTag(e)}${srcLink(e)}</span></div></div></article>`;
 
 const MOTIVOS=[["data","A data (dia ou mês) está errada"],["ano","O ano está errado"],["titulo","O título ou o nome está errado"],["descricao","A descrição tem informação incorreta"],["categoria","A categoria está errada"],["local","A ilha ou o local está errado"],["fonte","A fonte não abre ou não confirma o facto"],["imagem","A imagem não corresponde ou é inadequada"],["duplicado","O acontecimento está repetido"],["ofensivo","Conteúdo ofensivo ou inadequado"]];
 const hashT=s=>{let x=5381;for(const c of s)x=((x<<5)+x+c.charCodeAt(0))>>>0;return x.toString(36)};
@@ -522,7 +524,7 @@ function renderDay(){
   fb.querySelectorAll(".near button").forEach(b=>b.onclick=()=>{cur.setMonth(+b.dataset.m-1,+b.dataset.d);renderDay()});
  } else {
   const f=day.find(e=>e.top)||day[0];
-  fb.innerHTML=`<div class="label" style="margin-bottom:8px">${L().highlight}</div><article class="feature${f.img?" has-img":""}">${imgTag(f,"wash")}<div class="yr">${f.y}${wdTag(f)}</div><h2>${esc(T(f))}</h2><p>${esc(X(f))}</p><div class="meta">${tagCat(f)}<span class="tag">${PL(f.ilha)}</span><span class="tag">${ago(f.y)}</span>${confTag(f)}${srcLink(f)}</div><div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap"><div class="acts-row">${shareBtn(f)}${flagBtn(f)}</div>${credit(f)}</div></article>`;
+  fb.innerHTML=`<div class="label" style="margin-bottom:8px">${L().highlight}</div><article class="feature${f.img?" has-img":""}">${imgTag(f,"wash")}<div class="yr">${f.y}${wdTag(f)}</div><h2>${esc(T(f))}</h2><p>${esc(X(f))}</p><div class="meta">${tagCat(f)}<span class="tag">${PL(f.ilha)}</span><span class="tag">${ago(f.y)}</span></div><div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap"><div class="acts-row" style="flex:1">${shareBtn(f)}${flagBtn(f)}<span class="srcw">${confTag(f)}${srcLink(f)}</span></div>${credit(f)}</div></article>`;
  }
  chips($("chips"),cat,k=>{cat=k;save();renderDay()},day);
  const list=day.filter(e=>hit(e,cat));
