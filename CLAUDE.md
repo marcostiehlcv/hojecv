@@ -12,14 +12,14 @@ Projeto: **Hoje CV** ("Neste dia na história de Cabo Verde"), de Marco Stiehl. 
 | Ficheiro | Função |
 |---|---|
 | `index.html` | O site inteiro (HTML + CSS + JS). Editar diretamente |
-| `eventos.js` | Os dados do site, gerados a partir da Sheet: `window.HOJECV_ATUALIZADO = "AAAA-MM-DD"` e `window.HOJECV_DADOS = [[...]]` |
+| `eventos.js` | Os dados do site, gerados a partir da Sheet: `window.HOJECV_ATUALIZADO = "AAAA-MM-DD HH:MM"` e `window.HOJECV_DADOS = [[...]]` |
 | `config.js` | `window.HOJECV_CONFIG = { API: "<url /exec do Apps Script>" }` (usado só para os reportes) |
 | `scripts/gerar-eventos.js` | Gera o `eventos.js` a partir do Apps Script, com validação (`--ver` só valida) |
 | `Code.gs` | Script da Google Sheet (colar em Extensões → Apps Script). O site só o usa para os reportes |
 
 **A Sheet serve para editar; o `eventos.js` serve o site.** O site é estático: lê apenas o `eventos.js` (carrega `dados/eventos.js` e depois `eventos.js`; o da raiz tem prioridade) e não pede dados ao Apps Script. Uma alteração na Sheet só chega ao site depois de regenerar o `eventos.js` e fazer commit.
 Abrir `/?fonte` mostra uma etiqueta com a origem e o número de registos.
-A nota no fim da vista Hoje mostra «Dados atualizados a …» (`I18N.*.updated`), a partir de `HOJECV_ATUALIZADO`. O gerador só muda essa data quando algum registo mudou (hora de Cabo Verde).
+A nota no fim da vista Hoje mostra só «Última atualização: D de mês de AAAA, às HH:MM (hora de Cabo Verde)» (`I18N.*.updated`), a partir de `HOJECV_ATUALIZADO`; não mostra o número de registos. O gerador só muda essa data e hora quando algum registo mudou.
 
 ## Dados
 Fonte de verdade: Google Sheet **"Hoje CV — Base de dados"** (id `1P8pzpkJ-V5zoudy7IWXynx_hyIG2YMhckNINPA6UpdI`).
@@ -29,7 +29,7 @@ Fonte de verdade: Google Sheet **"Hoje CV — Base de dados"** (id `1P8pzpkJ-V5z
 Cada registo em `eventos.js` é um array:
 `[dia, mes, ano, titulo, descricao, categoria, ilha, destaque, fonte, imagem, credito, titulo_en, descricao_en, tema]`
 - `categoria` = **tipo**: `acontecimento | nascimento | falecimento`
-- `tema` = **área**: `politica | historia | musica | literatura | artes | desporto | religiao | sociedade | catastrofe` (historia = descobrimentos, período colonial, luta de libertação; artes = artes plásticas, cinema, teatro; sociedade = economia, educação, saúde, infraestruturas, imprensa, diáspora; catastrofe = secas, fomes, erupções, naufrágios, acidentes, epidemias). Um nascimento de um músico é `nascimento` + `musica`.
+- `tema` = **área**: `politica | historia | musica | literatura | artes | desporto | religiao | sociedade | catastrofe | celebracao` (celebracao = só a data em que uma celebração começou ou foi instituída, nunca as edições anuais; historia = descobrimentos, período colonial, luta de libertação; artes = artes plásticas, cinema, teatro; sociedade = economia, educação, saúde, infraestruturas, imprensa, diáspora; catastrofe = secas, fomes, erupções, naufrágios, acidentes, epidemias). Um nascimento de um músico é `nascimento` + `musica`.
 - Registos antigos sem `tema` (categoria `politica|cultura|desporto`) continuam a funcionar: o `toEv` converte-os.
 - `destaque`: `1` = evento principal do dia (se não houver, usa-se o primeiro)
 - `ilha`: nome da ilha, `Nacional` ou país/local (ex.: Portugal, Guiné-Bissau). Os nomes em inglês estão em `L().place`.
@@ -38,7 +38,7 @@ Cada registo em `eventos.js` é um array:
 ## Critérios editoriais (obrigatórios para novos registos)
 1. Relevância para a história de Cabo Verde ou da diáspora.
 2. **Data exata** (dia, mês e ano). Só ano ou mês = não entra. Se duas fontes discordam, o registo fica de fora até haver confirmação.
-3. **Fonte consultável** em cada registo, e **duas fontes independentes** com a mesma data exata para entrar como `verificado` (`fonte` + `fonte2`; a Wikipédia, no máximo, como `fonte2`). Com uma só fonte ou com fontes que discordam, fica `por verificar`, com a razão em `notas`. Fontes aceites: instituições oficiais, arquivos, enciclopédias e imprensa cabo-verdiana de referência (Inforpress, Expresso das Ilhas, A Semana, RTC). Só factos comprovados, nunca especulação ou boatos.
+3. **Fonte consultável** em cada registo. **Basta uma fonte de confiança** com a data exata para entrar como `verificado` (decisão do Marco, 2026-11-02: um erro pontual corrige-se pelos reportes). `fonte2` é opcional. Se as fontes conhecidas discordarem na data, fica `por verificar`, com a razão em `notas`. Fontes de confiança: instituições oficiais, arquivos, enciclopédias e imprensa cabo-verdiana de referência (Inforpress, Expresso das Ilhas, A Semana, RTC). Só factos comprovados, nunca especulação ou boatos.
 4. Datas tradicionais (ex.: descobertas do séc. XV) são assinaladas como tal na descrição.
 5. **Pares:** quem tem registo de nascimento deve ter o de falecimento (e vice-versa), quando as duas datas exatas são conhecidas.
 6. Imagens: só quando existirem, de forma muito subtil, com licença livre (Wikimedia Commons) e crédito. Sem imagem, não se mostra nada.
@@ -48,6 +48,8 @@ Cada registo em `eventos.js` é um array:
 - **Temas:** variáveis CSS em `:root` (claro) e `prefers-color-scheme: dark` / `data-theme`. Não usar cores soltas; usar os tokens (`--bg`, `--surface`, `--fg`, `--muted`, `--line`, `--ocean`, `--ocean-deep`, `--sun`, `--rubro`…).
 - **i18n:** `I18N.pt` e `I18N.en`; `L()` devolve a língua atual; `T(e)`/`X(e)` escolhem título/descrição por língua; `PL()` traduz nomes de locais. Língua guardada em `localStorage` (`hojecv_lang`).
 - **Filtros:** `I18N.*.cats` (tipos + temas); `hit(e,k)` aceita tipo ou tema; na vista Hoje só aparecem os filtros com registos nesse dia. `rotulo(e)` dá a etiqueta: tema nos acontecimentos, tipo nos nascimentos e falecimentos (também no cartão de partilha). Cores das etiquetas em tokens `--t-*`.
+- **Confiança:** `confOf(e)` dá `alta` (domínio da `fonte` em `CONF_ALTA`: .cv, imprensa de referência, organismos oficiais, enciclopédias), `media` (Wikipédia ou outras) ou `baixa` (descrição com «Data tradicional»). `confTag(e)` mostra o nível e um botão «i» que abre o «Sobre» no parágrafo `aboutConf` (PT/EN). Para um registo ficar «alta», pôr a fonte mais direta em `fonte`.
+- **Dia da semana:** `wdTag(e)` mostra o dia da semana do acontecimento junto ao ano (destaque e lista). Não aparece antes de 15/10/1582 (calendário juliano).
 - **Estado:** `RAW` → `EVENTS` (objetos) → `BYKEY`. `route()` desenha as vistas Hoje e Explorar. `applyLang()` atualiza os textos.
 - **Reportes:** motivos fixos por código (data, ano, titulo, descricao, categoria, local, fonte, imagem, duplicado, ofensivo), **sem texto livre**. POST `{chave, motivos[]}` para o Apps Script; reportes já enviados em `localStorage` (`hojecv_rep`).
 - **Cartão de partilha:** canvas 1080×1080 (quadrado) e 1080×1920 (story) em `drawCard()`. Mostra marca, bandeira, data, ano, título, descrição, etiquetas (categoria, ilha, "há N anos"), imagem subtil e `hojecv.app`. Botões: Guardar imagem, Partilhar… (menu nativo), Ecrã inteiro, Copiar texto. **Sem botões de WhatsApp/X.**
