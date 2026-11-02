@@ -8,7 +8,7 @@ const path = require("path");
 const RAIZ = path.join(__dirname, "..");
 const SAIDA = path.join(RAIZ, "eventos.js");
 const TIPOS = ["acontecimento", "nascimento", "falecimento"];
-const TEMAS = ["politica", "historia", "musica", "literatura", "artes", "desporto", "religiao", "sociedade", "catastrofe"];
+const TEMAS = ["politica", "historia", "musica", "literatura", "artes", "desporto", "religiao", "sociedade", "catastrofe", "celebracao"];
 
 // Mesma chave que o site (keyOf) e o Code.gs (hash_): AAAA-MM-DD-djb2(titulo) em base 36
 const hash = s => { let x = 5381; for (const ch of s) x = (((x << 5) + x + ch.charCodeAt(0)) >>> 0); return x.toString(36); };

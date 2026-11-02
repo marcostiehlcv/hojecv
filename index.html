@@ -25,7 +25,7 @@
   --ocean:#003893; --ocean-deep:#002566; --sun:#f2c230; --rubro:#c8262f;
   /* etiquetas de tipo e tema (texto branco) */
   --t-nascimento:#1f8a5b; --t-falecimento:#4a5468; --t-musica:#a3570f; --t-literatura:#6d4c41; --t-artes:#ad3a6e;
-  --t-desporto:#6b3fb0; --t-religiao:#5f6b1f; --t-sociedade:#0b7285; --t-catastrofe:#3d3d3d;
+  --t-desporto:#6b3fb0; --t-religiao:#5f6b1f; --t-sociedade:#0b7285; --t-catastrofe:#3d3d3d; --t-celebracao:#8a6d00;
   --bg:#f5f7fb; --surface:#ffffff; --fg:#0f1a2e; --muted:#5a6680; --line:#dde3ee; --chip:#e9eef8;
   --img-op:.38;
   --display:"Bricolage Grotesque",system-ui,sans-serif;
@@ -92,6 +92,10 @@ main .wrap{padding-block:22px 48px;display:flex;flex-direction:column;gap:22px}
 .item h3{margin:0 0 4px;font-family:var(--display);font-weight:500;font-size:17px;line-height:1.3}
 .item p{margin:0 0 8px;color:var(--muted);font-size:15px}
 .item .d{font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:.05em;text-transform:uppercase;margin-bottom:2px}
+/* dia da semana do acontecimento, junto ao ano */
+.wd{font-family:var(--mono);font-weight:500;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.feature .yr .wd{margin-left:12px;vertical-align:middle}
+.item .y .wd{display:block;font-size:10px;letter-spacing:.04em;margin-top:2px}
 .empty{background:var(--surface);border:1px dashed var(--line);border-radius:14px;padding:18px;color:var(--muted)}
 .empty strong{color:var(--fg);font-family:var(--display);font-weight:500}
 .near{display:flex;flex-direction:column;gap:8px;margin-top:12px}
@@ -147,7 +151,7 @@ main .wrap{padding-block:22px 48px;display:flex;flex-direction:column;gap:22px}
 .aboutlink:hover{color:var(--fg)}
 .about p{margin:0;line-height:1.6;font-size:15.5px}
 .foot{font-size:12.5px;color:var(--muted);display:flex;flex-wrap:wrap;gap:6px 14px;justify-content:space-between;border-top:1px solid var(--line);padding-top:12px;margin-top:-8px}
-.c-acontecimento,.c-historia{background:var(--ocean)}.c-politica{background:var(--rubro)}.c-nascimento{background:var(--t-nascimento)}.c-falecimento{background:var(--t-falecimento)}.c-musica,.c-cultura{background:var(--t-musica)}.c-literatura{background:var(--t-literatura)}.c-artes{background:var(--t-artes)}.c-desporto{background:var(--t-desporto)}.c-religiao{background:var(--t-religiao)}.c-sociedade{background:var(--t-sociedade)}.c-catastrofe{background:var(--t-catastrofe)}
+.c-acontecimento,.c-historia{background:var(--ocean)}.c-politica{background:var(--rubro)}.c-nascimento{background:var(--t-nascimento)}.c-falecimento{background:var(--t-falecimento)}.c-musica,.c-cultura{background:var(--t-musica)}.c-literatura{background:var(--t-literatura)}.c-artes{background:var(--t-artes)}.c-desporto{background:var(--t-desporto)}.c-religiao{background:var(--t-religiao)}.c-sociedade{background:var(--t-sociedade)}.c-catastrofe{background:var(--t-catastrofe)}.c-celebracao{background:var(--t-celebracao)}
 @media (prefers-reduced-motion:no-preference){.feature,.item{animation:rise .35s ease both}@keyframes rise{from{transform:translateY(6px);opacity:.4}to{transform:none;opacity:1}}}
 
 /* ===== Desktop / tablet: coluna mais larga, tipografia moderada, lista a duas colunas ===== */
@@ -309,8 +313,8 @@ pt:{hoje:"Hoje",explorar:"Explorar",today:"Hoje",prev:"Dia anterior",next:"Dia s
  flagAlt:"Bandeira de Cabo Verde",
  months:["janeiro","fevereiro","março","abril","maio","junho","julho","agosto","setembro","outubro","novembro","dezembro"],
  week:["domingo","segunda","terça","quarta","quinta","sexta","sábado"],
- cats:{todas:"Todas",acontecimento:"Acontecimentos",nascimento:"Nascimentos",falecimento:"Falecimentos",politica:"Política",historia:"História",musica:"Música",literatura:"Literatura",artes:"Artes",desporto:"Desporto",religiao:"Religião",sociedade:"Sociedade",catastrofe:"Catástrofes"},
- cat1:{acontecimento:"Acontecimento",nascimento:"Nascimento",falecimento:"Falecimento",politica:"Política",historia:"História",musica:"Música",literatura:"Literatura",artes:"Artes",desporto:"Desporto",religiao:"Religião",sociedade:"Sociedade",catastrofe:"Catástrofe",cultura:"Cultura"},
+ cats:{todas:"Todas",acontecimento:"Acontecimentos",nascimento:"Nascimentos",falecimento:"Falecimentos",politica:"Política",historia:"História",musica:"Música",literatura:"Literatura",artes:"Artes",desporto:"Desporto",religiao:"Religião",sociedade:"Sociedade",catastrofe:"Catástrofes",celebracao:"Celebrações"},
+ cat1:{acontecimento:"Acontecimento",nascimento:"Nascimento",falecimento:"Falecimento",politica:"Política",historia:"História",musica:"Música",literatura:"Literatura",artes:"Artes",desporto:"Desporto",religiao:"Religião",sociedade:"Sociedade",catastrofe:"Catástrofe",celebracao:"Celebração",cultura:"Cultura"},
  eras:{todas:"Tudo",xv:"Séc. XV–XVIII",xix:"Séc. XIX",colonial:"Séc. XX colonial",indep:"Independência",democ:"Democracia"},
  mot:{data:"A data (dia ou mês) está errada",ano:"O ano está errado",titulo:"O título ou o nome está errado",descricao:"A descrição tem informação incorreta",categoria:"A categoria está errada",local:"A ilha ou o local está errado",fonte:"A fonte não abre ou não confirma o facto",imagem:"A imagem não corresponde ou é inadequada",duplicado:"O acontecimento está repetido",ofensivo:"Conteúdo ofensivo ou inadequado"},
  place:{}},
@@ -341,8 +345,8 @@ en:{hoje:"Today",explorar:"Explore",today:"Today",prev:"Previous day",next:"Next
  flagAlt:"Flag of Cabo Verde",
  months:["January","February","March","April","May","June","July","August","September","October","November","December"],
  week:["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],
- cats:{todas:"All",acontecimento:"Events",nascimento:"Births",falecimento:"Deaths",politica:"Politics",historia:"History",musica:"Music",literatura:"Literature",artes:"Arts",desporto:"Sport",religiao:"Religion",sociedade:"Society",catastrofe:"Disasters"},
- cat1:{acontecimento:"Event",nascimento:"Birth",falecimento:"Death",politica:"Politics",historia:"History",musica:"Music",literatura:"Literature",artes:"Arts",desporto:"Sport",religiao:"Religion",sociedade:"Society",catastrofe:"Disaster",cultura:"Culture"},
+ cats:{todas:"All",acontecimento:"Events",nascimento:"Births",falecimento:"Deaths",politica:"Politics",historia:"History",musica:"Music",literatura:"Literature",artes:"Arts",desporto:"Sport",religiao:"Religion",sociedade:"Society",catastrofe:"Disasters",celebracao:"Celebrations"},
+ cat1:{acontecimento:"Event",nascimento:"Birth",falecimento:"Death",politica:"Politics",historia:"History",musica:"Music",literatura:"Literature",artes:"Arts",desporto:"Sport",religiao:"Religion",sociedade:"Society",catastrofe:"Disaster",celebracao:"Celebration",cultura:"Culture"},
  eras:{todas:"All",xv:"15th–18th c.",xix:"19th c.",colonial:"20th c. colonial",indep:"Independence",democ:"Democracy"},
  mot:{data:"The date (day or month) is wrong",ano:"The year is wrong",titulo:"The title or name is wrong",descricao:"The description is incorrect",categoria:"The category is wrong",local:"The island or place is wrong",fonte:"The source doesn't open or doesn't confirm it",imagem:"The image doesn't match or is inappropriate",duplicado:"This event is a duplicate",ofensivo:"Offensive or inappropriate content"},
  place:{"Nacional":"National","Guiné-Bissau":"Guinea-Bissau","Guiné-Conacri":"Guinea (Conakry)","Nova Iorque":"New York","Estados Unidos":"United States","África do Sul":"South Africa","Costa do Marfim":"Ivory Coast","Genebra":"Geneva"}}
@@ -371,11 +375,13 @@ const esc=s=>s.replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));
 const rotulo=e=>e.c==="acontecimento"&&e.tema?e.tema:e.c;
 const hit=(e,k)=>k==="todas"||e.c===k||e.tema===k;
 const tagCat=e=>{const k=rotulo(e);return`<span class="tag cat c-${k}">${L().cat1[k]||k}</span>`};
+// Dia da semana do acontecimento; antes de 15/10/1582 (calendário juliano) não se mostra.
+const wdTag=e=>{if(e.y<1582||(e.y===1582&&(e.m<10||(e.m===10&&e.d<15))))return"";return`<span class="wd">${L().week[new Date(Date.UTC(e.y,e.m-1,e.d)).getUTCDay()]}</span>`};
 const ago=y=>L().ago(new Date().getFullYear()-y);
 const imgTag=(e,cls)=>e.img?`<figure class="${cls}" aria-hidden="true"><img src="${e.img}" alt="" loading="lazy" onerror="var a=this.closest('article');if(a){a.classList.remove('has-img');var c=a.querySelector('.cred');if(c)c.remove();}this.parentNode.remove()"></figure>`:"";
 const credit=e=>e.img&&e.cr?`<a class="cred" href="${e.cr}" target="_blank" rel="noopener">${L().credit}</a>`:"";
 const srcLink=e=>e.f?`<a class="src" href="${e.f}" target="_blank" rel="noopener">${L().src}</a>`:"";
-const itemHTML=(e,showDate)=>`<article class="item${e.img?" has-img":""}"><div class="y">${e.y}</div><div style="min-width:0">${showDate?`<div class="d">${L().shortDate(e.d,MO(e.m-1))}</div>`:""}<h3>${esc(T(e))}</h3><p>${esc(X(e))}</p><div class="meta">${tagCat(e)}<span class="tag">${PL(e.ilha)}</span>${srcLink(e)}</div><div class="acts-row">${shareBtn(e)}${flagBtn(e)}</div></div>${imgTag(e,"thumb")}</article>`;
+const itemHTML=(e,showDate)=>`<article class="item${e.img?" has-img":""}"><div class="y">${e.y}${wdTag(e)}</div><div style="min-width:0">${showDate?`<div class="d">${L().shortDate(e.d,MO(e.m-1))}</div>`:""}<h3>${esc(T(e))}</h3><p>${esc(X(e))}</p><div class="meta">${tagCat(e)}<span class="tag">${PL(e.ilha)}</span>${srcLink(e)}</div><div class="acts-row">${shareBtn(e)}${flagBtn(e)}</div></div>${imgTag(e,"thumb")}</article>`;
 
 const MOTIVOS=[["data","A data (dia ou mês) está errada"],["ano","O ano está errado"],["titulo","O título ou o nome está errado"],["descricao","A descrição tem informação incorreta"],["categoria","A categoria está errada"],["local","A ilha ou o local está errado"],["fonte","A fonte não abre ou não confirma o facto"],["imagem","A imagem não corresponde ou é inadequada"],["duplicado","O acontecimento está repetido"],["ofensivo","Conteúdo ofensivo ou inadequado"]];
 const hashT=s=>{let x=5381;for(const c of s)x=((x<<5)+x+c.charCodeAt(0))>>>0;return x.toString(36)};
@@ -490,7 +496,7 @@ function renderDay(){
   fb.querySelectorAll(".near button").forEach(b=>b.onclick=()=>{cur.setMonth(+b.dataset.m-1,+b.dataset.d);renderDay()});
  } else {
   const f=day.find(e=>e.top)||day[0];
-  fb.innerHTML=`<div class="label" style="margin-bottom:8px">${L().highlight}</div><article class="feature${f.img?" has-img":""}">${imgTag(f,"wash")}<div class="yr">${f.y}</div><h2>${esc(T(f))}</h2><p>${esc(X(f))}</p><div class="meta">${tagCat(f)}<span class="tag">${PL(f.ilha)}</span><span class="tag">${ago(f.y)}</span>${srcLink(f)}</div><div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap"><div class="acts-row">${shareBtn(f)}${flagBtn(f)}</div>${credit(f)}</div></article>`;
+  fb.innerHTML=`<div class="label" style="margin-bottom:8px">${L().highlight}</div><article class="feature${f.img?" has-img":""}">${imgTag(f,"wash")}<div class="yr">${f.y}${wdTag(f)}</div><h2>${esc(T(f))}</h2><p>${esc(X(f))}</p><div class="meta">${tagCat(f)}<span class="tag">${PL(f.ilha)}</span><span class="tag">${ago(f.y)}</span>${srcLink(f)}</div><div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap"><div class="acts-row">${shareBtn(f)}${flagBtn(f)}</div>${credit(f)}</div></article>`;
  }
  chips($("chips"),cat,k=>{cat=k;save();renderDay()},day);
  const list=day.filter(e=>hit(e,cat));
