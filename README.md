@@ -1,6 +1,6 @@
 # Hoje CV
 
-**Neste dia na história de Cabo Verde** — [hojecv.app](https://hojecv.app)
+**Neste dia na história de Cabo Verde** — [hojecv.vercel.app](https://hojecv.vercel.app) (em breve em hojecv.app)
 
 O Hoje CV mostra, para cada dia do ano, os acontecimentos, nascimentos e falecimentos que marcaram a história de Cabo Verde e da sua diáspora, desde a chegada dos navegadores em 1460 até aos nossos dias. O objetivo é informar: ajudar os cabo-verdianos, nas ilhas e na diáspora, a conhecer melhor a sua história, e dar a quem quer descobrir Cabo Verde uma forma simples de o fazer.
 
@@ -61,7 +61,9 @@ Um registo só entra se cumprir estas regras:
 
 ## Tecnologia
 
-Site estático em HTML, CSS e JavaScript, sem frameworks nem dependências. Os dados vêm de uma base editorial privada, revista à mão, e são publicados num único ficheiro de dados.
+Site estático em HTML, CSS e JavaScript, sem frameworks nem dependências. Os dados vêm de uma base editorial privada e são publicados num único ficheiro de dados.
+
+A pesquisa e a verificação dos registos são feitas com apoio de inteligência artificial e revistas à mão. Cada registo indica a fonte de onde a informação foi tirada e o respetivo nível de confiança.
 
 ## Autor
 
@@ -69,4 +71,4 @@ Um projeto de Marco Stiehl.
 
 ---
 
-*English:* **Hoje CV** ("Today CV") shows, day by day, the events, births and deaths that shaped the history of Cabo Verde and its diaspora, each with an exact date, a checkable source and a confidence level. It includes a timeline by century, filters by type and theme, shareable cards and a way to report errors. Available in Portuguese and English.
+*English:* **Hoje CV** ("Today CV") shows, day by day, the events, births and deaths that shaped the history of Cabo Verde and its diaspora, each with an exact date, a checkable source and a confidence level. Records are researched and checked with the help of artificial intelligence and reviewed by hand. It includes a timeline by century, filters by type and theme, shareable cards and a way to report errors. Available in Portuguese and English.

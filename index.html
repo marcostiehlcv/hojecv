@@ -307,7 +307,7 @@ pt:{hoje:"Hoje",explorar:"Explorar",today:"Hoje",prev:"Dia anterior",next:"Dia s
  foot:"Hoje CV · Um projeto de Marco Stiehl",aboutBtn:"Sobre o Hoje CV",aboutTitle:"Sobre o Hoje CV",
  about:["O Hoje CV mostra, dia a dia, os acontecimentos, nascimentos e falecimentos que marcaram a história de Cabo Verde, desde a chegada dos navegadores em 1460 até aos nossos dias.",
  "A motivação é informar. Queremos ajudar os cabo-verdianos, nas ilhas e na diáspora, a conhecer melhor a sua própria história, e dar a quem quer descobrir Cabo Verde uma forma simples de ficar mais bem informado sobre o país.",
- "Critérios para um registo entrar no Hoje CV: ter relevância para a história de Cabo Verde ou para a sua diáspora; ter data exata (dia, mês e ano); estar confirmado numa fonte que se possa consultar, como instituições oficiais, arquivos, enciclopédias ou a imprensa cabo-verdiana de referência. Entram apenas factos comprovados, nunca especulações ou boatos. Datas sem confirmação ficam de fora, e as datas tradicionais são assinaladas como tal. Sempre que as datas exatas são conhecidas, quem tem registo de nascimento tem também o de falecimento, e vice-versa.",
+ "Critérios para um registo entrar no Hoje CV: ter relevância para a história de Cabo Verde ou para a sua diáspora; ter data exata (dia, mês e ano); estar confirmado numa fonte que se possa consultar, como instituições oficiais, arquivos, enciclopédias ou a imprensa cabo-verdiana de referência. Entram apenas factos comprovados, nunca especulações ou boatos. Datas sem confirmação ficam de fora, e as datas tradicionais são assinaladas como tal. Sempre que as datas exatas são conhecidas, quem tem registo de nascimento tem também o de falecimento, e vice-versa. A pesquisa e a verificação dos registos são feitas com apoio de inteligência artificial e revistas à mão.",
  "Cada registo tem uma fonte que pode consultar. Se encontrar um erro, use «Assinalar erro»: todos os reportes são revistos antes de qualquer alteração.",
  "Um projeto de Marco Stiehl."],
  repTitle:"Assinalar erro",repQ:"O que está errado? Escolha uma ou mais opções",cancel:"Cancelar",send:"Enviar",sending:"A enviar…",sentBtn:"Enviado",
@@ -345,7 +345,7 @@ en:{hoje:"Today",explorar:"Explore",today:"Today",prev:"Previous day",next:"Next
  foot:"Hoje CV · A project by Marco Stiehl",aboutBtn:"About Hoje CV",aboutTitle:"About Hoje CV",
  about:["Hoje CV (“Today CV”) shows, day by day, the events, births and deaths that shaped the history of Cabo Verde, from the arrival of the navigators in 1460 to the present day.",
  "Its purpose is to inform. We want to help Cape Verdeans, on the islands and in the diaspora, learn more about their own history, and to give anyone who wants to discover Cabo Verde a simple way to become better informed about the country.",
- "Criteria for a record to enter Hoje CV: it must be relevant to the history of Cabo Verde or its diaspora; have an exact date (day, month and year); and be confirmed by a source you can check, such as official institutions, archives, encyclopaedias or reputable Cape Verdean press. Only established facts are included, never speculation or rumour. Unconfirmed dates are left out, and traditional dates are marked as such. Whenever the exact dates are known, anyone with a birth record also has a death record, and vice versa.",
+ "Criteria for a record to enter Hoje CV: it must be relevant to the history of Cabo Verde or its diaspora; have an exact date (day, month and year); and be confirmed by a source you can check, such as official institutions, archives, encyclopaedias or reputable Cape Verdean press. Only established facts are included, never speculation or rumour. Unconfirmed dates are left out, and traditional dates are marked as such. Whenever the exact dates are known, anyone with a birth record also has a death record, and vice versa. Records are researched and checked with the help of artificial intelligence and reviewed by hand.",
  "Every record has a source you can check. If you find a mistake, use “Report error”: all reports are reviewed before anything is changed.",
  "A project by Marco Stiehl."],
  repTitle:"Report an error",repQ:"What is wrong? Choose one or more options",cancel:"Cancel",send:"Send",sending:"Sending…",sentBtn:"Sent",
@@ -372,7 +372,8 @@ en:{hoje:"Today",explorar:"Explore",today:"Today",prev:"Previous day",next:"Next
  mot:{data:"The date (day or month) is wrong",ano:"The year is wrong",titulo:"The title or name is wrong",descricao:"The description is incorrect",categoria:"The category is wrong",local:"The island or place is wrong",fonte:"The source doesn't open or doesn't confirm it",imagem:"The image doesn't match or is inappropriate",duplicado:"This event is a duplicate",ofensivo:"Offensive or inappropriate content"},
  place:{"Nacional":"National","Guiné-Bissau":"Guinea-Bissau","Guiné-Conacri":"Guinea (Conakry)","Nova Iorque":"New York","Estados Unidos":"United States","África do Sul":"South Africa","Costa do Marfim":"Ivory Coast","Genebra":"Geneva","Países Baixos":"Netherlands","Egito":"Egypt"}}
 };
-const SITE="hojecv.app";
+// Domínio mostrado no cartão e no texto de partilha: o da página aberta. Em ficheiro local ou localhost usa-se hojecv.app.
+const SITE=/^(localhost|127\.0\.0\.1|)$/.test(location.hostname)?"hojecv.app":location.hostname.replace(/^www\./,"");
 let LANG="pt";try{const l=localStorage.getItem("hojecv_lang");if(l==="en"||l==="pt")LANG=l}catch(_){}
 const L=()=>I18N[LANG];
 const T=e=>LANG==="en"&&e.te?e.te:e.t;
