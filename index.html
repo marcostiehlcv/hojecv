@@ -258,7 +258,7 @@ button.tag{border:0;cursor:pointer;line-height:inherit}
   <div class="wrap" id="view-explorar" hidden>
     <section style="display:flex;flex-direction:column;gap:12px">
       <div class="label" id="lblEra">Época</div>
-      <div class="seg" id="eras" role="group" aria-label="Filtrar por época"></div>
+      <div class="chips" id="eras" role="group" aria-label="Filtrar por época"></div>
       <div class="label" style="margin-top:6px" id="lblCat">Categoria</div>
       <div class="chips" id="chips2" role="group" aria-label="Filtrar por categoria"></div>
       <div class="label" style="margin-top:6px" id="lblIlha">Local</div>
@@ -529,7 +529,9 @@ $("shrFull").onclick=openFull;$("shrCv").onclick=openFull;$("full").onclick=()=>
 document.addEventListener("click",ev=>{const b=ev.target.closest(".share[data-s]");if(b)openShare(b.dataset.s)});
 
 // pool: se dado, só aparecem os filtros com registos (mais Todas e o selecionado)
-function chips(el,val,set,pool){el.innerHTML=Object.entries(L().cats).filter(([k])=>!pool||k==="todas"||k===val||pool.some(e=>hit(e,k))).map(([k,v])=>`<button data-k="${k}" aria-pressed="${k===val}">${v}</button>`).join("");
+// Centra o filtro escolhido numa fila que desliza (mobile), partindo da posição em que estava
+const centra=(el,prev)=>{el.scrollLeft=prev||0;const b=el.querySelector('[aria-pressed="true"]');if(!b||el.scrollWidth<=el.clientWidth)return;el.scrollTo({left:b.offsetLeft-el.offsetLeft-(el.clientWidth-b.offsetWidth)/2,behavior:"smooth"})};
+function chips(el,val,set,pool){const prev=el.scrollLeft;el.innerHTML=Object.entries(L().cats).filter(([k])=>!pool||k==="todas"||k===val||pool.some(e=>hit(e,k))).map(([k,v])=>`<button data-k="${k}" aria-pressed="${k===val}">${v}</button>`).join("");centra(el,prev);
  el.onclick=ev=>{const b=ev.target.closest("button");if(b){set(b.dataset.k);}};}
 
 function renderDay(){
@@ -554,12 +556,14 @@ function renderDay(){
 }
 
 function renderExplore(){
- $("eras").innerHTML=ERAS.map(([k])=>`<button data-k="${k}" aria-pressed="${k===era}">${L().eras[k]}</button>`).join("");
+ const prevE=$("eras").scrollLeft;$("eras").innerHTML=ERAS.map(([k])=>`<button data-k="${k}" aria-pressed="${k===era}">${L().eras[k]}</button>`).join("");
+ centra($("eras"),prevE);
  $("eras").onclick=ev=>{const b=ev.target.closest("button");if(b){era=b.dataset.k;expMax=LOTE;save();renderExplore()}};
  chips($("chips2"),cat2,k=>{cat2=k;expMax=LOTE;renderExplore()});
  const locs=[["",L().cats.todas],...ILHAS.filter(k=>EVENTS.some(e=>e.ilha===k)).map(k=>[k,PL(k)]),[EXT,L().ext]];
  if(ilha2&&!locs.some(x=>x[0]===ilha2))locs.push([ilha2,PL(ilha2)]);
- $("ilhas").innerHTML=locs.map(([k,v])=>`<button data-k="${esc(k)}" aria-pressed="${k===ilha2}">${esc(v)}</button>`).join("");
+ const prevI=$("ilhas").scrollLeft;$("ilhas").innerHTML=locs.map(([k,v])=>`<button data-k="${esc(k)}" aria-pressed="${k===ilha2}">${esc(v)}</button>`).join("");
+ centra($("ilhas"),prevI);
  $("ilhas").onclick=ev=>{const b=ev.target.closest("button");if(b){ilha2=b.dataset.k;expMax=LOTE;renderExplore()}};
  const [,,a,z]=ERAS.find(x=>x[0]===era);
  const items=EVENTS.filter(e=>e.y>=a&&e.y<=z&&hit(e,cat2)&&naIlha(e,ilha2)).sort((p,q)=>p.y-q.y||p.m-q.m||p.d-q.d);
