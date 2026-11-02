@@ -23,6 +23,9 @@
 /* Layout: one narrow column like a phone app; flag-blue masthead carrying the official flag (10 stars for the ten islands), white reading surface below */
 :root{
   --ocean:#003893; --ocean-deep:#002566; --sun:#f2c230; --rubro:#c8262f;
+  /* etiquetas de tipo e tema (texto branco) */
+  --t-nascimento:#1f8a5b; --t-falecimento:#4a5468; --t-musica:#a3570f; --t-literatura:#6d4c41; --t-artes:#ad3a6e;
+  --t-desporto:#6b3fb0; --t-religiao:#5f6b1f; --t-sociedade:#0b7285; --t-catastrofe:#3d3d3d;
   --bg:#f5f7fb; --surface:#ffffff; --fg:#0f1a2e; --muted:#5a6680; --line:#dde3ee; --chip:#e9eef8;
   --img-op:.38;
   --display:"Bricolage Grotesque",system-ui,sans-serif;
@@ -144,7 +147,7 @@ main .wrap{padding-block:22px 48px;display:flex;flex-direction:column;gap:22px}
 .aboutlink:hover{color:var(--fg)}
 .about p{margin:0;line-height:1.6;font-size:15.5px}
 .foot{font-size:12.5px;color:var(--muted);display:flex;flex-wrap:wrap;gap:6px 14px;justify-content:space-between;border-top:1px solid var(--line);padding-top:12px;margin-top:-8px}
-.c-acontecimento{background:var(--ocean)}.c-politica{background:var(--rubro)}.c-nascimento{background:#1f8a5b}.c-falecimento{background:#4a5468}.c-cultura{background:#a3570f}.c-desporto{background:#6b3fb0}
+.c-acontecimento,.c-historia{background:var(--ocean)}.c-politica{background:var(--rubro)}.c-nascimento{background:var(--t-nascimento)}.c-falecimento{background:var(--t-falecimento)}.c-musica,.c-cultura{background:var(--t-musica)}.c-literatura{background:var(--t-literatura)}.c-artes{background:var(--t-artes)}.c-desporto{background:var(--t-desporto)}.c-religiao{background:var(--t-religiao)}.c-sociedade{background:var(--t-sociedade)}.c-catastrofe{background:var(--t-catastrofe)}
 @media (prefers-reduced-motion:no-preference){.feature,.item{animation:rise .35s ease both}@keyframes rise{from{transform:translateY(6px);opacity:.4}to{transform:none;opacity:1}}}
 
 /* ===== Desktop / tablet: coluna mais larga, tipografia moderada, lista a duas colunas ===== */
@@ -274,7 +277,9 @@ main .wrap{padding-block:22px 48px;display:flex;flex-direction:column;gap:22px}
 
 <script>
 let RAW = Array.isArray(window.HOJECV_DADOS) ? window.HOJECV_DADOS : [];
-const toEv=a=>a.map(([d,m,y,t,x,c,ilha,top,f,img,cr,te,xe])=>({d,m,y,t,x,c,ilha,top,f,img,cr,te,xe}));
+// categoria = tipo (acontecimento | nascimento | falecimento); tema = área. Registos antigos sem tema: politica/cultura/desporto passam a tema.
+const TEMA_ANTIGO={politica:1,cultura:1,desporto:1};
+const toEv=a=>a.map(([d,m,y,t,x,c,ilha,top,f,img,cr,te,xe,tema])=>{if(!tema&&TEMA_ANTIGO[c]){tema=c;c="acontecimento"}return{d,m,y,t,x,c,ilha,top,f,img,cr,te,xe,tema:tema||""}});
 let EVENTS = toEv(RAW);
 const I18N={
 pt:{hoje:"Hoje",explorar:"Explorar",today:"Hoje",prev:"Dia anterior",next:"Dia seguinte",pick:"Escolher data",tabs:"Secções",
@@ -304,8 +309,8 @@ pt:{hoje:"Hoje",explorar:"Explorar",today:"Hoje",prev:"Dia anterior",next:"Dia s
  flagAlt:"Bandeira de Cabo Verde",
  months:["janeiro","fevereiro","março","abril","maio","junho","julho","agosto","setembro","outubro","novembro","dezembro"],
  week:["domingo","segunda","terça","quarta","quinta","sexta","sábado"],
- cats:{todas:"Todas",acontecimento:"Acontecimentos",politica:"Política",nascimento:"Nascimentos",falecimento:"Falecimentos",cultura:"Cultura",desporto:"Desporto"},
- cat1:{acontecimento:"Acontecimento",politica:"Política",nascimento:"Nascimento",falecimento:"Falecimento",cultura:"Cultura",desporto:"Desporto"},
+ cats:{todas:"Todas",acontecimento:"Acontecimentos",nascimento:"Nascimentos",falecimento:"Falecimentos",politica:"Política",historia:"História",musica:"Música",literatura:"Literatura",artes:"Artes",desporto:"Desporto",religiao:"Religião",sociedade:"Sociedade",catastrofe:"Catástrofes"},
+ cat1:{acontecimento:"Acontecimento",nascimento:"Nascimento",falecimento:"Falecimento",politica:"Política",historia:"História",musica:"Música",literatura:"Literatura",artes:"Artes",desporto:"Desporto",religiao:"Religião",sociedade:"Sociedade",catastrofe:"Catástrofe",cultura:"Cultura"},
  eras:{todas:"Tudo",xv:"Séc. XV–XVIII",xix:"Séc. XIX",colonial:"Séc. XX colonial",indep:"Independência",democ:"Democracia"},
  mot:{data:"A data (dia ou mês) está errada",ano:"O ano está errado",titulo:"O título ou o nome está errado",descricao:"A descrição tem informação incorreta",categoria:"A categoria está errada",local:"A ilha ou o local está errado",fonte:"A fonte não abre ou não confirma o facto",imagem:"A imagem não corresponde ou é inadequada",duplicado:"O acontecimento está repetido",ofensivo:"Conteúdo ofensivo ou inadequado"},
  place:{}},
@@ -336,8 +341,8 @@ en:{hoje:"Today",explorar:"Explore",today:"Today",prev:"Previous day",next:"Next
  flagAlt:"Flag of Cabo Verde",
  months:["January","February","March","April","May","June","July","August","September","October","November","December"],
  week:["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],
- cats:{todas:"All",acontecimento:"Events",politica:"Politics",nascimento:"Births",falecimento:"Deaths",cultura:"Culture",desporto:"Sport"},
- cat1:{acontecimento:"Event",politica:"Politics",nascimento:"Birth",falecimento:"Death",cultura:"Culture",desporto:"Sport"},
+ cats:{todas:"All",acontecimento:"Events",nascimento:"Births",falecimento:"Deaths",politica:"Politics",historia:"History",musica:"Music",literatura:"Literature",artes:"Arts",desporto:"Sport",religiao:"Religion",sociedade:"Society",catastrofe:"Disasters"},
+ cat1:{acontecimento:"Event",nascimento:"Birth",falecimento:"Death",politica:"Politics",historia:"History",musica:"Music",literatura:"Literature",artes:"Arts",desporto:"Sport",religiao:"Religion",sociedade:"Society",catastrofe:"Disaster",cultura:"Culture"},
  eras:{todas:"All",xv:"15th–18th c.",xix:"19th c.",colonial:"20th c. colonial",indep:"Independence",democ:"Democracy"},
  mot:{data:"The date (day or month) is wrong",ano:"The year is wrong",titulo:"The title or name is wrong",descricao:"The description is incorrect",categoria:"The category is wrong",local:"The island or place is wrong",fonte:"The source doesn't open or doesn't confirm it",imagem:"The image doesn't match or is inappropriate",duplicado:"This event is a duplicate",ofensivo:"Offensive or inappropriate content"},
  place:{"Nacional":"National","Guiné-Bissau":"Guinea-Bissau","Guiné-Conacri":"Guinea (Conakry)","Nova Iorque":"New York","Estados Unidos":"United States","África do Sul":"South Africa","Costa do Marfim":"Ivory Coast","Genebra":"Geneva"}}
@@ -349,7 +354,6 @@ const T=e=>LANG==="en"&&e.te?e.te:e.t;
 const X=e=>LANG==="en"&&e.xe?e.xe:e.x;
 const PL=p=>L().place[p]||p;
 const ROMAN_EN={"XV":"15th","XVI":"16th","XVII":"17th","XVIII":"18th","XIX":"19th","XX":"20th","XXI":"21st"};
-const CATS={todas:"Todas",acontecimento:"Acontecimentos",politica:"Política",nascimento:"Nascimentos",falecimento:"Falecimentos",cultura:"Cultura",desporto:"Desporto"};
 const ERAS=[["todas","Tudo",0,9999],["xv","Séc. XV–XVIII",1400,1799],["xix","Séc. XIX",1800,1899],["colonial","Séc. XX colonial",1900,1974],["indep","Independência",1975,1990],["democ","Democracia",1991,9999]];
 const MO=i=>L().months[i];
 
@@ -357,17 +361,21 @@ const $=id=>document.getElementById(id);
 let cur=new Date(); cur.setHours(12,0,0,0);
 let cat="todas", cat2="todas", era="todas";
 try{const s=localStorage.getItem("hojecv"); if(s){const o=JSON.parse(s); cat=o.cat||cat; era=o.era||era;}}catch(e){}
+if(!(cat in I18N.pt.cats))cat="todas";
 const save=()=>{try{localStorage.setItem("hojecv",JSON.stringify({cat,era}))}catch(e){}};
 
 
 
 const esc=s=>s.replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));
-const tagCat=c=>`<span class="tag cat c-${c}">${L().cat1[c]||c}</span>`;
+// Etiqueta: nos acontecimentos mostra o tema; nos nascimentos e falecimentos, o tipo.
+const rotulo=e=>e.c==="acontecimento"&&e.tema?e.tema:e.c;
+const hit=(e,k)=>k==="todas"||e.c===k||e.tema===k;
+const tagCat=e=>{const k=rotulo(e);return`<span class="tag cat c-${k}">${L().cat1[k]||k}</span>`};
 const ago=y=>L().ago(new Date().getFullYear()-y);
 const imgTag=(e,cls)=>e.img?`<figure class="${cls}" aria-hidden="true"><img src="${e.img}" alt="" loading="lazy" onerror="var a=this.closest('article');if(a){a.classList.remove('has-img');var c=a.querySelector('.cred');if(c)c.remove();}this.parentNode.remove()"></figure>`:"";
 const credit=e=>e.img&&e.cr?`<a class="cred" href="${e.cr}" target="_blank" rel="noopener">${L().credit}</a>`:"";
 const srcLink=e=>e.f?`<a class="src" href="${e.f}" target="_blank" rel="noopener">${L().src}</a>`:"";
-const itemHTML=(e,showDate)=>`<article class="item${e.img?" has-img":""}"><div class="y">${e.y}</div><div style="min-width:0">${showDate?`<div class="d">${L().shortDate(e.d,MO(e.m-1))}</div>`:""}<h3>${esc(T(e))}</h3><p>${esc(X(e))}</p><div class="meta">${tagCat(e.c)}<span class="tag">${PL(e.ilha)}</span>${srcLink(e)}</div><div class="acts-row">${shareBtn(e)}${flagBtn(e)}</div></div>${imgTag(e,"thumb")}</article>`;
+const itemHTML=(e,showDate)=>`<article class="item${e.img?" has-img":""}"><div class="y">${e.y}</div><div style="min-width:0">${showDate?`<div class="d">${L().shortDate(e.d,MO(e.m-1))}</div>`:""}<h3>${esc(T(e))}</h3><p>${esc(X(e))}</p><div class="meta">${tagCat(e)}<span class="tag">${PL(e.ilha)}</span>${srcLink(e)}</div><div class="acts-row">${shareBtn(e)}${flagBtn(e)}</div></div>${imgTag(e,"thumb")}</article>`;
 
 const MOTIVOS=[["data","A data (dia ou mês) está errada"],["ano","O ano está errado"],["titulo","O título ou o nome está errado"],["descricao","A descrição tem informação incorreta"],["categoria","A categoria está errada"],["local","A ilha ou o local está errado"],["fonte","A fonte não abre ou não confirma o facto"],["imagem","A imagem não corresponde ou é inadequada"],["duplicado","O acontecimento está repetido"],["ofensivo","Conteúdo ofensivo ou inadequado"]];
 const hashT=s=>{let x=5381;for(const c of s)x=((x<<5)+x+c.charCodeAt(0))>>>0;return x.toString(36)};
@@ -436,7 +444,7 @@ async function drawCard(cv,e,fmt){
  ctx.fillStyle="rgba(255,255,255,.86)";ctx.font=`400 ${dd.s}px "Literata", Georgia, serif`;for(const l of dd.l){ctx.fillText(l,P,y+dd.s);y+=dd.s*1.45}
  // tags
  y+=st?60:34;ctx.font='500 26px "JetBrains Mono", ui-monospace, monospace';let x=P;
- for(const t of [L().cat1[e.c]||e.c,PL(e.ilha),ago(e.y)]){const tw=ctx.measureText(t.toUpperCase()).width+40;ctx.fillStyle="rgba(255,255,255,.12)";ctx.beginPath();ctx.roundRect(x,y,tw,52,26);ctx.fill();ctx.fillStyle="#fff";ctx.fillText(t.toUpperCase(),x+20,y+35);x+=tw+14}
+ for(const t of [L().cat1[rotulo(e)]||rotulo(e),PL(e.ilha),ago(e.y)]){const tw=ctx.measureText(t.toUpperCase()).width+40;ctx.fillStyle="rgba(255,255,255,.12)";ctx.beginPath();ctx.roundRect(x,y,tw,52,26);ctx.fill();ctx.fillStyle="#fff";ctx.fillText(t.toUpperCase(),x+20,y+35);x+=tw+14}
  // footer stripes (flag band)
  const fb=H-(st?230:150);ctx.fillStyle="#fff";ctx.fillRect(0,fb,W,36);ctx.fillStyle="#cf2027";ctx.fillRect(0,fb+12,W,12);
  ctx.font='500 23px "JetBrains Mono", ui-monospace, monospace';ctx.fillStyle="rgba(255,255,255,.62)";ctx.fillText(L().cardFoot,P,fb+(st?120:88));ctx.font='500 28px "JetBrains Mono", ui-monospace, monospace';ctx.fillStyle="rgba(255,255,255,.95)";ctx.textAlign="right";ctx.fillText(SITE,W-P,fb+(st?120:88));ctx.textAlign="left";
@@ -464,7 +472,8 @@ const openFull=async()=>{const c=document.createElement("canvas");await drawCard
 $("shrFull").onclick=openFull;$("shrCv").onclick=openFull;$("full").onclick=()=>{$("full").hidden=true};
 document.addEventListener("click",ev=>{const b=ev.target.closest(".share[data-s]");if(b)openShare(b.dataset.s)});
 
-function chips(el,val,set){el.innerHTML=Object.entries(L().cats).map(([k,v])=>`<button data-k="${k}" aria-pressed="${k===val}">${v}</button>`).join("");
+// pool: se dado, só aparecem os filtros com registos (mais Todas e o selecionado)
+function chips(el,val,set,pool){el.innerHTML=Object.entries(L().cats).filter(([k])=>!pool||k==="todas"||k===val||pool.some(e=>hit(e,k))).map(([k,v])=>`<button data-k="${k}" aria-pressed="${k===val}">${v}</button>`).join("");
  el.onclick=ev=>{const b=ev.target.closest("button");if(b){set(b.dataset.k);}};}
 
 function renderDay(){
@@ -481,10 +490,10 @@ function renderDay(){
   fb.querySelectorAll(".near button").forEach(b=>b.onclick=()=>{cur.setMonth(+b.dataset.m-1,+b.dataset.d);renderDay()});
  } else {
   const f=day.find(e=>e.top)||day[0];
-  fb.innerHTML=`<div class="label" style="margin-bottom:8px">${L().highlight}</div><article class="feature${f.img?" has-img":""}">${imgTag(f,"wash")}<div class="yr">${f.y}</div><h2>${esc(T(f))}</h2><p>${esc(X(f))}</p><div class="meta">${tagCat(f.c)}<span class="tag">${PL(f.ilha)}</span><span class="tag">${ago(f.y)}</span>${srcLink(f)}</div><div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap"><div class="acts-row">${shareBtn(f)}${flagBtn(f)}</div>${credit(f)}</div></article>`;
+  fb.innerHTML=`<div class="label" style="margin-bottom:8px">${L().highlight}</div><article class="feature${f.img?" has-img":""}">${imgTag(f,"wash")}<div class="yr">${f.y}</div><h2>${esc(T(f))}</h2><p>${esc(X(f))}</p><div class="meta">${tagCat(f)}<span class="tag">${PL(f.ilha)}</span><span class="tag">${ago(f.y)}</span>${srcLink(f)}</div><div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap"><div class="acts-row">${shareBtn(f)}${flagBtn(f)}</div>${credit(f)}</div></article>`;
  }
- chips($("chips"),cat,k=>{cat=k;save();renderDay()});
- const list=day.filter(e=>cat==="todas"||e.c===cat);
+ chips($("chips"),cat,k=>{cat=k;save();renderDay()},day);
+ const list=day.filter(e=>hit(e,cat));
  $("dayList").innerHTML=list.length?list.map(e=>itemHTML(e,false)).join(""):`<p class="empty">${L().noneCat}</p>`;
 }
 
@@ -493,7 +502,7 @@ function renderExplore(){
  $("eras").onclick=ev=>{const b=ev.target.closest("button");if(b){era=b.dataset.k;save();renderExplore()}};
  chips($("chips2"),cat2,k=>{cat2=k;renderExplore()});
  const [,,a,z]=ERAS.find(x=>x[0]===era);
- const items=EVENTS.filter(e=>e.y>=a&&e.y<=z&&(cat2==="todas"||e.c===cat2)).sort((p,q)=>p.y-q.y||p.m-q.m||p.d-q.d);
+ const items=EVENTS.filter(e=>e.y>=a&&e.y<=z&&hit(e,cat2)).sort((p,q)=>p.y-q.y||p.m-q.m||p.d-q.d);
  const roman=n=>["XV","XVI","XVII","XVIII","XIX","XX","XXI"][n-15];
  const groups={};items.forEach(e=>{const c=Math.floor((e.y-1)/100)+1;(groups[c]=groups[c]||[]).push(e)});
  $("timeline").innerHTML=Object.keys(groups).length?Object.entries(groups).map(([c,arr])=>`<section class="century"><h2>${LANG==="en"?L().century(ROMAN_EN[roman(+c)]):L().century(roman(+c))}<small>${L().count(arr.length)}</small></h2><div class="list">${arr.map(e=>itemHTML(e,true)).join("")}</div></section>`).join(""):`<p class="empty">${L().noneCombo}</p>`;

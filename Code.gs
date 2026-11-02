@@ -32,11 +32,11 @@ function doGet(e) {
   const acao = (e && e.parameter && e.parameter.acao) || 'eventos';
   if (acao !== 'eventos') return json_({ erro: 'acao_desconhecida' });
   const cache = CacheService.getScriptCache();
-  const n = Number(cache.get('eventos_v2_n') || 0);
+  const n = Number(cache.get('eventos_v3_n') || 0);
   if (n) {
-    const partes = cache.getAll(Array.from({ length: n }, function (_, i) { return 'eventos_v2_' + i; }));
+    const partes = cache.getAll(Array.from({ length: n }, function (_, i) { return 'eventos_v3_' + i; }));
     if (Object.keys(partes).length === n) {
-      const txt = Array.from({ length: n }, function (_, i) { return partes['eventos_v2_' + i]; }).join('');
+      const txt = Array.from({ length: n }, function (_, i) { return partes['eventos_v3_' + i]; }).join('');
       return ContentService.createTextOutput(txt).setMimeType(ContentService.MimeType.JSON);
     }
   }
@@ -44,8 +44,8 @@ function doGet(e) {
   // O cache guarda no máximo 100 KB por valor, por isso divide-se em partes.
   const TAM = 90000, obj = {};
   let i = 0;
-  for (let p = 0; p < out.length; p += TAM, i++) obj['eventos_v2_' + i] = out.slice(p, p + TAM);
-  obj['eventos_v2_n'] = String(i);
+  for (let p = 0; p < out.length; p += TAM, i++) obj['eventos_v3_' + i] = out.slice(p, p + TAM);
+  obj['eventos_v3_n'] = String(i);
   try { cache.putAll(obj, CACHE_SEGUNDOS); } catch (err) { /* sem cache: continua a funcionar */ }
   return ContentService.createTextOutput(out).setMimeType(ContentService.MimeType.JSON);
 }
@@ -83,7 +83,8 @@ function doPost(e) {
   return json_({ ok: true });
 }
 
-// [dia, mes, ano, titulo, descricao, categoria, ilha, destaque, fonte, imagem, credito, titulo_en, descricao_en]
+// [dia, mes, ano, titulo, descricao, categoria, ilha, destaque, fonte, imagem, credito, titulo_en, descricao_en, tema]
+// categoria = tipo (acontecimento | nascimento | falecimento); tema = área. As colunas fonte2 e notas não saem daqui.
 function lerEventos_() {
   const sh = SpreadsheetApp.getActive().getSheetByName(FOLHA_EVENTOS);
   const v = sh.getDataRange().getValues();
@@ -93,14 +94,15 @@ function lerEventos_() {
     dia: c('dia'), mes: c('mes'), ano: c('ano'), titulo: c('titulo'), descricao: c('descricao'),
     categoria: c('categoria'), ilha: c('ilha'), destaque: c('destaque'), fonte: c('fonte'),
     estado: c('estado'), imagem: c('imagem'), credito: c('credito_imagem'),
-    tituloEn: c('titulo_en'), descricaoEn: c('descricao_en')
+    tituloEn: c('titulo_en'), descricaoEn: c('descricao_en'), tema: c('tema')
   };
   return v.filter(function (r) { return String(r[I.estado]).trim().toLowerCase() === 'verificado' && r[I.titulo]; })
     .map(function (r) {
       return [Number(r[I.dia]), Number(r[I.mes]), Number(r[I.ano]), String(r[I.titulo]), String(r[I.descricao]),
         String(r[I.categoria]), String(r[I.ilha]), String(r[I.destaque]).toLowerCase() === 'sim' ? 1 : 0,
         String(r[I.fonte] || ''), I.imagem >= 0 ? String(r[I.imagem] || '') : '', I.credito >= 0 ? String(r[I.credito] || '') : '',
-        I.tituloEn >= 0 ? String(r[I.tituloEn] || '') : '', I.descricaoEn >= 0 ? String(r[I.descricaoEn] || '') : ''];
+        I.tituloEn >= 0 ? String(r[I.tituloEn] || '') : '', I.descricaoEn >= 0 ? String(r[I.descricaoEn] || '') : '',
+        I.tema >= 0 ? String(r[I.tema] || '') : ''];
     });
 }
 
@@ -120,4 +122,4 @@ function onEdit(e) {
 }
 
 /** Executar à mão depois de editar a folha "eventos" para o site ver logo as mudanças. */
-function limparCache() { CacheService.getScriptCache().remove('eventos_v2_n'); }
+function limparCache() { CacheService.getScriptCache().remove('eventos_v3_n'); }

@@ -7,7 +7,8 @@ Neste dia na história de Cabo Verde. Site estático (HTML, CSS e JavaScript, se
 ```
 Google Sheet (privada)
   ├─ folha "eventos"  → só as linhas com estado "verificado" aparecem no site
-  │                     (colunas titulo_en / descricao_en = versão inglesa)
+  │                     (colunas titulo_en / descricao_en = versão inglesa;
+  │                      categoria = tipo, tema = área; fonte2 e notas só na Sheet)
   └─ folha "erros"    ← cada "Assinalar erro" entra aqui como "pendente"
         ▲
         │  Apps Script (apps-script/Code.gs), corre com a sua conta
@@ -72,7 +73,7 @@ Na Vercel: **Project → Settings → Domains → Add**, escreva `hojecv.app` e 
 
 ## Rotina de manutenção
 
-- **Novo acontecimento:** acrescente uma linha na folha "eventos" com estado `verificado` e, se possível, `titulo_en` e `descricao_en`. As alterações aparecem no site em menos de 10 minutos; ao editar a folha o cache é limpo automaticamente.
+- **Novo acontecimento:** acrescente uma linha na folha "eventos" com estado `verificado`, `categoria` (`acontecimento`, `nascimento` ou `falecimento`), `tema` (`politica`, `historia`, `musica`, `literatura`, `artes`, `desporto`, `religiao`, `sociedade` ou `catastrofe`) e, se possível, `titulo_en` e `descricao_en`. Só entra como `verificado` com duas fontes independentes (`fonte` e `fonte2`); caso contrário fica `por verificar`, com a razão em `notas`. As alterações aparecem no site em menos de 10 minutos; ao editar a folha o cache é limpo automaticamente.
 - **Esconder um acontecimento:** mude o estado para outra coisa (por exemplo `por verificar`).
 - **Rever erros:** na folha "erros", passe de `pendente` para `validado` ou `inválido` e escreva uma nota. Se for validado, corrija a linha na folha "eventos".
 - **Atualizar a cópia de reserva:** de vez em quando, peça ao Claude para gerar um `dados/eventos.js` novo a partir da Sheet e substitua-o no GitHub.

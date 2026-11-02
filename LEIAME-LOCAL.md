@@ -4,7 +4,7 @@
 | Ficheiro | Para quê |
 |---|---|
 | `index.html` | O site completo (HTML, CSS e JavaScript), em PT e EN |
-| `eventos.js` | Cópia de reserva dos 383 acontecimentos |
+| `eventos.js` | Cópia de reserva da base (só registos `verificado`) |
 | `config.js` | URL do Apps Script (já preenchido); com `API: ""` o site usa só o `eventos.js` |
 | `Code.gs` | Script da Google Sheet (cola-se no Apps Script; não é usado no site) |
 
