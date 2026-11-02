@@ -600,6 +600,7 @@ addEventListener("keydown",ev=>{if(ev.key==="Escape"){$("abt").hidden=true;$("cn
 function route(){const v=location.hash==="#explorar"?"explorar":"hoje";
  $("view-hoje").hidden=v!=="hoje";$("view-explorar").hidden=v!=="explorar";
  $("hero").hidden=v!=="hoje";$("dateline").hidden=v!=="hoje";
+ $(v==="hoje"?"view-hoje":"view-explorar").appendChild(document.querySelector(".foot"));
  $("tab-hoje").setAttribute("aria-current",v==="hoje"?"page":"false");$("tab-explorar").setAttribute("aria-current",v==="explorar"?"page":"false");
  v==="hoje"?renderDay():renderExplore();}
 $("prev").onclick=()=>{cur.setDate(cur.getDate()-1);renderDay()};
