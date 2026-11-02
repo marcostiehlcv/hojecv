@@ -146,6 +146,59 @@ main .wrap{padding-block:22px 48px;display:flex;flex-direction:column;gap:22px}
 .foot{font-size:12.5px;color:var(--muted);display:flex;flex-wrap:wrap;gap:6px 14px;justify-content:space-between;border-top:1px solid var(--line);padding-top:12px;margin-top:-8px}
 .c-acontecimento{background:var(--ocean)}.c-politica{background:var(--rubro)}.c-nascimento{background:#1f8a5b}.c-falecimento{background:#4a5468}.c-cultura{background:#a3570f}.c-desporto{background:#6b3fb0}
 @media (prefers-reduced-motion:no-preference){.feature,.item{animation:rise .35s ease both}@keyframes rise{from{transform:translateY(6px);opacity:.4}to{transform:none;opacity:1}}}
+
+/* ===== Desktop / tablet: wider column, bigger type, two-column list ===== */
+@media (min-width:900px){
+ .wrap{max-width:1040px;padding-left:32px;padding-right:32px}
+ header.mast .wrap{padding-block:26px 40px}
+ .logo{font-size:30px}.logo b{padding:0 9px;border-radius:8px}
+ nav.tabs a{font-size:17px;padding:9px 20px}
+ .lang button{font-size:14px;padding:7px 12px}
+ .datehero{margin-top:34px;gap:40px}
+ .datehero .day{font-size:176px;line-height:.86}
+ .datehero .month{font-size:50px;margin-top:8px}
+ .flagwrap{width:360px;margin-bottom:12px;border-radius:6px}
+ .dateline{margin-top:26px;flex-direction:row;align-items:center;gap:24px;font-size:14px;letter-spacing:.08em}
+ .dateline input{min-height:46px;font-size:16px;padding:8px 12px;border-radius:10px}
+ .dateline .todaybtn{font-size:15px;padding:12px 18px;border-radius:10px}
+ .navbtn{width:48px;height:48px;font-size:24px}
+ .ctrls{gap:12px}
+ main .wrap{padding-block:36px 72px;gap:36px}
+ .label{font-size:13px}
+ .feature{padding:36px 40px;gap:14px;border-radius:24px;min-height:260px}
+ .feature .wash{inset:0 0 0 42%}
+ .feature .yr{font-size:84px}
+ .feature h2{font-size:42px;max-width:22ch}
+ .feature p{font-size:20px;line-height:1.55;max-width:56ch}
+ .tag{font-size:12.5px;padding:5px 12px}
+ .cred{font-size:12px}
+ .chips{flex-wrap:wrap;overflow:visible}
+ .chips button{font-size:16px;padding:10px 20px}
+ #dayList.list{display:grid;grid-template-columns:1fr 1fr;column-gap:56px}
+ #dayList .item:nth-child(2){border-top:0}
+ .item{grid-template-columns:76px 1fr;gap:18px;padding-block:20px}
+ .item.has-img{grid-template-columns:76px 1fr 84px}
+ .thumb{width:84px;height:84px;border-radius:14px}
+ .item .y{font-size:26px}
+ .item h3{font-size:21px;margin-bottom:6px}
+ .item p{font-size:17px}
+ .item .d{font-size:12.5px}
+ .empty{padding:28px;font-size:18px}
+ .note,.foot{font-size:15px}
+ .share,.flag,.src,.aboutlink{font-size:13.5px}
+ .acts-row{gap:18px}
+ .seg button{font-size:14px;padding:9px 16px}
+ .seg2 button{font-size:15px}
+ .sheet{max-width:620px;padding:28px}
+ .sheet h2{font-size:26px}
+}
+@media (min-width:1500px){
+ .wrap{max-width:1200px}
+ .datehero .day{font-size:210px}.datehero .month{font-size:58px}
+ .flagwrap{width:440px}
+ .feature h2{font-size:48px}.feature p{font-size:22px}
+ #dayList.list{column-gap:72px}
+}
 </style>
 </head>
 <body>
@@ -241,7 +294,7 @@ pt:{hoje:"Hoje",explorar:"Explorar",today:"Hoje",prev:"Dia anterior",next:"Dia s
  foot:"Hoje CV · Um projeto de Marco Stiehl",aboutBtn:"Sobre o Hoje CV",aboutTitle:"Sobre o Hoje CV",
  about:["O Hoje CV mostra, dia a dia, os acontecimentos, nascimentos e falecimentos que marcaram a história de Cabo Verde, desde a chegada dos navegadores em 1460 até aos nossos dias.",
  "A motivação é informar. Queremos ajudar os cabo-verdianos, nas ilhas e na diáspora, a conhecer melhor a sua própria história, e dar a quem quer descobrir Cabo Verde uma forma simples de ficar mais bem informado sobre o país.",
- "Critérios para um registo entrar no Hoje CV: ter relevância para a história de Cabo Verde ou para a sua diáspora; ter data exata (dia, mês e ano); estar confirmado numa fonte que se possa consultar, como enciclopédias, instituições oficiais, arquivos ou imprensa de referência. Datas sem confirmação ficam de fora, e as datas tradicionais são assinaladas como tal.",
+ "Critérios para um registo entrar no Hoje CV: ter relevância para a história de Cabo Verde ou para a sua diáspora; ter data exata (dia, mês e ano); estar confirmado numa fonte que se possa consultar, como instituições oficiais, arquivos, enciclopédias ou a imprensa cabo-verdiana de referência. Entram apenas factos comprovados, nunca especulações ou boatos. Datas sem confirmação ficam de fora, e as datas tradicionais são assinaladas como tal. Sempre que as datas exatas são conhecidas, quem tem registo de nascimento tem também o de falecimento, e vice-versa.",
  "Cada registo tem uma fonte que pode consultar. Se encontrar um erro, use «Assinalar erro»: todos os reportes são revistos antes de qualquer alteração.",
  "Um projeto de Marco Stiehl."],
  repTitle:"Assinalar erro",repQ:"O que está errado? Escolha uma ou mais opções",cancel:"Cancelar",send:"Enviar",sending:"A enviar…",sentBtn:"Enviado",
@@ -273,7 +326,7 @@ en:{hoje:"Today",explorar:"Explore",today:"Today",prev:"Previous day",next:"Next
  foot:"Hoje CV · A project by Marco Stiehl",aboutBtn:"About Hoje CV",aboutTitle:"About Hoje CV",
  about:["Hoje CV (“Today CV”) shows, day by day, the events, births and deaths that shaped the history of Cabo Verde, from the arrival of the navigators in 1460 to the present day.",
  "Its purpose is to inform. We want to help Cape Verdeans, on the islands and in the diaspora, learn more about their own history, and to give anyone who wants to discover Cabo Verde a simple way to become better informed about the country.",
- "Criteria for a record to enter Hoje CV: it must be relevant to the history of Cabo Verde or its diaspora; have an exact date (day, month and year); and be confirmed by a source you can check, such as encyclopaedias, official institutions, archives or reputable press. Unconfirmed dates are left out, and traditional dates are marked as such.",
+ "Criteria for a record to enter Hoje CV: it must be relevant to the history of Cabo Verde or its diaspora; have an exact date (day, month and year); and be confirmed by a source you can check, such as official institutions, archives, encyclopaedias or reputable Cape Verdean press. Only established facts are included, never speculation or rumour. Unconfirmed dates are left out, and traditional dates are marked as such. Whenever the exact dates are known, anyone with a birth record also has a death record, and vice versa.",
  "Every record has a source you can check. If you find a mistake, use “Report error”: all reports are reviewed before anything is changed.",
  "A project by Marco Stiehl."],
  repTitle:"Report an error",repQ:"What is wrong? Choose one or more options",cancel:"Cancel",send:"Send",sending:"Sending…",sentBtn:"Sent",
