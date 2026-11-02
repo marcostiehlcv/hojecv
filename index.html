@@ -116,7 +116,8 @@ main .wrap{padding-block:22px 48px;display:flex;flex-direction:column;gap:22px}
 .conf.alta::before{background:var(--conf-alta)}.conf.media::before{background:var(--conf-media)}
 .confi{width:16px;height:16px;margin-left:5px;padding:0;border:1px solid var(--line);border-radius:50%;background:none;color:var(--muted);font:600 10px/14px var(--mono);cursor:pointer;flex:none}
 .confi:hover{color:var(--fg);border-color:var(--muted)}
-.srcw{display:inline-flex;align-items:center;margin-left:auto;white-space:nowrap}.srcw .src{margin-left:0}.confw{display:inline-flex;align-items:center;white-space:nowrap}.confw .conf{margin-left:0}.confw+.src{margin-left:10px}
+.srcw{display:inline-flex;align-items:center;white-space:nowrap}
+@media (min-width:900px){.feature .srcw{margin-left:auto}}.srcw .src{margin-left:0}.confw{display:inline-flex;align-items:center;white-space:nowrap}.confw .conf{margin-left:0}.confw+.src{margin-left:10px}
 .src:hover{text-decoration:underline}
 .flag{font-family:var(--mono);font-size:11px;letter-spacing:.04em;text-transform:uppercase;background:none;border:0;color:var(--muted);cursor:pointer;padding:3px 0;display:inline-flex;align-items:center;gap:4px;opacity:.8}
 .flag:hover{color:var(--rubro);opacity:1}
