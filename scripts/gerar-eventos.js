@@ -70,17 +70,18 @@ function validar(D) {
   const assinatura = L => L.map(r => JSON.stringify(r)).sort().join("\n");
   const mudou = assinatura(D) !== assinatura(antigo);
   const p = {};
-  new Intl.DateTimeFormat("en-US", { timeZone: "Atlantic/Cape_Verde", year: "numeric", month: "2-digit", day: "2-digit" })
+  new Intl.DateTimeFormat("en-US", { timeZone: "Atlantic/Cape_Verde", year: "numeric", month: "2-digit", day: "2-digit",
+    hour: "2-digit", minute: "2-digit", hourCycle: "h23" })
     .formatToParts(new Date()).forEach(x => { p[x.type] = x.value; });
-  const hoje = `${p.year}-${p.month}-${p.day}`;
-  const valida = /^\d{4}-\d{2}-\d{2}$/.test(anterior.HOJECV_ATUALIZADO || "");
-  const atualizado = mudou || !valida ? hoje : anterior.HOJECV_ATUALIZADO;
+  const agora = `${p.year}-${p.month}-${p.day} ${p.hour}:${p.minute}`;
+  const valida = /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}$/.test(anterior.HOJECV_ATUALIZADO || "");
+  const atualizado = mudou || !valida ? agora : anterior.HOJECV_ATUALIZADO;
 
   const corpo = D.map(r => "[" + r.map(v => JSON.stringify(v)).join(", ") + "]").join(", ");
   fs.writeFileSync(SAIDA, `/* Dados do site, gerados a partir da Google Sheet por scripts/gerar-eventos.js (só registos "verificado").
    [dia, mes, ano, titulo, descricao, categoria, ilha, destaque, fonte, imagem, credito, titulo_en, descricao_en, tema]
    categoria = tipo (${TIPOS.join(" | ")}); tema = ${TEMAS.join(" | ")}
-   HOJECV_ATUALIZADO = data da última alteração dos registos (AAAA-MM-DD, hora de Cabo Verde) */
+   HOJECV_ATUALIZADO = data e hora da última alteração dos registos (AAAA-MM-DD HH:MM, hora de Cabo Verde) */
 window.HOJECV_ATUALIZADO = "${atualizado}";
 window.HOJECV_DADOS = [${corpo}];
 `);
