@@ -261,6 +261,8 @@ button.tag{border:0;cursor:pointer;line-height:inherit}
       <div class="seg" id="eras" role="group" aria-label="Filtrar por época"></div>
       <div class="label" style="margin-top:6px" id="lblCat">Categoria</div>
       <div class="chips" id="chips2" role="group" aria-label="Filtrar por categoria"></div>
+      <div class="label" style="margin-top:6px" id="lblIlha">Local</div>
+      <div class="chips" id="ilhas" role="group" aria-label="Filtrar por local"></div>
     </section>
     <div id="timeline" style="display:flex;flex-direction:column;gap:18px"></div>
   </div>
@@ -307,7 +309,7 @@ pt:{hoje:"Hoje",explorar:"Explorar",today:"Hoje",prev:"Dia anterior",next:"Dia s
  highlight:"Destaque do dia",catsLbl:"Categorias",era:"Época",cat:"Categoria",onday:"neste dia em Cabo Verde",
  conf:{alta:"Confiança alta",media:"Confiança média",baixa:"Confiança baixa"},confInfo:"O que significa o nível de confiança?",
  confTip:"Nível de confiança da fonte. Alta: fonte oficial, imprensa de referência ou enciclopédia. Média: Wikipédia ou outra fonte. Baixa: data tradicional. Toque no i para ver o que significa.",
- ilhaSel:p=>`Local: ${p}`,ilhaClear:"Remover o filtro de local",
+ ext:"Estrangeiro",ilhaLbl:"Local",
  more:(n,r)=>`Ver mais ${n} (faltam ${r})`,
  confTitle:"Nível de confiança",confIntro:"O nível de confiança é calculado a partir da fonte principal de cada registo.",
  confLv:{alta:"Instituições oficiais, imprensa de referência ou enciclopédias.",media:"Wikipédia ou outras fontes.",baixa:"Datas tradicionais, sem registo documental exato."},
@@ -347,7 +349,7 @@ en:{hoje:"Today",explorar:"Explore",today:"Today",prev:"Previous day",next:"Next
  highlight:"Highlight of the day",catsLbl:"Categories",era:"Period",cat:"Category",onday:"on this day in Cabo Verde",
  conf:{alta:"High confidence",media:"Medium confidence",baixa:"Low confidence"},confInfo:"What does the confidence level mean?",
  confTip:"Source confidence level. High: official source, reputable press or encyclopaedia. Medium: Wikipedia or another source. Low: traditional date. Tap the i to see what it means.",
- ilhaSel:p=>`Place: ${p}`,ilhaClear:"Remove the place filter",
+ ext:"Abroad",ilhaLbl:"Place",
  more:(n,r)=>`Show ${n} more (${r} left)`,
  confTitle:"Confidence level",confIntro:"The confidence level is based on the main source of each record.",
  confLv:{alta:"Official institutions, reputable press or encyclopaedias.",media:"Wikipedia or other sources.",baixa:"Traditional dates with no exact documentary record."},
@@ -399,6 +401,8 @@ const $=id=>document.getElementById(id);
 let cur=new Date(); cur.setHours(12,0,0,0);
 let cat="todas", cat2="todas", era="todas";
 const LOTE=30; let expMax=LOTE, ilha2="";
+const ILHAS=["Santo Antão","São Vicente","São Nicolau","Sal","Boa Vista","Maio","Santiago","Fogo","Brava","Nacional"];
+const EXT="__ext";const naIlha=(e,k)=>!k||(k===EXT?!ILHAS.includes(e.ilha):e.ilha===k);
 try{const s=localStorage.getItem("hojecv"); if(s){const o=JSON.parse(s); cat=o.cat||cat; era=o.era||era;}}catch(e){}
 if(!(cat in I18N.pt.cats))cat="todas";
 const save=()=>{try{localStorage.setItem("hojecv",JSON.stringify({cat,era}))}catch(e){}};
@@ -553,20 +557,23 @@ function renderExplore(){
  $("eras").innerHTML=ERAS.map(([k])=>`<button data-k="${k}" aria-pressed="${k===era}">${L().eras[k]}</button>`).join("");
  $("eras").onclick=ev=>{const b=ev.target.closest("button");if(b){era=b.dataset.k;expMax=LOTE;save();renderExplore()}};
  chips($("chips2"),cat2,k=>{cat2=k;expMax=LOTE;renderExplore()});
+ const locs=[["",L().cats.todas],...ILHAS.filter(k=>EVENTS.some(e=>e.ilha===k)).map(k=>[k,PL(k)]),[EXT,L().ext]];
+ if(ilha2&&!locs.some(x=>x[0]===ilha2))locs.push([ilha2,PL(ilha2)]);
+ $("ilhas").innerHTML=locs.map(([k,v])=>`<button data-k="${esc(k)}" aria-pressed="${k===ilha2}">${esc(v)}</button>`).join("");
+ $("ilhas").onclick=ev=>{const b=ev.target.closest("button");if(b){ilha2=b.dataset.k;expMax=LOTE;renderExplore()}};
  const [,,a,z]=ERAS.find(x=>x[0]===era);
- const items=EVENTS.filter(e=>e.y>=a&&e.y<=z&&hit(e,cat2)&&(!ilha2||e.ilha===ilha2)).sort((p,q)=>p.y-q.y||p.m-q.m||p.d-q.d);
+ const items=EVENTS.filter(e=>e.y>=a&&e.y<=z&&hit(e,cat2)&&naIlha(e,ilha2)).sort((p,q)=>p.y-q.y||p.m-q.m||p.d-q.d);
  const roman=n=>["XV","XVI","XVII","XVIII","XIX","XX","XXI"][n-15];
  // Mostra os registos em lotes; «Ver mais» acrescenta o lote seguinte. A contagem do século é a total.
  const tot={};items.forEach(e=>{const c=Math.floor((e.y-1)/100)+1;tot[c]=(tot[c]||0)+1});
  const groups={};items.slice(0,expMax).forEach(e=>{const c=Math.floor((e.y-1)/100)+1;(groups[c]=groups[c]||[]).push(e)});
  $("timeline").innerHTML=Object.keys(groups).length?Object.entries(groups).map(([c,arr])=>`<section class="century"><h2>${LANG==="en"?L().century(ROMAN_EN[roman(+c)]):L().century(roman(+c))}<small>${L().count(tot[c])}</small></h2><div class="list">${arr.map(e=>itemHTML(e,true)).join("")}</div></section>`).join(""):`<p class="empty">${L().noneCombo}</p>`;
- if(ilha2){const b=document.createElement("button");b.type="button";b.className="ilhasel";b.setAttribute("aria-label",L().ilhaClear);b.textContent=L().ilhaSel(PL(ilha2))+" ✕";b.onclick=()=>{ilha2="";expMax=LOTE;renderExplore()};$("timeline").prepend(b)}
  if(items.length>expMax){const b=document.createElement("button");b.type="button";b.className="more";b.textContent=L().more(Math.min(LOTE,items.length-expMax),items.length-expMax);b.onclick=()=>{expMax+=LOTE;renderExplore()};$("timeline").appendChild(b)}
 }
 
 function applyLang(){const t=L();document.documentElement.lang=LANG==="en"?"en":"pt";
  const set=(id,v)=>{const el=$(id);if(el)el.textContent=v};
- set("tab-hoje",t.hoje);set("tab-explorar",t.explorar);set("today",t.today);set("lblCats",t.catsLbl);set("lblEra",t.era);set("lblCat",t.cat);
+ set("tab-hoje",t.hoje);set("tab-explorar",t.explorar);set("today",t.today);set("lblCats",t.catsLbl);set("lblEra",t.era);set("lblCat",t.cat);set("lblIlha",t.ilhaLbl);
  set("repTitle",t.repTitle);set("repQ",t.repQ);set("repCancel",t.cancel);set("repSend",t.send);set("shrTitle",t.shrTitle);set("fmtSq",t.sq);
  set("shrSave",t.save);set("shrNative",t.native);set("shrFull",t.full);set("shrCopy",t.copy);set("shrClose",t.close);set("fullHint",t.hint);set("foot",t.foot);set("aboutBtn",t.aboutBtn);set("abtTitle",t.aboutTitle);set("cnfTitle",t.confTitle);set("cnfClose",t.close);{const b=$("cnfBody");if(b){b.innerHTML=`<p>${esc(t.confIntro)}</p>`+["alta","media","baixa"].map(k=>`<p><span class="conf ${k}" style="margin:0">${esc(t.conf[k])}</span><br>${esc(t.confLv[k])}</p>`).join("")+`<p>${esc(t.confNote)}</p>`}}set("abtClose",t.close);{const b=$("abtBody");if(b){b.innerHTML="";t.about.forEach((x,i)=>{const p=document.createElement("p");p.textContent=x;b.appendChild(p);if(i===2){const q=document.createElement("p");q.id="abtConf";q.textContent=t.aboutConf;b.appendChild(q)}})}}
  if($("note")){const u=/^(\d{4})-(\d{2})-(\d{2}) (\d{2}:\d{2})$/.exec(window.HOJECV_ATUALIZADO||"");$("note").textContent=u?t.updated(+u[3],MO(+u[2]-1),u[1],u[4]):"";$("note").hidden=!u}
