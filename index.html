@@ -533,10 +533,13 @@ $("next").onclick=()=>{cur.setDate(cur.getDate()+1);renderDay()};
 $("today").onclick=()=>{cur=new Date();cur.setHours(12,0,0,0);renderDay()};
 $("pick").onchange=e=>{const [y,m,d]=e.target.value.split("-").map(Number);if(y){cur=new Date(y,m-1,d,12);renderDay()}};
 addEventListener("hashchange",route);applyLang();route();
+window.HOJECV_FONTE="cópia de reserva (eventos.js)";
+const mostraFonte=()=>{if(!/[?&]fonte(&|$)/.test(location.search))return;let b=document.getElementById("fonteTag");if(!b){b=document.createElement("div");b.id="fonteTag";b.style.cssText="position:fixed;left:12px;bottom:12px;z-index:30;background:#003893;color:#fff;font:12px/1.3 ui-monospace,monospace;padding:6px 10px;border-radius:8px;box-shadow:0 4px 14px rgba(0,0,0,.35)";document.body.appendChild(b)}b.textContent="Dados: "+window.HOJECV_FONTE+" · "+EVENTS.length+" registos"};
+mostraFonte();
 (async()=>{const api=(window.HOJECV_CONFIG||{}).API;if(!api)return;
  try{const ctl=new AbortController();const t=setTimeout(()=>ctl.abort(),12000);
   const r=await fetch(api+"?acao=eventos",{signal:ctl.signal});clearTimeout(t);const j=await r.json();
-  if(Array.isArray(j.eventos)&&j.eventos.length){RAW=j.eventos;EVENTS=toEv(RAW);indexar();applyLang();if($("rep").hidden&&$("shr").hidden)route()}
+  if(Array.isArray(j.eventos)&&j.eventos.length){RAW=j.eventos;EVENTS=toEv(RAW);indexar();window.HOJECV_FONTE="Google Sheet (em direto)";applyLang();if($("rep").hidden&&$("shr").hidden)route();mostraFonte()}
  }catch(_){/* fica a cópia de reserva */}})();
 </script>
 </body>
