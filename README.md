@@ -76,7 +76,7 @@ Na Vercel: **Project → Settings → Domains → Add**, escreva `hojecv.app` e 
 
 ## Rotina de manutenção
 
-- **Novo acontecimento:** acrescente uma linha na folha "eventos" com estado `verificado`, `categoria` (`acontecimento`, `nascimento` ou `falecimento`), `tema` (`politica`, `historia`, `musica`, `literatura`, `artes`, `desporto`, `religiao`, `sociedade` ou `catastrofe`) e, se possível, `titulo_en` e `descricao_en`. Só entra como `verificado` com duas fontes independentes (`fonte` e `fonte2`); caso contrário fica `por verificar`, com a razão em `notas`. Para aparecer no site, regenere o `eventos.js` (`node scripts/gerar-eventos.js`) e faça commit.
+- **Novo acontecimento:** acrescente uma linha na folha "eventos" com estado `verificado`, `categoria` (`acontecimento`, `nascimento` ou `falecimento`), `tema` (`politica`, `historia`, `musica`, `literatura`, `artes`, `desporto`, `religiao`, `sociedade` ou `catastrofe`) e, se possível, `titulo_en` e `descricao_en`. Só entra como `verificado` com duas fontes independentes (`fonte` e `fonte2`); caso contrário fica `por verificar`, com a razão em `notas`. Para aparecer no site, regenere o `eventos.js` (`node scripts/gerar-eventos.js`) e faça commit. O site mostra «Dados atualizados a …» com a data da última alteração dos registos.
 - **Esconder um acontecimento:** mude o estado para outra coisa (por exemplo `por verificar`).
 - **Rever erros:** na folha "erros", passe de `pendente` para `validado` ou `inválido` e escreva uma nota. Se for validado, corrija a linha na folha "eventos".
 - **Publicar alterações da Sheet:** `node scripts/gerar-eventos.js` (ou peça ao Claude) e commit. O script recusa escrever se encontrar erros nos dados.

@@ -285,6 +285,7 @@ const I18N={
 pt:{hoje:"Hoje",explorar:"Explorar",today:"Hoje",prev:"Dia anterior",next:"Dia seguinte",pick:"Escolher data",tabs:"Secções",
  highlight:"Destaque do dia",catsLbl:"Categorias",era:"Época",cat:"Categoria",onday:"neste dia em Cabo Verde",
  note:n=>`${n} registos verificados, cada um com fonte. Datas do século XV são tradicionais. Imagens do Wikimedia Commons, com licença livre.`,
+ updated:(d,m,y)=>`Dados atualizados a ${d} de ${m} de ${y}.`,
  foot:"Hoje CV · Um projeto de Marco Stiehl",aboutBtn:"Sobre o Hoje CV",aboutTitle:"Sobre o Hoje CV",
  about:["O Hoje CV mostra, dia a dia, os acontecimentos, nascimentos e falecimentos que marcaram a história de Cabo Verde, desde a chegada dos navegadores em 1460 até aos nossos dias.",
  "A motivação é informar. Queremos ajudar os cabo-verdianos, nas ilhas e na diáspora, a conhecer melhor a sua própria história, e dar a quem quer descobrir Cabo Verde uma forma simples de ficar mais bem informado sobre o país.",
@@ -317,6 +318,7 @@ pt:{hoje:"Hoje",explorar:"Explorar",today:"Hoje",prev:"Dia anterior",next:"Dia s
 en:{hoje:"Today",explorar:"Explore",today:"Today",prev:"Previous day",next:"Next day",pick:"Choose a date",tabs:"Sections",
  highlight:"Highlight of the day",catsLbl:"Categories",era:"Period",cat:"Category",onday:"on this day in Cabo Verde",
  note:n=>`${n} verified records, each with a source. 15th-century dates are traditional. Images from Wikimedia Commons, freely licensed.`,
+ updated:(d,m,y)=>`Data updated ${d} ${m} ${y}.`,
  foot:"Hoje CV · A project by Marco Stiehl",aboutBtn:"About Hoje CV",aboutTitle:"About Hoje CV",
  about:["Hoje CV (“Today CV”) shows, day by day, the events, births and deaths that shaped the history of Cabo Verde, from the arrival of the navigators in 1460 to the present day.",
  "Its purpose is to inform. We want to help Cape Verdeans, on the islands and in the diaspora, learn more about their own history, and to give anyone who wants to discover Cabo Verde a simple way to become better informed about the country.",
@@ -513,7 +515,7 @@ function applyLang(){const t=L();document.documentElement.lang=LANG==="en"?"en":
  set("tab-hoje",t.hoje);set("tab-explorar",t.explorar);set("today",t.today);set("lblCats",t.catsLbl);set("lblEra",t.era);set("lblCat",t.cat);
  set("repTitle",t.repTitle);set("repQ",t.repQ);set("repCancel",t.cancel);set("repSend",t.send);set("shrTitle",t.shrTitle);set("fmtSq",t.sq);
  set("shrSave",t.save);set("shrNative",t.native);set("shrFull",t.full);set("shrCopy",t.copy);set("shrClose",t.close);set("fullHint",t.hint);set("foot",t.foot);set("aboutBtn",t.aboutBtn);set("abtTitle",t.aboutTitle);set("abtClose",t.close);{const b=$("abtBody");if(b){b.innerHTML="";t.about.forEach(x=>{const p=document.createElement("p");p.textContent=x;b.appendChild(p)})}}
- if($("note"))$("note").textContent=t.note(EVENTS.length);
+ if($("note")){const u=/^(\d{4})-(\d{2})-(\d{2})$/.exec(window.HOJECV_ATUALIZADO||"");$("note").textContent=t.note(EVENTS.length)+(u?" "+t.updated(+u[3],MO(+u[2]-1),u[1]):"")}
  $("prev").setAttribute("aria-label",t.prev);$("next").setAttribute("aria-label",t.next);$("pick").setAttribute("aria-label",t.pick);$("tabs").setAttribute("aria-label",t.tabs);
  $("shrCv").title=t.cvTitle;document.querySelector('#shr .seg2').setAttribute("aria-label",t.fmtAria);
  const fl=document.querySelector(".flag-cv");if(fl)fl.setAttribute("aria-label",t.flagAlt);

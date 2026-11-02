@@ -50,7 +50,8 @@ function validar(D) {
   if (!Array.isArray(D) || !D.length) throw new Error("O Apps Script não devolveu eventos");
 
   const erros = validar(D);
-  const antigo = (ler(SAIDA) || {}).HOJECV_DADOS || [];
+  const anterior = ler(SAIDA) || {};
+  const antigo = anterior.HOJECV_DADOS || [];
   const ka = new Set(antigo.map(chave)), kn = new Set(D.map(chave));
   const novos = D.filter(r => !ka.has(chave(r))), saem = antigo.filter(r => !kn.has(chave(r)));
 
@@ -65,11 +66,23 @@ function validar(D) {
   }
   if (process.argv.includes("--ver")) return;
 
+  // Data da última atualização dos dados (hora de Cabo Verde): só muda se algum registo mudou.
+  const assinatura = L => L.map(r => JSON.stringify(r)).sort().join("\n");
+  const mudou = assinatura(D) !== assinatura(antigo);
+  const p = {};
+  new Intl.DateTimeFormat("en-US", { timeZone: "Atlantic/Cape_Verde", year: "numeric", month: "2-digit", day: "2-digit" })
+    .formatToParts(new Date()).forEach(x => { p[x.type] = x.value; });
+  const hoje = `${p.year}-${p.month}-${p.day}`;
+  const valida = /^\d{4}-\d{2}-\d{2}$/.test(anterior.HOJECV_ATUALIZADO || "");
+  const atualizado = mudou || !valida ? hoje : anterior.HOJECV_ATUALIZADO;
+
   const corpo = D.map(r => "[" + r.map(v => JSON.stringify(v)).join(", ") + "]").join(", ");
   fs.writeFileSync(SAIDA, `/* Dados do site, gerados a partir da Google Sheet por scripts/gerar-eventos.js (só registos "verificado").
    [dia, mes, ano, titulo, descricao, categoria, ilha, destaque, fonte, imagem, credito, titulo_en, descricao_en, tema]
-   categoria = tipo (${TIPOS.join(" | ")}); tema = ${TEMAS.join(" | ")} */
+   categoria = tipo (${TIPOS.join(" | ")}); tema = ${TEMAS.join(" | ")}
+   HOJECV_ATUALIZADO = data da última alteração dos registos (AAAA-MM-DD, hora de Cabo Verde) */
+window.HOJECV_ATUALIZADO = "${atualizado}";
 window.HOJECV_DADOS = [${corpo}];
 `);
-  console.log(`\neventos.js escrito com ${D.length} registos.`);
+  console.log(`\neventos.js escrito com ${D.length} registos. Dados atualizados a ${atualizado}${mudou ? "" : " (sem alterações; data mantida)"}.`);
 })().catch(e => { console.error("Erro: " + e.message); process.exitCode = 1; });
