@@ -115,6 +115,8 @@ main .wrap{padding-block:22px 48px;display:flex;flex-direction:column;gap:22px}
 .conf::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--conf-baixa)}
 .conf.alta::before{background:var(--conf-alta)}.conf.media::before{background:var(--conf-media)}
 .confi{width:16px;height:16px;margin-left:5px;padding:0;border:1px solid var(--line);border-radius:50%;background:none;color:var(--muted);font:600 10px/14px var(--mono);cursor:pointer;flex:none}
+.more{align-self:center;font-family:var(--display);font-weight:500;font-size:15px;border:1px solid var(--line);background:var(--surface);color:var(--fg);padding:10px 22px;border-radius:999px;cursor:pointer}
+.more:hover{border-color:var(--muted)}
 .confi:hover{color:var(--fg);border-color:var(--muted)}
 .srcw{display:inline-flex;align-items:center;white-space:nowrap}
 @media (min-width:900px){.feature .srcw{margin-left:auto}}.srcw .src{margin-left:0}.confw{display:inline-flex;align-items:center;white-space:nowrap}.confw .conf{margin-left:0}.confw+.src{margin-left:10px}
@@ -302,6 +304,7 @@ pt:{hoje:"Hoje",explorar:"Explorar",today:"Hoje",prev:"Dia anterior",next:"Dia s
  highlight:"Destaque do dia",catsLbl:"Categorias",era:"Época",cat:"Categoria",onday:"neste dia em Cabo Verde",
  conf:{alta:"Confiança alta",media:"Confiança média",baixa:"Confiança baixa"},confInfo:"O que significa o nível de confiança?",
  confTip:"Nível de confiança da fonte. Alta: fonte oficial, imprensa de referência ou enciclopédia. Média: Wikipédia ou outra fonte. Baixa: data tradicional. Toque no i para ver o que significa.",
+ more:(n,r)=>`Ver mais ${n} (faltam ${r})`,
  confTitle:"Nível de confiança",confIntro:"O nível de confiança é calculado a partir da fonte principal de cada registo.",
  confLv:{alta:"Instituições oficiais, imprensa de referência ou enciclopédias.",media:"Wikipédia ou outras fontes.",baixa:"Datas tradicionais, sem registo documental exato."},
  confNote:"Um nível médio não quer dizer que o facto esteja errado, apenas que a fonte é menos direta. Se encontrar um erro, use «Assinalar erro».",
@@ -340,6 +343,7 @@ en:{hoje:"Today",explorar:"Explore",today:"Today",prev:"Previous day",next:"Next
  highlight:"Highlight of the day",catsLbl:"Categories",era:"Period",cat:"Category",onday:"on this day in Cabo Verde",
  conf:{alta:"High confidence",media:"Medium confidence",baixa:"Low confidence"},confInfo:"What does the confidence level mean?",
  confTip:"Source confidence level. High: official source, reputable press or encyclopaedia. Medium: Wikipedia or another source. Low: traditional date. Tap the i to see what it means.",
+ more:(n,r)=>`Show ${n} more (${r} left)`,
  confTitle:"Confidence level",confIntro:"The confidence level is based on the main source of each record.",
  confLv:{alta:"Official institutions, reputable press or encyclopaedias.",media:"Wikipedia or other sources.",baixa:"Traditional dates with no exact documentary record."},
  confNote:"A medium level does not mean the fact is wrong, only that the source is less direct. If you find a mistake, use “Report error”.",
@@ -389,6 +393,7 @@ const MO=i=>L().months[i];
 const $=id=>document.getElementById(id);
 let cur=new Date(); cur.setHours(12,0,0,0);
 let cat="todas", cat2="todas", era="todas";
+const LOTE=30; let expMax=LOTE;
 try{const s=localStorage.getItem("hojecv"); if(s){const o=JSON.parse(s); cat=o.cat||cat; era=o.era||era;}}catch(e){}
 if(!(cat in I18N.pt.cats))cat="todas";
 const save=()=>{try{localStorage.setItem("hojecv",JSON.stringify({cat,era}))}catch(e){}};
@@ -540,13 +545,16 @@ function renderDay(){
 
 function renderExplore(){
  $("eras").innerHTML=ERAS.map(([k])=>`<button data-k="${k}" aria-pressed="${k===era}">${L().eras[k]}</button>`).join("");
- $("eras").onclick=ev=>{const b=ev.target.closest("button");if(b){era=b.dataset.k;save();renderExplore()}};
- chips($("chips2"),cat2,k=>{cat2=k;renderExplore()});
+ $("eras").onclick=ev=>{const b=ev.target.closest("button");if(b){era=b.dataset.k;expMax=LOTE;save();renderExplore()}};
+ chips($("chips2"),cat2,k=>{cat2=k;expMax=LOTE;renderExplore()});
  const [,,a,z]=ERAS.find(x=>x[0]===era);
  const items=EVENTS.filter(e=>e.y>=a&&e.y<=z&&hit(e,cat2)).sort((p,q)=>p.y-q.y||p.m-q.m||p.d-q.d);
  const roman=n=>["XV","XVI","XVII","XVIII","XIX","XX","XXI"][n-15];
- const groups={};items.forEach(e=>{const c=Math.floor((e.y-1)/100)+1;(groups[c]=groups[c]||[]).push(e)});
- $("timeline").innerHTML=Object.keys(groups).length?Object.entries(groups).map(([c,arr])=>`<section class="century"><h2>${LANG==="en"?L().century(ROMAN_EN[roman(+c)]):L().century(roman(+c))}<small>${L().count(arr.length)}</small></h2><div class="list">${arr.map(e=>itemHTML(e,true)).join("")}</div></section>`).join(""):`<p class="empty">${L().noneCombo}</p>`;
+ // Mostra os registos em lotes; «Ver mais» acrescenta o lote seguinte. A contagem do século é a total.
+ const tot={};items.forEach(e=>{const c=Math.floor((e.y-1)/100)+1;tot[c]=(tot[c]||0)+1});
+ const groups={};items.slice(0,expMax).forEach(e=>{const c=Math.floor((e.y-1)/100)+1;(groups[c]=groups[c]||[]).push(e)});
+ $("timeline").innerHTML=Object.keys(groups).length?Object.entries(groups).map(([c,arr])=>`<section class="century"><h2>${LANG==="en"?L().century(ROMAN_EN[roman(+c)]):L().century(roman(+c))}<small>${L().count(tot[c])}</small></h2><div class="list">${arr.map(e=>itemHTML(e,true)).join("")}</div></section>`).join(""):`<p class="empty">${L().noneCombo}</p>`;
+ if(items.length>expMax){const b=document.createElement("button");b.type="button";b.className="more";b.textContent=L().more(Math.min(LOTE,items.length-expMax),items.length-expMax);b.onclick=()=>{expMax+=LOTE;renderExplore()};$("timeline").appendChild(b)}
 }
 
 function applyLang(){const t=L();document.documentElement.lang=LANG==="en"?"en":"pt";
