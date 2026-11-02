@@ -116,7 +116,7 @@ main .wrap{padding-block:22px 48px;display:flex;flex-direction:column;gap:22px}
 .conf.alta::before{background:var(--conf-alta)}.conf.media::before{background:var(--conf-media)}
 .confi{width:16px;height:16px;margin-left:5px;padding:0;border:1px solid var(--line);border-radius:50%;background:none;color:var(--muted);font:600 10px/14px var(--mono);cursor:pointer;flex:none}
 .confi:hover{color:var(--fg);border-color:var(--muted)}
-.confi+.src{margin-left:10px}
+.confw{display:inline-flex;align-items:center;margin-left:auto;white-space:nowrap}.confw .conf{margin-left:0}.confw+.src{margin-left:10px}
 .src:hover{text-decoration:underline}
 .flag{font-family:var(--mono);font-size:11px;letter-spacing:.04em;text-transform:uppercase;background:none;border:0;color:var(--muted);cursor:pointer;padding:3px 0;display:inline-flex;align-items:center;gap:4px;opacity:.8}
 .flag:hover{color:var(--rubro);opacity:1}
@@ -405,9 +405,9 @@ const credit=e=>e.img&&e.cr?`<a class="cred" href="${e.cr}" target="_blank" rel=
 // Nível de confiança: baixa = data tradicional; alta = fonte oficial, imprensa de referência ou enciclopédia; média = Wikipédia ou outra fonte.
 const CONF_ALTA=["cv","unesco.org","un.org","who.int","wto.org","rtp.pt","dn.pt","rr.pt","observador.pt","publico.pt","sapo.pt","sabado.pt","infopedia.pt","britannica.com","grammy.com","olympedia.org","fifa.com","cafonline.com","fiba.basketball","catholic-hierarchy.org","gcatholic.org","forbesafricalusofona.com","forbespt.com","embaixadadecaboverde.pt","ahram.org.eg","uca.edu"];
 const confOf=e=>{if(/data tradicional|traditional date/i.test(e.x+" "+(e.xe||"")))return"baixa";let h="";try{h=new URL(e.f).hostname.replace(/^www\./,"")}catch(_){return"baixa"}return CONF_ALTA.some(d=>h===d||h.endsWith("."+d))?"alta":"media"};
-const confTag=e=>{const c=confOf(e);return`<span class="conf ${c}" title="${L().confTip}">${L().conf[c]}</span><button type="button" class="confi" aria-label="${L().confInfo}" title="${L().confTip}">i</button>`};
+const confTag=e=>{const c=confOf(e);return`<span class="confw"><span class="conf ${c}" title="${L().confTip}">${L().conf[c]}</span><button type="button" class="confi" aria-label="${L().confInfo}" title="${L().confTip}">i</button></span>`};
 const srcLink=e=>e.f?`<a class="src" href="${e.f}" target="_blank" rel="noopener">${L().src}</a>`:"";
-const itemHTML=(e,showDate)=>`<article class="item${e.img?" has-img":""}"><div class="y">${e.y}${wdTag(e)}</div><div style="min-width:0">${showDate?`<div class="d">${L().shortDate(e.d,MO(e.m-1))}</div>`:""}<h3>${esc(T(e))}</h3><p>${esc(X(e))}</p><div class="meta">${tagCat(e)}<span class="tag">${PL(e.ilha)}</span>${confTag(e)}${srcLink(e)}</div><div class="acts-row">${shareBtn(e)}${flagBtn(e)}</div></div>${imgTag(e,"thumb")}</article>`;
+const itemHTML=(e,showDate)=>`<article class="item"><div class="y">${e.y}${wdTag(e)}</div><div style="min-width:0">${showDate?`<div class="d">${L().shortDate(e.d,MO(e.m-1))}</div>`:""}<h3>${esc(T(e))}</h3><p>${esc(X(e))}</p><div class="meta">${tagCat(e)}<span class="tag">${PL(e.ilha)}</span>${confTag(e)}${srcLink(e)}</div><div class="acts-row">${shareBtn(e)}${flagBtn(e)}</div></div></article>`;
 
 const MOTIVOS=[["data","A data (dia ou mês) está errada"],["ano","O ano está errado"],["titulo","O título ou o nome está errado"],["descricao","A descrição tem informação incorreta"],["categoria","A categoria está errada"],["local","A ilha ou o local está errado"],["fonte","A fonte não abre ou não confirma o facto"],["imagem","A imagem não corresponde ou é inadequada"],["duplicado","O acontecimento está repetido"],["ofensivo","Conteúdo ofensivo ou inadequado"]];
 const hashT=s=>{let x=5381;for(const c of s)x=((x<<5)+x+c.charCodeAt(0))>>>0;return x.toString(36)};
