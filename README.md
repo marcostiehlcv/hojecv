@@ -1,86 +1,72 @@
 # Hoje CV
 
-Neste dia na história de Cabo Verde. Site estático (HTML, CSS e JavaScript, sem servidor próprio). Os acontecimentos são editados numa Google Sheet e publicados no ficheiro `eventos.js`. Em português por defeito, com versão em inglês (botão PT | EN no topo).
+**Neste dia na história de Cabo Verde** — [hojecv.app](https://hojecv.app)
 
-## Como funciona
+O Hoje CV mostra, para cada dia do ano, os acontecimentos, nascimentos e falecimentos que marcaram a história de Cabo Verde e da sua diáspora, desde a chegada dos navegadores em 1460 até aos nossos dias. O objetivo é informar: ajudar os cabo-verdianos, nas ilhas e na diáspora, a conhecer melhor a sua história, e dar a quem quer descobrir Cabo Verde uma forma simples de o fazer.
 
-```
-Google Sheet (privada)
-  ├─ folha "eventos"  → só as linhas com estado "verificado" aparecem no site
-  │                     (colunas titulo_en / descricao_en = versão inglesa;
-  │                      categoria = tipo, tema = área; fonte2 e notas só na Sheet)
-  └─ folha "erros"    ← cada "Assinalar erro" entra aqui como "pendente"
-        ▲
-        │  Apps Script (Code.gs), corre com a sua conta
-        │   ├─ GET ?acao=eventos → scripts/gerar-eventos.js → eventos.js (commit)
-        │   └─ POST reportes ← site
-        ▼
-Site estático (index.html + eventos.js) — Vercel
-```
+Disponível em português e em inglês.
 
-- A Sheet **não precisa de ser pública**. O script só devolve os registos verificados e só aceita reportes com os códigos da lista. Não há texto livre.
-- Um reporte **nunca altera** a folha "eventos". Quem decide é quem revê a folha "erros".
-- O site lê só o `eventos.js`, por isso não depende da Sheet para abrir. Uma alteração na Sheet chega ao site quando se regenera o `eventos.js` e se faz commit.
-- Se um registo não tiver tradução, a versão inglesa mostra o texto em português.
+## Funcionalidades
 
-## Ficheiros
+### Hoje
 
-| Ficheiro | Para quê |
-|---|---|
-| `index.html` | O site completo (PT e EN) |
-| `config.js` | O endereço do Apps Script (preencher no passo 1) |
-| `eventos.js` | Os dados do site (gerados a partir da Sheet) |
-| `Code.gs` | O script a colar na Google Sheet |
-| `scripts/gerar-eventos.js` | Gera o `eventos.js` a partir da Sheet, com validação |
+- O destaque do dia e a lista de tudo o que aconteceu nessa data, em anos diferentes.
+- O dia da semana em que cada acontecimento ocorreu, junto ao ano.
+- Navegação dia a dia ou por calendário.
+- Filtros por tipo e por tema. Só aparecem os que têm registos nesse dia.
 
-## Passo 1 — Ligar a Google Sheet (5 minutos)
+### Explorar
 
-1. Abra a Sheet **Hoje CV — Base de dados**.
-2. Menu **Extensões → Apps Script**.
-3. Apague o que lá estiver, cole todo o conteúdo de `apps-script/Code.gs` e guarde.
-4. **Implementar → Nova implementação**:
-   - Tipo: **Aplicação web**
-   - Executar como: **Eu**
-   - Quem tem acesso: **Qualquer pessoa**
-5. Autorize quando o Google pedir. O aviso "app não verificada" é normal para scripts próprios: escolha *Avançadas → Aceder*.
-6. Copie o **URL da aplicação web** (termina em `/exec`) e cole-o em `config.js`:
+- Linha do tempo por século.
+- Filtro por época: séculos XV a XVIII, século XIX, século XX colonial, Independência e Democracia.
+- Filtro por tipo ou tema.
 
-```js
-window.HOJECV_CONFIG = {
-  API: "https://script.google.com/macros/s/XXXXXXXX/exec"
-};
-```
+### Organização dos registos
 
-Para testar, abra o URL seguido de `?acao=eventos`. Deve aparecer a lista em JSON.
+- Tipo: acontecimento, nascimento ou falecimento.
+- Tema: política, história, música, literatura, artes, desporto, religião, sociedade, catástrofes e celebrações.
 
-## Passo 2 — GitHub
+### Em cada registo
 
-1. Crie uma conta em github.com.
-2. **New repository**, nome `hojecv`, visibilidade **Public**.
-3. **Add file → Upload files**: arraste todos os ficheiros desta pasta, mantendo as subpastas, e clique em **Commit changes**.
+- Data exata, descrição, ilha ou local, e há quantos anos aconteceu.
+- Ligação para a fonte, que pode ser consultada.
+- Nível de confiança (alta, média ou baixa), calculado a partir do tipo de fonte, com uma explicação acessível no botão «i».
 
-## Passo 3 — Publicar na Vercel (plano Hobby, grátis)
+### Partilhar
 
-1. Entre em vercel.com com **Continue with GitHub**.
-2. Escolha o plano **Hobby** (uso pessoal e não comercial).
-3. **Add New → Project**, escolha o repositório `hojecv` e clique em **Deploy**. Não é preciso alterar nada: o site é estático.
-4. Em cerca de um minuto o site fica em `hojecv.vercel.app` (ou parecido).
+- Cartão em formato quadrado ou story, com a bandeira oficial, a data e o resumo do acontecimento.
+- Guardar como imagem, partilhar pelo menu do telemóvel, abrir em ecrã inteiro ou copiar o texto.
 
-Cada alteração enviada para o GitHub publica uma versão nova automaticamente.
+### Assinalar erro
 
-## Passo 4 — Domínio hojecv.app
+- Qualquer pessoa pode indicar o que está errado num registo (data, ano, título, descrição, categoria, local, fonte, imagem, duplicado ou conteúdo inadequado).
+- Todos os reportes são revistos antes de qualquer alteração. Um reporte nunca altera um registo diretamente.
 
-Na Vercel: **Project → Settings → Domains → Add**, escreva `hojecv.app` e siga as instruções de DNS do fornecedor onde comprou o domínio. O HTTPS é automático (obrigatório nos domínios .app).
+### Outros
 
-**Nota:** o plano Hobby é para uso não comercial. Se o projeto passar a ter receitas (publicidade, patrocínios), é preciso mudar para o plano Pro ou para o GitHub Pages.
+- Data e hora da última atualização dos dados.
+- Tema claro e escuro, de acordo com o dispositivo.
+- Pensado primeiro para o telemóvel, com versão adaptada para computador.
 
-## Rotina de manutenção
+## Critérios editoriais
 
-- **Novo acontecimento:** acrescente uma linha na folha "eventos" com estado `verificado`, `categoria` (`acontecimento`, `nascimento` ou `falecimento`), `tema` (`politica`, `historia`, `musica`, `literatura`, `artes`, `desporto`, `religiao`, `sociedade`, `catastrofe` ou `celebracao`) e, se possível, `titulo_en` e `descricao_en`. Basta uma fonte de confiança com a data exata para entrar como `verificado` (`fonte2` é opcional); se as fontes discordarem, fica `por verificar`, com a razão em `notas`. Para aparecer no site, regenere o `eventos.js` (`node scripts/gerar-eventos.js`) e faça commit. O site mostra «Última atualização: …» com a data e a hora (de Cabo Verde) da última alteração dos registos.
-- **Esconder um acontecimento:** mude o estado para outra coisa (por exemplo `por verificar`).
-- **Rever erros:** na folha "erros", passe de `pendente` para `validado` ou `inválido` e escreva uma nota. Se for validado, corrija a linha na folha "eventos".
-- **Publicar alterações da Sheet:** `node scripts/gerar-eventos.js` (ou peça ao Claude) e commit. O script recusa escrever se encontrar erros nos dados.
+Um registo só entra se cumprir estas regras:
 
-## Se alterar o script
+1. Ter relevância para a história de Cabo Verde ou da sua diáspora.
+2. Ter data exata (dia, mês e ano). Registos com apenas o ano ou o mês ficam de fora.
+3. Ter uma fonte de confiança que se possa consultar: instituições oficiais, arquivos, enciclopédias ou imprensa de referência. Só entram factos comprovados, nunca especulação. Se as fontes discordarem na data, o registo fica de fora até haver confirmação.
+4. As datas tradicionais (por exemplo, as das descobertas do século XV) são assinaladas como tal.
+5. Quem tem registo de nascimento tem também o de falecimento, e vice-versa, sempre que as duas datas exatas são conhecidas.
+6. As imagens só aparecem quando existem com licença livre (Wikimedia Commons) e indicação de crédito.
 
-Depois de editar `Code.gs`, use **Implementar → Gerir implementações → Editar (lápis) → Versão: Nova versão**. Assim o URL `/exec` mantém-se igual.
+## Tecnologia
+
+Site estático em HTML, CSS e JavaScript, sem frameworks nem dependências. Os dados vêm de uma base editorial privada, revista à mão, e são publicados num único ficheiro de dados.
+
+## Autor
+
+Um projeto de Marco Stiehl.
+
+---
+
+*English:* **Hoje CV** ("Today CV") shows, day by day, the events, births and deaths that shaped the history of Cabo Verde and its diaspora, each with an exact date, a checkable source and a confidence level. It includes a timeline by century, filters by type and theme, shareable cards and a way to report errors. Available in Portuguese and English.
