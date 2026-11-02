@@ -473,9 +473,15 @@ async function drawCard(cv,e,fmt){
  const lbl=L().cardLbl(e.d,MO(e.m-1));ctx.fillText(lbl,P,y);
  y+=st?225:172;ctx.font=`800 ${st?210:170}px "Bricolage Grotesque", system-ui, sans-serif`;ctx.fillStyle="#f7d116";ctx.fillText(String(e.y),P-6,y);
  y+=st?50:16;
- const maxW=W-2*P;const tt=fitLines(ctx,T(e),'800 $px "Bricolage Grotesque", system-ui, sans-serif',st?92:76,48,maxW,st?4:3);
+ const maxW=W-2*P;
+ // Ajusta título e descrição ao espaço até à faixa do rodapé (as etiquetas nunca tocam na linha)
+ const limite=H-(st?230:150)-(st?70:40), gT=st?80:44, gE=st?60:34;
+ let tt,dd,tS=st?92:76,dS=st?44:36,dL=st?7:4;
+ for(let i=0;i<40;i++){tt=fitLines(ctx,T(e),'800 $px "Bricolage Grotesque", system-ui, sans-serif',tS,40,maxW,st?4:3);dd=fitLines(ctx,X(e),'400 $px "Literata", Georgia, serif',dS,24,maxW,dL);
+  const alt=tt.l.length*tt.s*1.08+gT+dd.l.length*dd.s*1.45+gE+52;if(y+alt<=limite)break;
+  if(tS>(st?72:60))tS-=4;else if(dL>2)dL--;else if(dS>28)dS-=2;else if(tS>44)tS-=4;else break}
  ctx.fillStyle="#fff";ctx.font=`800 ${tt.s}px "Bricolage Grotesque", system-ui, sans-serif`;for(const l of tt.l){y+=tt.s*1.08;ctx.fillText(l,P,y)}
- y+=st?80:44;const dd=fitLines(ctx,X(e),'400 $px "Literata", Georgia, serif',st?44:36,28,maxW,st?7:4);
+ y+=gT;
  ctx.fillStyle="rgba(255,255,255,.86)";ctx.font=`400 ${dd.s}px "Literata", Georgia, serif`;for(const l of dd.l){ctx.fillText(l,P,y+dd.s);y+=dd.s*1.45}
  // tags
  y+=st?60:34;ctx.font='500 26px "JetBrains Mono", ui-monospace, monospace';let x=P;
