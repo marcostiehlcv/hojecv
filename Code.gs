@@ -2,6 +2,7 @@
  * Hoje CV — API da Google Sheet
  *
  * GET  ?acao=eventos  -> devolve só os registos com estado "verificado" da folha "eventos".
+ *                         Usado por scripts/gerar-eventos.js para gerar o eventos.js (o site não lê daqui).
  * POST {chave, motivos[]} -> grava um reporte de erro na folha "erros" com estado "pendente".
  *
  * A Sheet continua privada: este script corre com a conta do dono e só expõe

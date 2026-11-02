@@ -1,6 +1,6 @@
 # Hoje CV
 
-Neste dia na história de Cabo Verde. Site estático (HTML, CSS e JavaScript, sem servidor próprio) que lê os acontecimentos de uma Google Sheet. Em português por defeito, com versão em inglês (botão PT | EN no topo).
+Neste dia na história de Cabo Verde. Site estático (HTML, CSS e JavaScript, sem servidor próprio). Os acontecimentos são editados numa Google Sheet e publicados no ficheiro `eventos.js`. Em português por defeito, com versão em inglês (botão PT | EN no topo).
 
 ## Como funciona
 
@@ -11,14 +11,16 @@ Google Sheet (privada)
   │                      categoria = tipo, tema = área; fonte2 e notas só na Sheet)
   └─ folha "erros"    ← cada "Assinalar erro" entra aqui como "pendente"
         ▲
-        │  Apps Script (apps-script/Code.gs), corre com a sua conta
+        │  Apps Script (Code.gs), corre com a sua conta
+        │   ├─ GET ?acao=eventos → scripts/gerar-eventos.js → eventos.js (commit)
+        │   └─ POST reportes ← site
         ▼
-Site estático (index.html) — Vercel
+Site estático (index.html + eventos.js) — Vercel
 ```
 
 - A Sheet **não precisa de ser pública**. O script só devolve os registos verificados e só aceita reportes com os códigos da lista. Não há texto livre.
 - Um reporte **nunca altera** a folha "eventos". Quem decide é quem revê a folha "erros".
-- Se a Sheet não responder, o site usa a cópia de reserva em `dados/eventos.js`.
+- O site lê só o `eventos.js`, por isso não depende da Sheet para abrir. Uma alteração na Sheet chega ao site quando se regenera o `eventos.js` e se faz commit.
 - Se um registo não tiver tradução, a versão inglesa mostra o texto em português.
 
 ## Ficheiros
@@ -27,8 +29,9 @@ Site estático (index.html) — Vercel
 |---|---|
 | `index.html` | O site completo (PT e EN) |
 | `config.js` | O endereço do Apps Script (preencher no passo 1) |
-| `dados/eventos.js` | Cópia de reserva da base |
-| `apps-script/Code.gs` | O script a colar na Google Sheet |
+| `eventos.js` | Os dados do site (gerados a partir da Sheet) |
+| `Code.gs` | O script a colar na Google Sheet |
+| `scripts/gerar-eventos.js` | Gera o `eventos.js` a partir da Sheet, com validação |
 
 ## Passo 1 — Ligar a Google Sheet (5 minutos)
 
@@ -73,10 +76,10 @@ Na Vercel: **Project → Settings → Domains → Add**, escreva `hojecv.app` e 
 
 ## Rotina de manutenção
 
-- **Novo acontecimento:** acrescente uma linha na folha "eventos" com estado `verificado`, `categoria` (`acontecimento`, `nascimento` ou `falecimento`), `tema` (`politica`, `historia`, `musica`, `literatura`, `artes`, `desporto`, `religiao`, `sociedade` ou `catastrofe`) e, se possível, `titulo_en` e `descricao_en`. Só entra como `verificado` com duas fontes independentes (`fonte` e `fonte2`); caso contrário fica `por verificar`, com a razão em `notas`. As alterações aparecem no site em menos de 10 minutos; ao editar a folha o cache é limpo automaticamente.
+- **Novo acontecimento:** acrescente uma linha na folha "eventos" com estado `verificado`, `categoria` (`acontecimento`, `nascimento` ou `falecimento`), `tema` (`politica`, `historia`, `musica`, `literatura`, `artes`, `desporto`, `religiao`, `sociedade` ou `catastrofe`) e, se possível, `titulo_en` e `descricao_en`. Só entra como `verificado` com duas fontes independentes (`fonte` e `fonte2`); caso contrário fica `por verificar`, com a razão em `notas`. Para aparecer no site, regenere o `eventos.js` (`node scripts/gerar-eventos.js`) e faça commit.
 - **Esconder um acontecimento:** mude o estado para outra coisa (por exemplo `por verificar`).
 - **Rever erros:** na folha "erros", passe de `pendente` para `validado` ou `inválido` e escreva uma nota. Se for validado, corrija a linha na folha "eventos".
-- **Atualizar a cópia de reserva:** de vez em quando, peça ao Claude para gerar um `dados/eventos.js` novo a partir da Sheet e substitua-o no GitHub.
+- **Publicar alterações da Sheet:** `node scripts/gerar-eventos.js` (ou peça ao Claude) e commit. O script recusa escrever se encontrar erros nos dados.
 
 ## Se alterar o script
 
