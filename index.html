@@ -79,6 +79,9 @@ main .wrap{padding-block:22px 48px;display:flex;flex-direction:column;gap:22px}
 .meta{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
 .tag{font-family:var(--mono);font-size:11px;letter-spacing:.05em;text-transform:uppercase;padding:3px 8px;border-radius:999px;background:var(--chip);color:var(--muted)}
 .tag.cat{color:#fff}
+button.tag{border:0;cursor:pointer;line-height:inherit}
+.tagl:hover{text-decoration:underline;text-underline-offset:2px}
+.ilhasel{align-self:flex-start;font-family:var(--mono);font-size:12px;letter-spacing:.05em;text-transform:uppercase;border:1px solid var(--line);background:var(--chip);color:var(--fg);padding:6px 12px;border-radius:999px;cursor:pointer}
 .chips{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}
 .chips button{flex:none;font-family:var(--display);font-weight:500;font-size:14px;border:1px solid var(--line);background:var(--surface);color:var(--fg);padding:7px 14px;border-radius:999px;cursor:pointer}
 .chips button[aria-pressed="true"]{background:var(--fg);color:var(--bg);border-color:var(--fg)}
@@ -304,6 +307,7 @@ pt:{hoje:"Hoje",explorar:"Explorar",today:"Hoje",prev:"Dia anterior",next:"Dia s
  highlight:"Destaque do dia",catsLbl:"Categorias",era:"Época",cat:"Categoria",onday:"neste dia em Cabo Verde",
  conf:{alta:"Confiança alta",media:"Confiança média",baixa:"Confiança baixa"},confInfo:"O que significa o nível de confiança?",
  confTip:"Nível de confiança da fonte. Alta: fonte oficial, imprensa de referência ou enciclopédia. Média: Wikipédia ou outra fonte. Baixa: data tradicional. Toque no i para ver o que significa.",
+ ilhaSel:p=>`Local: ${p}`,ilhaClear:"Remover o filtro de local",
  more:(n,r)=>`Ver mais ${n} (faltam ${r})`,
  confTitle:"Nível de confiança",confIntro:"O nível de confiança é calculado a partir da fonte principal de cada registo.",
  confLv:{alta:"Instituições oficiais, imprensa de referência ou enciclopédias.",media:"Wikipédia ou outras fontes.",baixa:"Datas tradicionais, sem registo documental exato."},
@@ -343,6 +347,7 @@ en:{hoje:"Today",explorar:"Explore",today:"Today",prev:"Previous day",next:"Next
  highlight:"Highlight of the day",catsLbl:"Categories",era:"Period",cat:"Category",onday:"on this day in Cabo Verde",
  conf:{alta:"High confidence",media:"Medium confidence",baixa:"Low confidence"},confInfo:"What does the confidence level mean?",
  confTip:"Source confidence level. High: official source, reputable press or encyclopaedia. Medium: Wikipedia or another source. Low: traditional date. Tap the i to see what it means.",
+ ilhaSel:p=>`Place: ${p}`,ilhaClear:"Remove the place filter",
  more:(n,r)=>`Show ${n} more (${r} left)`,
  confTitle:"Confidence level",confIntro:"The confidence level is based on the main source of each record.",
  confLv:{alta:"Official institutions, reputable press or encyclopaedias.",media:"Wikipedia or other sources.",baixa:"Traditional dates with no exact documentary record."},
@@ -393,7 +398,7 @@ const MO=i=>L().months[i];
 const $=id=>document.getElementById(id);
 let cur=new Date(); cur.setHours(12,0,0,0);
 let cat="todas", cat2="todas", era="todas";
-const LOTE=30; let expMax=LOTE;
+const LOTE=30; let expMax=LOTE, ilha2="";
 try{const s=localStorage.getItem("hojecv"); if(s){const o=JSON.parse(s); cat=o.cat||cat; era=o.era||era;}}catch(e){}
 if(!(cat in I18N.pt.cats))cat="todas";
 const save=()=>{try{localStorage.setItem("hojecv",JSON.stringify({cat,era}))}catch(e){}};
@@ -404,7 +409,8 @@ const esc=s=>s.replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));
 // Etiqueta: nos acontecimentos mostra o tema; nos nascimentos e falecimentos, o tipo.
 const rotulo=e=>e.c==="acontecimento"&&e.tema?e.tema:e.c;
 const hit=(e,k)=>k==="todas"||e.c===k||e.tema===k;
-const tagCat=e=>{const k=rotulo(e);return`<span class="tag cat c-${k}">${L().cat1[k]||k}</span>`};
+const tagCat=e=>{const k=rotulo(e);return`<button type="button" class="tag cat tagl c-${k}" data-fc="${k}">${L().cat1[k]||k}</button>`};
+const tagIlha=e=>`<button type="button" class="tag tagl" data-fi="${esc(e.ilha)}">${PL(e.ilha)}</button>`;
 // Dia da semana do acontecimento; antes de 15/10/1582 (calendário juliano) não se mostra.
 const wdTag=e=>{if(e.y<1582||(e.y===1582&&(e.m<10||(e.m===10&&e.d<15))))return"";return`<span class="wd">${L().week[new Date(Date.UTC(e.y,e.m-1,e.d)).getUTCDay()]}</span>`};
 const ago=y=>L().ago(new Date().getFullYear()-y);
@@ -415,7 +421,7 @@ const CONF_ALTA=["cv","unesco.org","un.org","who.int","wto.org","rtp.pt","dn.pt"
 const confOf=e=>{if(/data tradicional|traditional date/i.test(e.x+" "+(e.xe||"")))return"baixa";let h="";try{h=new URL(e.f).hostname.replace(/^www\./,"")}catch(_){return"baixa"}return CONF_ALTA.some(d=>h===d||h.endsWith("."+d))?"alta":"media"};
 const confTag=e=>{const c=confOf(e);return`<span class="confw"><span class="conf ${c}" title="${L().confTip}">${L().conf[c]}</span><button type="button" class="confi" aria-label="${L().confInfo}" title="${L().confTip}">i</button></span>`};
 const srcLink=e=>e.f?`<a class="src" href="${e.f}" target="_blank" rel="noopener">${L().src}</a>`:"";
-const itemHTML=(e,showDate)=>`<article class="item"><div class="y">${e.y}${wdTag(e)}</div><div style="min-width:0">${showDate?`<div class="d">${L().shortDate(e.d,MO(e.m-1))}</div>`:""}<h3>${esc(T(e))}</h3><p>${esc(X(e))}</p><div class="meta">${tagCat(e)}<span class="tag">${PL(e.ilha)}</span></div><div class="acts-row">${shareBtn(e)}${flagBtn(e)}<span class="srcw">${confTag(e)}${srcLink(e)}</span></div></div></article>`;
+const itemHTML=(e,showDate)=>`<article class="item"><div class="y">${e.y}${wdTag(e)}</div><div style="min-width:0">${showDate?`<div class="d">${L().shortDate(e.d,MO(e.m-1))}</div>`:""}<h3>${esc(T(e))}</h3><p>${esc(X(e))}</p><div class="meta">${tagCat(e)}${tagIlha(e)}</div><div class="acts-row">${shareBtn(e)}${flagBtn(e)}<span class="srcw">${confTag(e)}${srcLink(e)}</span></div></div></article>`;
 
 const MOTIVOS=[["data","A data (dia ou mês) está errada"],["ano","O ano está errado"],["titulo","O título ou o nome está errado"],["descricao","A descrição tem informação incorreta"],["categoria","A categoria está errada"],["local","A ilha ou o local está errado"],["fonte","A fonte não abre ou não confirma o facto"],["imagem","A imagem não corresponde ou é inadequada"],["duplicado","O acontecimento está repetido"],["ofensivo","Conteúdo ofensivo ou inadequado"]];
 const hashT=s=>{let x=5381;for(const c of s)x=((x<<5)+x+c.charCodeAt(0))>>>0;return x.toString(36)};
@@ -536,7 +542,7 @@ function renderDay(){
   fb.querySelectorAll(".near button").forEach(b=>b.onclick=()=>{cur.setMonth(+b.dataset.m-1,+b.dataset.d);renderDay()});
  } else {
   const f=day.find(e=>e.top)||day[0];
-  fb.innerHTML=`<div class="label" style="margin-bottom:8px">${L().highlight}</div><article class="feature${f.img?" has-img":""}">${imgTag(f,"wash")}<div class="yr">${f.y}${wdTag(f)}</div><h2>${esc(T(f))}</h2><p>${esc(X(f))}</p><div class="meta">${tagCat(f)}<span class="tag">${PL(f.ilha)}</span><span class="tag">${ago(f.y)}</span></div><div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap"><div class="acts-row" style="flex:1">${shareBtn(f)}${flagBtn(f)}<span class="srcw">${confTag(f)}${srcLink(f)}</span></div>${credit(f)}</div></article>`;
+  fb.innerHTML=`<div class="label" style="margin-bottom:8px">${L().highlight}</div><article class="feature${f.img?" has-img":""}">${imgTag(f,"wash")}<div class="yr">${f.y}${wdTag(f)}</div><h2>${esc(T(f))}</h2><p>${esc(X(f))}</p><div class="meta">${tagCat(f)}${tagIlha(f)}<span class="tag">${ago(f.y)}</span></div><div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap"><div class="acts-row" style="flex:1">${shareBtn(f)}${flagBtn(f)}<span class="srcw">${confTag(f)}${srcLink(f)}</span></div>${credit(f)}</div></article>`;
  }
  chips($("chips"),cat,k=>{cat=k;save();renderDay()},day);
  const list=day.filter(e=>hit(e,cat));
@@ -548,12 +554,13 @@ function renderExplore(){
  $("eras").onclick=ev=>{const b=ev.target.closest("button");if(b){era=b.dataset.k;expMax=LOTE;save();renderExplore()}};
  chips($("chips2"),cat2,k=>{cat2=k;expMax=LOTE;renderExplore()});
  const [,,a,z]=ERAS.find(x=>x[0]===era);
- const items=EVENTS.filter(e=>e.y>=a&&e.y<=z&&hit(e,cat2)).sort((p,q)=>p.y-q.y||p.m-q.m||p.d-q.d);
+ const items=EVENTS.filter(e=>e.y>=a&&e.y<=z&&hit(e,cat2)&&(!ilha2||e.ilha===ilha2)).sort((p,q)=>p.y-q.y||p.m-q.m||p.d-q.d);
  const roman=n=>["XV","XVI","XVII","XVIII","XIX","XX","XXI"][n-15];
  // Mostra os registos em lotes; «Ver mais» acrescenta o lote seguinte. A contagem do século é a total.
  const tot={};items.forEach(e=>{const c=Math.floor((e.y-1)/100)+1;tot[c]=(tot[c]||0)+1});
  const groups={};items.slice(0,expMax).forEach(e=>{const c=Math.floor((e.y-1)/100)+1;(groups[c]=groups[c]||[]).push(e)});
  $("timeline").innerHTML=Object.keys(groups).length?Object.entries(groups).map(([c,arr])=>`<section class="century"><h2>${LANG==="en"?L().century(ROMAN_EN[roman(+c)]):L().century(roman(+c))}<small>${L().count(tot[c])}</small></h2><div class="list">${arr.map(e=>itemHTML(e,true)).join("")}</div></section>`).join(""):`<p class="empty">${L().noneCombo}</p>`;
+ if(ilha2){const b=document.createElement("button");b.type="button";b.className="ilhasel";b.setAttribute("aria-label",L().ilhaClear);b.textContent=L().ilhaSel(PL(ilha2))+" ✕";b.onclick=()=>{ilha2="";expMax=LOTE;renderExplore()};$("timeline").prepend(b)}
  if(items.length>expMax){const b=document.createElement("button");b.type="button";b.className="more";b.textContent=L().more(Math.min(LOTE,items.length-expMax),items.length-expMax);b.onclick=()=>{expMax+=LOTE;renderExplore()};$("timeline").appendChild(b)}
 }
 
@@ -570,6 +577,10 @@ function applyLang(){const t=L();document.documentElement.lang=LANG==="en"?"en":
 $("lang").addEventListener("click",ev=>{const b=ev.target.closest("button[data-l]");if(!b||b.dataset.l===LANG)return;LANG=b.dataset.l;try{localStorage.setItem("hojecv_lang",LANG)}catch(_){}applyLang();route();
  if(!$("shr").hidden&&shrKey){const e=BYKEY[shrKey];renderShare()}});
 $("aboutBtn").onclick=()=>{$("abt").hidden=false;$("abtClose").focus()};$("abtClose").onclick=()=>{$("abt").hidden=true};$("abt").addEventListener("click",ev=>{if(ev.target.id==="abt")$("abt").hidden=true});
+// Etiquetas de categoria e de ilha: abrem o Explorar filtrado
+document.addEventListener("click",ev=>{const t=ev.target.closest(".tagl");if(!t)return;
+ if(t.dataset.fc){cat2=t.dataset.fc;ilha2=""}else{ilha2=t.dataset.fi;cat2="todas"}
+ era="todas";expMax=LOTE;save();if(location.hash==="#explorar")renderExplore();else location.hash="#explorar";scrollTo(0,0)});
 // Botão «i» junto ao nível de confiança: janela só com a explicação dos níveis
 document.addEventListener("click",ev=>{if(!ev.target.closest(".confi"))return;$("cnf").hidden=false;$("cnfClose").focus()});
 $("cnfClose").onclick=()=>{$("cnf").hidden=true};$("cnf").addEventListener("click",ev=>{if(ev.target.id==="cnf")$("cnf").hidden=true});
