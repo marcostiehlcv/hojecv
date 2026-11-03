@@ -41,12 +41,12 @@ body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:16px
 body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--ocean-deep)}
 .wrap{max-width:640px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
 header.mast{background:linear-gradient(170deg,var(--ocean) 0%,var(--ocean-deep) 100%);color:#fff;position:relative;overflow:hidden}
-/* bandeira de fundo no cabeçalho: forte à direita, a desaparecer para a esquerda (por trás do texto), com um ondular lento */
-.flagbg{position:absolute;top:0;right:0;height:100%;width:auto;aspect-ratio:17/10;pointer-events:none;z-index:0;opacity:.9;
-  -webkit-mask-image:linear-gradient(90deg,transparent 0%,rgba(0,0,0,.12) 30%,rgba(0,0,0,.55) 62%,#000 100%);mask-image:linear-gradient(90deg,transparent 0%,rgba(0,0,0,.12) 30%,rgba(0,0,0,.55) 62%,#000 100%)}
-.flagbg .estrelas{transform-box:view-box}
-@media (prefers-reduced-motion:no-preference){.flagbg{animation:ondula 14s ease-in-out infinite alternate}}
-@keyframes ondula{from{transform:translateX(0) scale(1.02)}to{transform:translateX(-14px) scale(1.06)}}
+/* bandeira de fundo no cabeçalho: grande, inclinada e cortada (só se vê parte das faixas e das estrelas), em degradê suave a partir da direita */
+.flagbg{position:absolute;top:50%;right:calc(-1 * min(330px,32vw));width:max(620px,62vw);height:auto;aspect-ratio:17/10;pointer-events:none;z-index:0;opacity:.5;
+  transform:translateY(-50%) rotate(-11deg);transform-origin:60% 50%;
+  -webkit-mask-image:radial-gradient(ellipse 60% 75% at 62% 55%,#000 0%,rgba(0,0,0,.55) 45%,transparent 75%);mask-image:radial-gradient(ellipse 60% 75% at 62% 55%,#000 0%,rgba(0,0,0,.55) 45%,transparent 75%)}
+@media (prefers-reduced-motion:no-preference){.flagbg{animation:ondula 18s ease-in-out infinite alternate}}
+@keyframes ondula{from{transform:translateY(-50%) rotate(-11deg) scale(1)}to{transform:translateY(-52%) rotate(-8deg) scale(1.05)}}
 header.mast>.wrap{position:relative;z-index:1}
 header.mast .wrap{padding-block:18px 26px;position:relative}
 .brand{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
