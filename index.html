@@ -226,9 +226,11 @@ button.tag{border:0;cursor:pointer;line-height:inherit}
  .logo{font-size:26px}
  nav.tabs a{font-size:15px;padding:7px 16px}
  .lang button{font-size:12.5px;padding:6px 10px}
- .datehero{margin-top:26px;gap:32px}
- .datehero .day{font-size:124px;line-height:.88}
- .datehero .month{font-size:36px;margin-top:6px}
+ .datehero{margin-top:18px;gap:32px}
+ /* computador: dia e mês na mesma linha, para o cabeçalho ficar mais baixo */
+ .datehero h1{display:flex;align-items:baseline;gap:16px;flex-wrap:wrap}
+ .datehero .day{font-size:88px;line-height:.9}
+ .datehero .month{font-size:40px;margin-top:0}
  .flagwrap{width:270px;margin-bottom:8px}
  .dateline{margin-top:20px;flex-direction:row;align-items:center;gap:20px;font-size:12.5px}
  .dateline input{min-height:40px;font-size:14px;padding:6px 10px}
@@ -256,7 +258,7 @@ button.tag{border:0;cursor:pointer;line-height:inherit}
 }
 @media (min-width:1500px){
  .wrap{max-width:960px}
- .datehero .day{font-size:136px}.datehero .month{font-size:40px}
+ .datehero .day{font-size:96px}.datehero .month{font-size:44px}
  .flagwrap{width:300px}
  .feature h2{font-size:34px}
 }
