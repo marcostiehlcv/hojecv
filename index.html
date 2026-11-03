@@ -515,6 +515,15 @@ document.addEventListener("click",ev=>{const b=ev.target.closest(".flag[data-k]"
 const shareBtn=e=>`<button class="share" data-s="${keyOf(e)}" type="button" aria-label="${L().shareAria}">${L().share}</button>`;
 let shrKey=null,shrFmt="sq";
 function wrap(ctx,text,maxW){const words=text.split(/\s+/);const lines=[];let line="";for(const w of words){const t=line?line+" "+w:w;if(ctx.measureText(t).width>maxW&&line){lines.push(line);line=w}else line=t}if(line)lines.push(line);return lines}
+// Bandeira de fundo do cartão: grande, inclinada e cortada, em degradê a partir do canto superior direito (como no cabeçalho)
+function drawFlagBg(ctx,W,H,cy){const oc=document.createElement("canvas");oc.width=W;oc.height=H;const o=oc.getContext("2d");
+ const fw=W*1.25,fh=fw*600/1020;o.save();o.translate(W*1.02,H*cy);o.rotate(-11*Math.PI/180);o.translate(-fw*.6,-fh*.5);o.scale(fw/1020,fh/600);
+ o.fillStyle="#003893";o.fillRect(0,0,1020,600);o.fillStyle="#fff";o.fillRect(0,300,1020,150);o.fillStyle="#cf2027";o.fillRect(0,350,1020,50);
+ o.translate(382.5,375);o.fillStyle="#f7d116";const ro=35,ri=ro*Math.sin(Math.PI/10)/Math.sin(3*Math.PI/10);
+ for(let i=0;i<10;i++){o.save();o.rotate(i*Math.PI/5);o.translate(0,-150);o.beginPath();for(let k=0;k<10;k++){const q=k%2?ri:ro,a=-Math.PI/2+k*Math.PI/5;o.lineTo(q*Math.cos(a),q*Math.sin(a))}o.closePath();o.fill();o.restore()}
+ o.restore();o.globalCompositeOperation="destination-in";
+ const g=o.createRadialGradient(W*.95,H*cy,0,W*.95,H*cy,W*.62);g.addColorStop(0,"rgba(0,0,0,1)");g.addColorStop(.45,"rgba(0,0,0,.55)");g.addColorStop(1,"rgba(0,0,0,0)");
+ o.fillStyle=g;o.fillRect(0,0,W,H);ctx.save();ctx.globalAlpha=.45;ctx.drawImage(oc,0,0);ctx.restore()}
 function drawFlag(ctx,x,y,w){const h=w*600/1020,s=w/1020,r=Math.max(5,w*.02);
  ctx.save();ctx.shadowColor="rgba(0,0,0,.5)";ctx.shadowBlur=w*.14;ctx.shadowOffsetY=w*.06;ctx.fillStyle="#003893";ctx.beginPath();ctx.roundRect(x,y,w,h,r);ctx.fill();ctx.restore();
  ctx.save();ctx.beginPath();ctx.roundRect(x,y,w,h,r);ctx.clip();ctx.translate(x,y);ctx.scale(s,s);
@@ -528,14 +537,14 @@ function fitLines(ctx,text,font,size,minSize,maxW,maxLines){let s=size;for(;s>=m
 async function drawCard(cv,e,fmt){
  try{await Promise.all(['800 80px "Bricolage Grotesque"','500 40px "Bricolage Grotesque"','400 36px "Literata"','500 28px "JetBrains Mono"'].map(f=>document.fonts.load(f)))}catch(_){}
  const W=1080,H=fmt==="st"?1920:1080;cv.width=W;cv.height=H;const ctx=cv.getContext("2d");
- const g=ctx.createLinearGradient(0,0,0,H);g.addColorStop(0,"#003893");g.addColorStop(1,"#002566");ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+ const g=ctx.createLinearGradient(0,0,0,H);g.addColorStop(0,"#003893");g.addColorStop(1,"#002566");ctx.fillStyle=g;ctx.fillRect(0,0,W,H);drawFlagBg(ctx,W,H,fmt==="st"?.06:.1);
  let hasImg=false;
  if(e.img){const im=await loadImg(e.img);if(im&&im.naturalWidth){const x0=Math.round(W*.38),w=W-x0,hh=H;const oc=document.createElement("canvas");oc.width=w;oc.height=hh;const o=oc.getContext("2d");const sc=Math.max(w/im.naturalWidth,hh/im.naturalHeight),iw=im.naturalWidth*sc,ih=im.naturalHeight*sc;try{o.filter="saturate(.55)"}catch(_){}o.drawImage(im,(w-iw)/2,(hh-ih)/2,iw,ih);try{o.filter="none"}catch(_){}o.globalCompositeOperation="destination-in";const mg=o.createLinearGradient(0,0,w,0);mg.addColorStop(0,"rgba(0,0,0,0)");mg.addColorStop(.55,"rgba(0,0,0,.55)");mg.addColorStop(1,"#000");o.fillStyle=mg;o.fillRect(0,0,w,hh);ctx.globalAlpha=.34;ctx.drawImage(oc,x0,0);ctx.globalAlpha=1;hasImg=true}}
  const P=88,st=fmt==="st";let y=st?150:84;
  // brand
  ctx.textBaseline="alphabetic";ctx.font='800 56px "Bricolage Grotesque", system-ui, sans-serif';ctx.fillStyle="#fff";ctx.fillText("Hoje",P,y+48);const hw=ctx.measureText("Hoje ").width;
  ctx.fillStyle="#f7d116";const cvw=ctx.measureText("CV").width+28;ctx.beginPath();ctx.roundRect(P+hw,y-2,cvw,64,12);ctx.fill();ctx.fillStyle="#002566";ctx.fillText("CV",P+hw+14,y+48);
- const fw=st?320:260;drawFlag(ctx,W-P-fw,y-8,fw);
+ 
  y+=st?470:170;
  // date label: «neste dia…» pequeno e, por baixo, dia e mês em grande (para se ver logo que dia é)
  const lp=L().cardLbl(e.d,MO(e.m-1)).split("·").map(s=>s.trim());
