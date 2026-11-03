@@ -617,7 +617,7 @@ function renderExplore(){
  const roman=n=>["XV","XVI","XVII","XVIII","XIX","XX","XXI"][n-15];
  // Mostra os registos em lotes; «Ver mais» acrescenta o lote seguinte. A contagem do século é a total.
  const tot={};items.forEach(e=>{const c=Math.floor((e.y-1)/100)+1;tot[c]=(tot[c]||0)+1});
- const lim=vista==="linha"?items.length:expMax;
+ const lim=expMax;
  const groups={};items.slice(0,lim).forEach(e=>{const c=Math.floor((e.y-1)/100)+1;(groups[c]=groups[c]||[]).push(e)});
  const cName=c=>LANG==="en"?L().century(ROMAN_EN[roman(c)]):L().century(roman(c));
  $("timeline").innerHTML=!Object.keys(groups).length?`<p class="empty">${L().noneCombo}</p>`:vista==="linha"?tlHTML(groups,tot,cName):Object.entries(groups).map(([c,arr])=>`<section class="century"><h2>${LANG==="en"?L().century(ROMAN_EN[roman(+c)]):L().century(roman(+c))}<small>${L().count(tot[c])}</small></h2><div class="list">${arr.map(e=>itemHTML(e,true)).join("")}</div></section>`).join("");
