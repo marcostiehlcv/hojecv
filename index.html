@@ -487,11 +487,12 @@ async function drawCard(cv,e,fmt){
  ctx.textBaseline="alphabetic";ctx.font='800 56px "Bricolage Grotesque", system-ui, sans-serif';ctx.fillStyle="#fff";ctx.fillText("Hoje",P,y+48);const hw=ctx.measureText("Hoje ").width;
  ctx.fillStyle="#f7d116";const cvw=ctx.measureText("CV").width+28;ctx.beginPath();ctx.roundRect(P+hw,y-2,cvw,64,12);ctx.fill();ctx.fillStyle="#002566";ctx.fillText("CV",P+hw+14,y+48);
  const fw=st?320:260;drawFlag(ctx,W-P-fw,y-8,fw);
- y+=st?470:190;
- // date label
- ctx.font='500 30px "JetBrains Mono", ui-monospace, monospace';ctx.fillStyle="rgba(255,255,255,.78)";
- const lbl=L().cardLbl(e.d,MO(e.m-1));ctx.fillText(lbl,P,y);
- y+=st?225:172;ctx.font=`800 ${st?210:170}px "Bricolage Grotesque", system-ui, sans-serif`;ctx.fillStyle="#f7d116";ctx.fillText(String(e.y),P-6,y);
+ y+=st?470:170;
+ // date label: «neste dia…» pequeno e, por baixo, dia e mês em grande (para se ver logo que dia é)
+ const lp=L().cardLbl(e.d,MO(e.m-1)).split("·").map(s=>s.trim());
+ ctx.font='500 30px "JetBrains Mono", ui-monospace, monospace';ctx.fillStyle="rgba(255,255,255,.78)";ctx.fillText(lp[1],P,y);
+ y+=st?124:86;ctx.font=`800 ${st?128:92}px "Bricolage Grotesque", system-ui, sans-serif`;ctx.fillStyle="#fff";ctx.fillText(lp[0],P-3,y);
+ y+=st?190:128;ctx.font=`800 ${st?170:120}px "Bricolage Grotesque", system-ui, sans-serif`;ctx.fillStyle="#f7d116";ctx.fillText(String(e.y),P-6,y);
  y+=st?50:16;
  const maxW=W-2*P;
  // Ajusta título e descrição ao espaço até à faixa do rodapé (as etiquetas nunca tocam na linha)
