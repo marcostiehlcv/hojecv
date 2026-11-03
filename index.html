@@ -90,8 +90,8 @@ button.tag{border:0;cursor:pointer;line-height:inherit}
 .item{display:grid;grid-template-columns:62px 1fr;gap:14px;padding-block:14px;border-top:1px solid var(--line)}
 .item:first-child{border-top:0}
 .item .y{font-family:var(--display);font-weight:800;font-size:20px;font-variant-numeric:tabular-nums;color:var(--ocean);line-height:1.2}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .item .y{color:var(--sun)}}
-:root[data-theme="dark"] .item .y{color:var(--sun)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) :is(.item .y,.tl .ty){color:var(--sun)}:root:not([data-theme="light"]) .tl li::before{background:var(--sun)}}
+:root[data-theme="dark"] :is(.item .y,.tl .ty){color:var(--sun)}:root[data-theme="dark"] .tl li::before{background:var(--sun)}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .src{color:#8fb4ff}}
 :root[data-theme="dark"] .src{color:#8fb4ff}
 .item h3{margin:0 0 4px;font-family:var(--display);font-weight:500;font-size:17px;line-height:1.3}
@@ -119,6 +119,18 @@ button.tag{border:0;cursor:pointer;line-height:inherit}
 .conf::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--conf-baixa)}
 .conf.alta::before{background:var(--conf-alta)}.conf.media::before{background:var(--conf-media)}
 .confi{width:16px;height:16px;margin-left:5px;padding:0;border:1px solid var(--line);border-radius:50%;background:none;color:var(--muted);font:600 10px/14px var(--mono);cursor:pointer;flex:none}
+.tl{list-style:none;margin:0 0 0 6px;padding:0 0 0 18px;border-left:2px solid var(--line)}
+.tl li{position:relative;padding:5px 0}
+.tl li::before{content:"";position:absolute;left:-25px;top:12px;width:8px;height:8px;border-radius:50%;background:var(--ocean);border:2px solid var(--bg)}
+.tl summary{display:grid;grid-template-columns:52px 1fr;gap:10px;cursor:pointer;list-style:none;align-items:baseline}
+.tl summary::-webkit-details-marker{display:none}
+.tl .ty{font-family:var(--display);font-weight:800;font-size:16px;font-variant-numeric:tabular-nums;color:var(--ocean)}
+.tl .tt{font-family:var(--display);font-weight:500;font-size:15.5px;line-height:1.35}
+.tl .tt small{display:block;font-family:var(--mono);font-size:10.5px;color:var(--muted);letter-spacing:.05em;text-transform:uppercase;font-weight:400}
+.tl summary:hover .tt,.tl details[open] .tt{text-decoration:underline;text-decoration-color:var(--line);text-underline-offset:3px}
+.tl .tb{margin:6px 0 4px 62px}
+.tl .tb p{margin:0 0 8px;color:var(--muted);font-size:15px}
+.dec-h{font-family:var(--mono);font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin:12px 0 4px}
 .more{align-self:center;font-family:var(--display);font-weight:500;font-size:15px;border:1px solid var(--line);background:var(--surface);color:var(--fg);padding:10px 22px;border-radius:999px;cursor:pointer}
 .more:hover{border-color:var(--muted)}
 .confi:hover{color:var(--fg);border-color:var(--muted)}
@@ -260,7 +272,9 @@ button.tag{border:0;cursor:pointer;line-height:inherit}
 
   <div class="wrap" id="view-explorar" hidden>
     <section style="display:flex;flex-direction:column;gap:12px">
-      <div class="label" id="lblEra">Época</div>
+      <div class="label" id="lblVista">Vista</div>
+      <div class="chips" id="vista" role="group" aria-label="Vista"></div>
+      <div class="label" style="margin-top:6px" id="lblEra">Época</div>
       <div class="chips" id="eras" role="group" aria-label="Filtrar por época"></div>
       <div class="label" style="margin-top:6px" id="lblCat">Categoria</div>
       <div class="chips" id="chips2" role="group" aria-label="Filtrar por categoria"></div>
@@ -337,7 +351,7 @@ pt:{hoje:"Hoje",explorar:"Explorar",today:"Hoje",prev:"Dia anterior",next:"Dia s
  ago:n=>n<=0?"este ano":n===1?"há 1 ano":`há ${n} anos`,
  emptyDay:(d,m)=>`Ainda não há registos para ${d} de ${m}.`,emptyMore:"É aqui que a comunidade pode sugerir acontecimentos. Datas próximas:",
  noneCat:"Nenhum registo nesta categoria para este dia.",noneCombo:"Nada nesta combinação de época e categoria.",
- century:r=>`Século ${r}`,count:n=>`${n} registo${n>1?"s":""}`,
+ century:r=>`Século ${r}`,decade:d=>`Década de ${d}`,vistaLbl:"Vista",vistas:{lista:"Lista",linha:"Linha do tempo"},count:n=>`${n} registo${n>1?"s":""}`,
  heroMonth:m=>"de "+m,shortDate:(d,m)=>`${d} ${m}`,longDate:(d,m,y)=>`${d} ${m} ${y}`,
  cardLbl:(d,m)=>`${d} DE ${m.toUpperCase()}  ·  NESTE DIA EM CABO VERDE`,cardFoot:"A HISTÓRIA DE CABO VERDE, DIA A DIA",
  shareText:(e,m)=>`Neste dia em Cabo Verde (${e.d} de ${m} de ${e.y}): ${T(e)}. ${X(e)} ${SITE} #HojeCV #CaboVerde`,
@@ -378,7 +392,7 @@ en:{hoje:"Today",explorar:"Explore",today:"Today",prev:"Previous day",next:"Next
  ago:n=>n<=0?"this year":n===1?"1 year ago":`${n} years ago`,
  emptyDay:(d,m)=>`No records yet for ${m} ${d}.`,emptyMore:"This is where the community can suggest events. Nearby dates:",
  noneCat:"No records in this category for this day.",noneCombo:"Nothing for this period and category.",
- century:r=>`${r} century`,count:n=>`${n} record${n>1?"s":""}`,
+ century:r=>`${r} century`,decade:d=>`${d}s`,vistaLbl:"View",vistas:{lista:"List",linha:"Timeline"},count:n=>`${n} record${n>1?"s":""}`,
  heroMonth:m=>m,shortDate:(d,m)=>`${m} ${d}`,longDate:(d,m,y)=>`${m} ${d}, ${y}`,
  cardLbl:(d,m)=>`${m.toUpperCase()} ${d}  ·  ON THIS DAY IN CABO VERDE`,cardFoot:"CABO VERDE'S HISTORY, DAY BY DAY",
  shareText:(e,m)=>`On this day in Cabo Verde (${m} ${e.d}, ${e.y}): ${T(e)}. ${X(e)} ${SITE} #HojeCV #CaboVerde`,
@@ -404,13 +418,13 @@ const MO=i=>L().months[i];
 
 const $=id=>document.getElementById(id);
 let cur=new Date(); cur.setHours(12,0,0,0);
-let cat="todas", cat2="todas", era="todas";
+let cat="todas", cat2="todas", era="todas", vista="lista";
 const LOTE=30; let expMax=LOTE, ilha2="";
 const ILHAS=["Santo Antão","São Vicente","São Nicolau","Sal","Boa Vista","Maio","Santiago","Fogo","Brava","Nacional"];
 const EXT="__ext";const naIlha=(e,k)=>!k||(k===EXT?!ILHAS.includes(e.ilha):e.ilha===k);
-try{const s=localStorage.getItem("hojecv"); if(s){const o=JSON.parse(s); cat=o.cat||cat; era=o.era||era;}}catch(e){}
+try{const s=localStorage.getItem("hojecv"); if(s){const o=JSON.parse(s); cat=o.cat||cat; era=o.era||era; if(o.vista==="linha")vista="linha";}}catch(e){}
 if(!(cat in I18N.pt.cats))cat="todas";
-const save=()=>{try{localStorage.setItem("hojecv",JSON.stringify({cat,era}))}catch(e){}};
+const save=()=>{try{localStorage.setItem("hojecv",JSON.stringify({cat,era,vista}))}catch(e){}};
 
 
 
@@ -561,7 +575,12 @@ function renderDay(){
  $("dayList").innerHTML=list.length?list.map(e=>itemHTML(e,false)).join(""):`<p class="empty">${L().noneCat}</p>`;
 }
 
+// Linha do tempo: uma linha por registo (ano, data, título), agrupada por século e década; um toque abre o resto
+const tlItem=e=>`<li><details><summary><span class="ty">${e.y}</span><span class="tt"><small>${L().shortDate(e.d,MO(e.m-1))}</small>${esc(T(e))}</span></summary><div class="tb"><p>${esc(X(e))}</p><div class="meta">${tagCat(e)}${tagIlha(e)}</div><div class="acts-row">${shareBtn(e)}${flagBtn(e)}<span class="srcw">${confTag(e)}${srcLink(e)}</span></div></div></details></li>`;
+const tlCentury=arr=>{const d={};arr.forEach(e=>{const k=Math.floor(e.y/10)*10;(d[k]=d[k]||[]).push(e)});return Object.entries(d).map(([k,a])=>`<div class="dec-h">${L().decade(k)}</div><ol class="tl">${a.map(tlItem).join("")}</ol>`).join("")};
 function renderExplore(){
+ $("vista").innerHTML=["lista","linha"].map(k=>`<button data-k="${k}" aria-pressed="${k===vista}">${L().vistas[k]}</button>`).join("");
+ $("vista").onclick=ev=>{const b=ev.target.closest("button");if(b&&b.dataset.k!==vista){vista=b.dataset.k;expMax=LOTE;save();renderExplore()}};
  const prevE=$("eras").scrollLeft;$("eras").innerHTML=ERAS.map(([k])=>`<button data-k="${k}" aria-pressed="${k===era}">${L().eras[k]}</button>`).join("");
  centra($("eras"),prevE);
  $("eras").onclick=ev=>{const b=ev.target.closest("button");if(b){era=b.dataset.k;expMax=LOTE;save();renderExplore()}};
@@ -576,14 +595,15 @@ function renderExplore(){
  const roman=n=>["XV","XVI","XVII","XVIII","XIX","XX","XXI"][n-15];
  // Mostra os registos em lotes; «Ver mais» acrescenta o lote seguinte. A contagem do século é a total.
  const tot={};items.forEach(e=>{const c=Math.floor((e.y-1)/100)+1;tot[c]=(tot[c]||0)+1});
- const groups={};items.slice(0,expMax).forEach(e=>{const c=Math.floor((e.y-1)/100)+1;(groups[c]=groups[c]||[]).push(e)});
- $("timeline").innerHTML=Object.keys(groups).length?Object.entries(groups).map(([c,arr])=>`<section class="century"><h2>${LANG==="en"?L().century(ROMAN_EN[roman(+c)]):L().century(roman(+c))}<small>${L().count(tot[c])}</small></h2><div class="list">${arr.map(e=>itemHTML(e,true)).join("")}</div></section>`).join(""):`<p class="empty">${L().noneCombo}</p>`;
- if(items.length>expMax){const b=document.createElement("button");b.type="button";b.className="more";b.textContent=L().more(Math.min(LOTE,items.length-expMax),items.length-expMax);b.onclick=()=>{expMax+=LOTE;renderExplore()};$("timeline").appendChild(b)}
+ const lim=vista==="linha"?items.length:expMax;
+ const groups={};items.slice(0,lim).forEach(e=>{const c=Math.floor((e.y-1)/100)+1;(groups[c]=groups[c]||[]).push(e)});
+ $("timeline").innerHTML=Object.keys(groups).length?Object.entries(groups).map(([c,arr])=>`<section class="century"><h2>${LANG==="en"?L().century(ROMAN_EN[roman(+c)]):L().century(roman(+c))}<small>${L().count(tot[c])}</small></h2>${vista==="linha"?tlCentury(arr):`<div class="list">${arr.map(e=>itemHTML(e,true)).join("")}</div>`}</section>`).join(""):`<p class="empty">${L().noneCombo}</p>`;
+ if(items.length>lim){const b=document.createElement("button");b.type="button";b.className="more";b.textContent=L().more(Math.min(LOTE,items.length-expMax),items.length-expMax);b.onclick=()=>{expMax+=LOTE;renderExplore()};$("timeline").appendChild(b)}
 }
 
 function applyLang(){const t=L();document.documentElement.lang=LANG==="en"?"en":"pt";
  const set=(id,v)=>{const el=$(id);if(el)el.textContent=v};
- set("tab-hoje",t.hoje);set("tab-explorar",t.explorar);set("today",t.today);set("lblCats",t.catsLbl);set("lblEra",t.era);set("lblCat",t.cat);set("lblIlha",t.ilhaLbl);
+ set("tab-hoje",t.hoje);set("tab-explorar",t.explorar);set("today",t.today);set("lblCats",t.catsLbl);set("lblEra",t.era);set("lblVista",t.vistaLbl);set("lblCat",t.cat);set("lblIlha",t.ilhaLbl);
  set("repTitle",t.repTitle);set("repQ",t.repQ);set("repCancel",t.cancel);set("repSend",t.send);set("shrTitle",t.shrTitle);set("fmtSq",t.sq);
  set("shrSave",t.save);set("shrNative",t.native);set("shrFull",t.full);set("shrCopy",t.copy);set("shrClose",t.close);set("fullHint",t.hint);set("foot",t.foot);set("aboutBtn",t.aboutBtn);set("abtTitle",t.aboutTitle);set("cnfTitle",t.confTitle);set("cnfClose",t.close);{const b=$("cnfBody");if(b){b.innerHTML=`<p>${esc(t.confIntro)}</p>`+["alta","media","baixa"].map(k=>`<p><span class="conf ${k}" style="margin:0">${esc(t.conf[k])}</span><br>${esc(t.confLv[k])}</p>`).join("")+`<p>${esc(t.confNote)}</p>`}}set("abtClose",t.close);{const b=$("abtBody");if(b){b.innerHTML="";t.about.forEach(([h,x])=>{if(h){const s=document.createElement("h3");s.textContent=h;b.appendChild(s)}const p=document.createElement("p");p.textContent=x;b.appendChild(p)})}}
  if($("note")){const u=/^(\d{4})-(\d{2})-(\d{2}) (\d{2}:\d{2})$/.exec(window.HOJECV_ATUALIZADO||"");$("note").textContent=u?t.updated(+u[3],MO(+u[2]-1),u[1],u[4]):"";$("note").hidden=!u}

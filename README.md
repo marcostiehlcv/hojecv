@@ -17,9 +17,10 @@ Disponível em português e em inglês.
 
 ### Explorar
 
-- Linha do tempo por século.
+- Duas vistas: lista completa (por século) ou linha do tempo compacta (por século e década, um toque abre o registo).
 - Filtro por época: séculos XV a XVIII, século XIX, século XX colonial, Independência e Democracia.
 - Filtro por tipo ou tema.
+- Filtro por local: cada ilha, Nacional ou Estrangeiro (por exemplo, a história de São Vicente em linha do tempo).
 
 ### Organização dos registos
 
