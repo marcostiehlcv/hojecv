@@ -119,6 +119,12 @@ button.tag{border:0;cursor:pointer;line-height:inherit}
 .conf::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--conf-baixa)}
 .conf.alta::before{background:var(--conf-alta)}.conf.media::before{background:var(--conf-media)}
 .confi{width:16px;height:16px;margin-left:5px;padding:0;border:1px solid var(--line);border-radius:50%;background:none;color:var(--muted);font:600 10px/14px var(--mono);cursor:pointer;flex:none}
+.vbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 0 -8px}
+.vtog{display:inline-flex;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--surface)}
+.vtog button{display:grid;place-items:center;width:40px;height:34px;border:0;background:none;color:var(--muted);cursor:pointer}
+.vtog button+button{border-left:1px solid var(--line)}
+.vtog button[aria-pressed="true"]{background:var(--fg);color:var(--bg)}
+.vtog svg{width:18px;height:18px}
 .tlw{position:relative;padding:4px 0 4px 30px}
 .tlw::before{content:"";position:absolute;left:9px;top:0;bottom:0;width:2px;background:var(--line)}
 .tl-m{position:relative;margin:18px 0 6px -30px}
@@ -293,15 +299,14 @@ button.tag{border:0;cursor:pointer;line-height:inherit}
 
   <div class="wrap" id="view-explorar" hidden>
     <section style="display:flex;flex-direction:column;gap:12px">
-      <div class="label" id="lblVista">Vista</div>
-      <div class="chips" id="vista" role="group" aria-label="Vista"></div>
-      <div class="label" style="margin-top:6px" id="lblEra">Época</div>
+      <div class="label" id="lblEra">Época</div>
       <div class="chips" id="eras" role="group" aria-label="Filtrar por época"></div>
       <div class="label" style="margin-top:6px" id="lblCat">Categoria</div>
       <div class="chips" id="chips2" role="group" aria-label="Filtrar por categoria"></div>
       <div class="label" style="margin-top:6px" id="lblIlha">Local</div>
       <div class="chips" id="ilhas" role="group" aria-label="Filtrar por local"></div>
     </section>
+    <div class="vbar"><span class="label" id="vcount"></span><div class="vtog" id="vista" role="group"></div></div>
     <div id="timeline" style="display:flex;flex-direction:column;gap:18px"></div>
   </div>
 </main>
@@ -601,7 +606,9 @@ const tlItem=(e,lado)=>`<details class="tl-e ${lado}"><summary><span class="ty">
 // Uma só linha contínua: marcas de século e de década; no computador os cartões alternam à esquerda e à direita
 const tlHTML=(groups,tot,cName)=>{let n=0;return `<div class="tlw">${Object.entries(groups).map(([c,arr])=>{let dec=null;return `<div class="tl-m tl-c"><span>${cName(+c)}</span><small>${L().count(tot[c])}</small></div>`+arr.map(e=>{const k=Math.floor(e.y/10)*10;const m=k!==dec?`<div class="tl-m"><span>${L().decade(k)}</span></div>`:"";dec=k;return m+tlItem(e,n++%2?"R":"L")}).join("")}).join("")}</div>`};
 function renderExplore(){
- $("vista").innerHTML=["lista","linha"].map(k=>`<button data-k="${k}" aria-pressed="${k===vista}">${L().vistas[k]}</button>`).join("");
+ const ICO={lista:'<path d="M3 5h14M3 10h14M3 15h14"/>',linha:'<path d="M6 2v16"/><circle cx="6" cy="5" r="2" fill="currentColor"/><circle cx="6" cy="14" r="2" fill="currentColor"/><path d="M10 5h7M10 14h7"/>'};
+ $("vista").setAttribute("aria-label",L().vistaLbl);
+ $("vista").innerHTML=["lista","linha"].map(k=>`<button type="button" data-k="${k}" aria-pressed="${k===vista}" aria-label="${L().vistas[k]}" title="${L().vistas[k]}"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">${ICO[k]}</svg></button>`).join("");
  $("vista").onclick=ev=>{const b=ev.target.closest("button");if(b&&b.dataset.k!==vista){vista=b.dataset.k;expMax=LOTE;save();renderExplore()}};
  const prevE=$("eras").scrollLeft;$("eras").innerHTML=ERAS.map(([k])=>`<button data-k="${k}" aria-pressed="${k===era}">${L().eras[k]}</button>`).join("");
  centra($("eras"),prevE);
@@ -619,6 +626,7 @@ function renderExplore(){
  const tot={};items.forEach(e=>{const c=Math.floor((e.y-1)/100)+1;tot[c]=(tot[c]||0)+1});
  const lim=expMax;
  const groups={};items.slice(0,lim).forEach(e=>{const c=Math.floor((e.y-1)/100)+1;(groups[c]=groups[c]||[]).push(e)});
+ $("vcount").textContent=items.length?L().count(items.length):"";
  const cName=c=>LANG==="en"?L().century(ROMAN_EN[roman(c)]):L().century(roman(c));
  $("timeline").innerHTML=!Object.keys(groups).length?`<p class="empty">${L().noneCombo}</p>`:vista==="linha"?tlHTML(groups,tot,cName):Object.entries(groups).map(([c,arr])=>`<section class="century"><h2>${LANG==="en"?L().century(ROMAN_EN[roman(+c)]):L().century(roman(+c))}<small>${L().count(tot[c])}</small></h2><div class="list">${arr.map(e=>itemHTML(e,true)).join("")}</div></section>`).join("");
  if(items.length>lim){const b=document.createElement("button");b.type="button";b.className="more";b.textContent=L().more(Math.min(LOTE,items.length-expMax),items.length-expMax);b.onclick=()=>{expMax+=LOTE;renderExplore()};$("timeline").appendChild(b)}
@@ -626,7 +634,7 @@ function renderExplore(){
 
 function applyLang(){const t=L();document.documentElement.lang=LANG==="en"?"en":"pt";
  const set=(id,v)=>{const el=$(id);if(el)el.textContent=v};
- set("tab-hoje",t.hoje);set("tab-explorar",t.explorar);set("today",t.today);set("lblCats",t.catsLbl);set("lblEra",t.era);set("lblVista",t.vistaLbl);set("lblCat",t.cat);set("lblIlha",t.ilhaLbl);
+ set("tab-hoje",t.hoje);set("tab-explorar",t.explorar);set("today",t.today);set("lblCats",t.catsLbl);set("lblEra",t.era);set("lblCat",t.cat);set("lblIlha",t.ilhaLbl);
  set("repTitle",t.repTitle);set("repQ",t.repQ);set("repCancel",t.cancel);set("repSend",t.send);set("shrTitle",t.shrTitle);set("fmtSq",t.sq);
  set("shrSave",t.save);set("shrNative",t.native);set("shrFull",t.full);set("shrCopy",t.copy);set("shrClose",t.close);set("fullHint",t.hint);set("foot",t.foot);set("aboutBtn",t.aboutBtn);set("abtTitle",t.aboutTitle);set("cnfTitle",t.confTitle);set("cnfClose",t.close);{const b=$("cnfBody");if(b){b.innerHTML=`<p>${esc(t.confIntro)}</p>`+["alta","media","baixa"].map(k=>`<p><span class="conf ${k}" style="margin:0">${esc(t.conf[k])}</span><br>${esc(t.confLv[k])}</p>`).join("")+`<p>${esc(t.confNote)}</p>`}}set("abtClose",t.close);{const b=$("abtBody");if(b){b.innerHTML="";t.about.forEach(([h,x])=>{if(h){const s=document.createElement("h3");s.textContent=h;b.appendChild(s)}const p=document.createElement("p");p.textContent=x;b.appendChild(p)})}}
  if($("note")){const u=/^(\d{4})-(\d{2})-(\d{2}) (\d{2}:\d{2})$/.exec(window.HOJECV_ATUALIZADO||"");$("note").textContent=u?t.updated(+u[3],MO(+u[2]-1),u[1],u[4]):"";$("note").hidden=!u}
