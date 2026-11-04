@@ -196,6 +196,7 @@ button.tag{border:0;cursor:pointer;line-height:inherit}
 .brand-r{display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end}
 .aboutlink{font:inherit;background:none;border:0;padding:0;color:var(--muted);text-decoration:underline;text-underline-offset:3px;cursor:pointer}
 .aboutlink:hover{color:var(--fg)}
+.apps{flex-basis:100%;display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 14px}.apps>span{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase}.apps a{color:var(--muted);text-decoration:none}.apps a b{color:var(--fg);font-weight:600}.apps a:hover b{text-decoration:underline;text-underline-offset:3px}
 .about p{margin:0;line-height:1.6;font-size:15.5px}
 .about h3{margin:10px 0 -6px;font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
 .about h3:first-child{margin-top:0}
@@ -303,7 +304,7 @@ button.tag{border:0;cursor:pointer;line-height:inherit}
       <div class="list" id="dayList"></div>
     </section>
     <p class="note" id="note"></p>
-    <div class="foot"><span id="foot"></span><button type="button" class="aboutlink" id="aboutBtn">Sobre o Hoje CV</button></div>
+    <div class="foot"><span id="foot"></span><button type="button" class="aboutlink" id="aboutBtn">Sobre o Hoje CV</button><nav class="apps" id="apps"></nav></div>
   </div>
 
   <div class="wrap" id="view-explorar" hidden>
@@ -367,7 +368,7 @@ pt:{hoje:"Hoje",explorar:"Explorar",today:"Hoje",prev:"Dia anterior",next:"Dia s
  confLv:{alta:"Instituições oficiais, imprensa de referência ou enciclopédias.",media:"Wikipédia ou outras fontes.",baixa:"Datas tradicionais, sem registo documental exato."},
  confNote:"Um nível médio não quer dizer que o facto esteja errado, apenas que a fonte é menos direta. Se encontrar um erro, use «Assinalar erro».",
  updated:(d,m,y,h)=>`Última atualização: ${d} de ${m} de ${y}, às ${h} (hora de Cabo Verde)`,
- foot:"Hoje CV · Um projeto de Marco Stiehl",aboutBtn:"Sobre o Hoje CV",aboutTitle:"Sobre o Hoje CV",
+ foot:"Hoje CV · Um projeto de Marco Stiehl",aboutBtn:"Sobre o Hoje CV",aboutTitle:"Sobre o Hoje CV",maisApps:"Mais apps",appsDesc:{hojecv:"Neste dia na história de Cabo Verde",quizcv:"Jogo de perguntas sobre Cabo Verde"},
  about:[["O que é","O Hoje CV mostra, dia a dia, os acontecimentos, nascimentos e falecimentos que marcaram a história de Cabo Verde, desde a chegada dos navegadores em 1460 até aos nossos dias."],
  ["Porquê","A motivação é informar. Queremos ajudar os cabo-verdianos, nas ilhas e na diáspora, a conhecer melhor a sua própria história, e dar a quem quer descobrir Cabo Verde uma forma simples de ficar mais bem informado sobre o país."],
  ["O que entra","Um registo entra se tiver relevância para a história de Cabo Verde ou para a sua diáspora, se tiver data exata (dia, mês e ano) e se estiver confirmado numa fonte que se possa consultar, como instituições oficiais, arquivos, enciclopédias ou a imprensa cabo-verdiana de referência. Entram apenas factos comprovados, nunca especulações ou boatos. Datas sem confirmação ficam de fora, e as datas tradicionais são assinaladas como tal. Sempre que as datas exatas são conhecidas, quem tem registo de nascimento tem também o de falecimento, e vice-versa."],
@@ -408,7 +409,7 @@ en:{hoje:"Today",explorar:"Explore",today:"Today",prev:"Previous day",next:"Next
  confLv:{alta:"Official institutions, reputable press or encyclopaedias.",media:"Wikipedia or other sources.",baixa:"Traditional dates with no exact documentary record."},
  confNote:"A medium level does not mean the fact is wrong, only that the source is less direct. If you find a mistake, use “Report error”.",
  updated:(d,m,y,h)=>`Last updated: ${d} ${m} ${y}, ${h} (Cabo Verde time)`,
- foot:"Hoje CV · A project by Marco Stiehl",aboutBtn:"About Hoje CV",aboutTitle:"About Hoje CV",
+ foot:"Hoje CV · A project by Marco Stiehl",aboutBtn:"About Hoje CV",aboutTitle:"About Hoje CV",maisApps:"More apps",appsDesc:{hojecv:"On this day in Cabo Verde history",quizcv:"Quiz game about Cabo Verde"},
  about:[["What it is","Hoje CV (“Today CV”) shows, day by day, the events, births and deaths that shaped the history of Cabo Verde, from the arrival of the navigators in 1460 to the present day."],
  ["Why","Its purpose is to inform. We want to help Cape Verdeans, on the islands and in the diaspora, learn more about their own history, and to give anyone who wants to discover Cabo Verde a simple way to become better informed about the country."],
  ["What is included","A record is included if it is relevant to the history of Cabo Verde or its diaspora, has an exact date (day, month and year) and is confirmed by a source you can check, such as official institutions, archives, encyclopaedias or reputable Cape Verdean press. Only established facts are included, never speculation or rumour. Unconfirmed dates are left out, and traditional dates are marked as such. Whenever the exact dates are known, anyone with a birth record also has a death record, and vice versa."],
@@ -443,6 +444,10 @@ en:{hoje:"Today",explorar:"Explore",today:"Today",prev:"Previous day",next:"Next
 // Domínio mostrado no cartão e no texto de partilha: o da página aberta. Em ficheiro local ou localhost usa-se hojecv.app.
 const SITE=/^(localhost|127\.0\.0\.1|)$/.test(location.hostname)?"hojecv.app":location.hostname.replace(/^www\./,"");
 let LANG="pt";try{const l=localStorage.getItem("hojecv_lang");if(l==="en"||l==="pt")LANG=l}catch(_){}
+// ?lang=pt|en (vem dos links «Mais apps»): abre na mesma língua da app de onde se veio
+{const q=/[?&]lang=(pt|en)(&|$)/.exec(location.search);if(q){LANG=q[1];try{localStorage.setItem("hojecv_lang",LANG)}catch(_){}}}
+// Todas as apps do projeto (lista igual em todas; ao criar uma nova, acrescentá-la aqui e nas outras). O rodapé mostra as outras.
+const APPS=[["hojecv","Hoje CV","https://hojecv.vercel.app/"],["quizcv","Quiz CV","https://quizcv.vercel.app/"]],ESTA_APP="hojecv";
 const L=()=>I18N[LANG];
 const T=e=>LANG==="en"&&e.te?e.te:e.t;
 const X=e=>LANG==="en"&&e.xe?e.xe:e.x;
@@ -654,7 +659,7 @@ function applyLang(){const t=L();document.documentElement.lang=LANG==="en"?"en":
  const set=(id,v)=>{const el=$(id);if(el)el.textContent=v};
  set("tab-hoje",t.hoje);set("tab-explorar",t.explorar);set("today",t.today);set("lblCats",t.catsLbl);set("lblEra",t.era);set("lblCat",t.cat);set("lblIlha",t.ilhaLbl);
  set("repTitle",t.repTitle);set("repQ",t.repQ);set("repCancel",t.cancel);set("repSend",t.send);set("shrTitle",t.shrTitle);set("fmtSq",t.sq);
- set("shrSave",t.save);set("shrNative",t.native);set("shrFull",t.full);set("shrCopy",t.copy);set("shrClose",t.close);set("fullHint",t.hint);set("foot",t.foot);set("aboutBtn",t.aboutBtn);set("abtTitle",t.aboutTitle);set("cnfTitle",t.confTitle);set("cnfClose",t.close);{const b=$("cnfBody");if(b){b.innerHTML=`<p>${esc(t.confIntro)}</p>`+["alta","media","baixa"].map(k=>`<p><span class="conf ${k}" style="margin:0">${esc(t.conf[k])}</span><br>${esc(t.confLv[k])}</p>`).join("")+`<p>${esc(t.confNote)}</p>`}}set("abtClose",t.close);{const b=$("abtBody");if(b){b.innerHTML="";t.about.forEach(([h,x])=>{if(h){const s=document.createElement("h3");s.textContent=h;b.appendChild(s)}const p=document.createElement("p");p.textContent=x;b.appendChild(p)})}}
+ set("shrSave",t.save);set("shrNative",t.native);set("shrFull",t.full);set("shrCopy",t.copy);set("shrClose",t.close);set("fullHint",t.hint);set("foot",t.foot);set("aboutBtn",t.aboutBtn);{const a=$("apps");if(a)a.innerHTML=`<span>${esc(t.maisApps)}</span>`+APPS.filter(x=>x[0]!==ESTA_APP).map(([k,n,u])=>`<a href="${u}?lang=${LANG}" target="_blank" rel="noopener"><b>${esc(n)}</b> · ${esc(t.appsDesc[k])} <span aria-hidden="true">↗</span></a>`).join("")}set("abtTitle",t.aboutTitle);set("cnfTitle",t.confTitle);set("cnfClose",t.close);{const b=$("cnfBody");if(b){b.innerHTML=`<p>${esc(t.confIntro)}</p>`+["alta","media","baixa"].map(k=>`<p><span class="conf ${k}" style="margin:0">${esc(t.conf[k])}</span><br>${esc(t.confLv[k])}</p>`).join("")+`<p>${esc(t.confNote)}</p>`}}set("abtClose",t.close);{const b=$("abtBody");if(b){b.innerHTML="";t.about.forEach(([h,x])=>{if(h){const s=document.createElement("h3");s.textContent=h;b.appendChild(s)}const p=document.createElement("p");p.textContent=x;b.appendChild(p)})}}
  if($("note")){const u=/^(\d{4})-(\d{2})-(\d{2}) (\d{2}:\d{2})$/.exec(window.HOJECV_ATUALIZADO||"");$("note").textContent=u?t.updated(+u[3],MO(+u[2]-1),u[1],u[4]):"";$("note").hidden=!u}
  $("prev").setAttribute("aria-label",t.prev);$("next").setAttribute("aria-label",t.next);$("pick").setAttribute("aria-label",t.pick);$("tabs").setAttribute("aria-label",t.tabs);
  $("shrCv").title=t.cvTitle;document.querySelector('#shr .seg2').setAttribute("aria-label",t.fmtAria);
